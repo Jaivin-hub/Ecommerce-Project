@@ -13,8 +13,8 @@ import {
 function App() {
   return (
     <div>
-      <Header />
       <Router>
+        <Header />
         <Switch>
           <Route exact path="/">
             <Home />

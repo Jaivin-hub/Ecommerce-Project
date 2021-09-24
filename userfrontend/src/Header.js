@@ -14,12 +14,11 @@ import {
     Switch,
     Route,
     Link
-  } from "react-router-dom";
+} from "react-router-dom";
 
 function Header() {
     return (
         <div className="main">
-            <Router>
             <div className='row pt-3'>
                 <div className="col-md-4 col-4">
                     <StorefrontIcon />
@@ -34,13 +33,13 @@ function Header() {
                         <div className="col-md-6">
                             <div className="row">
                                 <div className="col-md-3 col-3">
-                                   <SearchIcon />
+                                    <SearchIcon />
                                 </div>
                                 <div className="col-md-3 col-3">
                                     <FavoriteBorderIcon />
                                 </div>
                                 <div className="col-md-3 col-3">
-                                <Link to="/login" className="text-dark"><AccountCircleIcon /></Link>
+                                    <Link to="/login" className="text-dark"><AccountCircleIcon /></Link>
                                 </div>
                                 <div className="col-md-3 col-3">
                                     <ShoppingBagIcon />
@@ -95,9 +94,8 @@ function Header() {
                 </div>
             </div>
             <div className="covidOffer row pt-2 text-center">
-                <h6><NotificationsIcon/>COVID Delivery Impact  | <FavoriteIcon/> We're Here To Help 9074607140</h6>
+                <h6><NotificationsIcon />COVID Delivery Impact  | <FavoriteIcon /> We're Here To Help 9074607140</h6>
             </div>
-            </Router>
         </div>
     )
 }
