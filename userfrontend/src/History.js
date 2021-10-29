@@ -9,23 +9,32 @@ function History() {
     const userId = localStorage.getItem('id')
 
     const [data, setData] = useState([])
+    const [address,setAddress] = useState([])
 
 
     useEffect(() => {
         getProduct()
     }, [])
 
+    
+
     const getProduct = () => {
-        console.log('started')
+       
         axios.get(`http://localhost:5000/users/forhistory/${userId}`).then((res) => {
-            console.log('ccccc')
-            console.log(res.data)
+           
+            if(res){
+                axios.get(`http://localhost:5000/users/findAddress/${userId}`).then((response) => {
+                    
+                    setAddress(response)
+                })
+            }
             setData(res.data)
         }).catch((err) => {
-            console.log(err)
+           
         })
     }
 
+   
     return (
         <div>
             <div className="container">
@@ -93,25 +102,28 @@ function History() {
 
 
 
-                <div className="row pt-5 py-3 ">
+                <div className="row  py-3 ">
                     {data.map((item, k) => {
                         return (
-                            <div className="row mt-5">
+                            <div className="row ">
 
                                 <div className="col-md-4 grid-margin stretch-card">
                                     <div className="card">
-                                        <div className="card-body">
-                                            <div className="aligner-wrapper text-center">
-                                                <img style={{ width: '65%', borderRadius: '10%' }} className="profileImg" src="https://www.johnniewalker.com/media/5652/c4_explore_johnnie_walker_green15_label_d.jpg" alt="" />
-                                                <div className="absolute center-content">
-                                                    <h4 className="text-small text-muted text-center mb-0"></h4>
-                                                    <h6 className="text-small text-muted text-center mb-0"></h6>
-                                                    <h6 className="text-small text-muted text-center mb-0"></h6>
+                                        {item.images.map((image, i) => {
+                                            return (
+                                                <div className="card-body">
+                                                    <div className="aligner-wrapper text-center">
+                                                        <img style={{ width: '100%', borderRadius: '10%', height: '22em' }} src={image.image1} alt="" />
+                                                        <div className="absolute center-content">
+                                                            <h4 className="text-small text-muted text-center mb-0"></h4>
+                                                            <h6 className="text-small text-muted text-center mb-0"></h6>
+                                                            <h6 className="text-small text-muted text-center mb-0"></h6>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            )
+                                        })}
 
-
-                                        </div>
                                     </div>
                                 </div>
                                 <div className="col-md-8 grid-margin stretch-card ">
@@ -119,44 +131,67 @@ function History() {
                                         <div className="card-body">
                                             <div className="d-flex flex-row justify-content-between">
                                                 <h4 className="card-title mb-1">Details</h4>
-                                                <button className="btn">Order dispatch</button>
+
                                             </div>
                                             <div className="row">
                                                 <div className="col-md-12 grid-margin stretch-card">
                                                     <div className="card">
                                                         <div className="card-body">
-                                                            <h4 className="card-title"></h4>
-                                                            <p className="card-description">  </p>
-                                                            <form className="forms-sample">
-                                                                <Form.Group className="row pt-3">                                               
-                                                                         <div className="col-md-6">
-                                                                    <h4>{item.name}</h4>
+                                                            <div className="row">
+                                                                <div className="col-md-6 ">
+                                                                    <p className="card-description"> <u>Product details</u> </p>
+                                                                    <Form.Group className="row pt-3">
+                                                                        <div className="col-md-6">
+                                                                            <h2><strong>{item.name}</strong></h2>
+                                                                        </div>
+                                                                    </Form.Group>
+                                                                    <Form.Group className="row pt-3">
+                                                                        <div className="col-md-6">
+                                                                            <h5><small><strong>{item.maincategory}</strong></small></h5>
+                                                                        </div>
+                                                                    </Form.Group>
+                                                                    <Form.Group className="row ">
+                                                                        <div className="col-md-6">
+                                                                            <h6><small>{item.size}</small></h6>
+                                                                        </div>
+                                                                    </Form.Group>
+                                                                    <Form.Group className="row pt-3">
+                                                                        <div className="">
+                                                                            <h5>{item.subcategory}</h5>
+                                                                        </div>
+                                                                    </Form.Group>
                                                                 </div>
+                                                                {/* {address.map((item, key)=>{
+                                                                    return(
+                                                                        <div className="col-md-6">
+                                                                <p className="card-description"> <u>Billing Address details</u> </p>
+                                                                    <Form.Group className="row pt-3">
+                                                                        <div className="col-md-6">
+                                                                            <h2><strong>{item.firstname}</strong></h2>
+                                                                        </div>
+                                                                    </Form.Group>
+                                                                    <Form.Group className="row pt-3">
+                                                                        <div className="col-md-6">
+                                                                            <h5><small><strong>{item.addressline1}</strong></small></h5>
+                                                                        </div>
+                                                                    </Form.Group>
+                                                                    <Form.Group className="row ">
+                                                                        <div className="col-md-6">
+                                                                            <h6><small>{item.addressline2}</small></h6>
+                                                                        </div>
+                                                                    </Form.Group>
+                                                                    <Form.Group className="row pt-3">
+                                                                        <div className="">
+                                                                            <h5>{item.statename}</h5>
+                                                                        </div>
+                                                                    </Form.Group>
+                                                                </div>
+                                                                    )
+                                                                })} */}
+                                                                
 
-                                                                </Form.Group>
-                                                                <Form.Group className="row pt-3">
 
-
-                                                                    <div className="col-md-6">
-                                                                        <h5>{item.maincategory}</h5>
-                                                                    </div>
-
-                                                                </Form.Group>
-                                                                <Form.Group className="row pt-3">
-
-                                                                    <div className="col-md-6">
-                                                                        <h4>{item.size}</h4>
-                                                                    </div>
-
-                                                                </Form.Group>
-                                                                <Form.Group className="row pt-3">
-
-                                                                    <div className="col-md-6">
-                                                                        <h4>{item.subcategory}</h4>
-                                                                    </div>
-
-                                                                </Form.Group>
-                                                            </form>
+                                                            </div>
                                                             <div class="row px-3">
                                                                 <div class="col">
                                                                     <ul id="progressbar">

@@ -1,91 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import bsCustomFileInput from 'bs-custom-file-input';
 import './style.css'
 import axios from 'axios';
+import { fileUploadAndResize } from '../FileUpload'
 
 export function BasicElements() {
 
+  const [categoryDetails, setCategoryDetails] = useState([])
+
+
+  useEffect(() => {
+    getCategories()
+  }, [])
+
+  const getCategories = () => {
+    axios.get('http://localhost:3000/users/findCategories').then((response) => {
+      setCategoryDetails(response.data)
+    })
+  }
+
+  const [categorydata,setCategoryData] = useState([])
   const [selectedImage, setSelectedimage] = useState([])
   const [value, setValues] = useState()
-  const [fileUpload, setFileupload] = useState()
-  const [filesecondUpload, setFilesecondupload] = useState()
-  const [filethirdUpload, setFilethirdupload] = useState()
-  const [filefourthUpload, setFilefourthupload] = useState()
+  const [image1, setImage1] = useState('')
+  const [image2, setImage2] = useState('')
+  const [image3, setImage3] = useState('')
+  const [image4, setImage4] = useState('')
 
-  const imageHandleChange = (e) => {
-    console.log(e.target.files)
-    setFileupload(e.target.files[0])
+  const [subcategory,setSubCategory] = useState('')
 
 
-    if (e.target.files) {
-      const fileArray = Array.from(e.target.files).map((file) => URL.createObjectURL(file))
-      setSelectedimage((prevImages) => prevImages.concat(fileArray))
-      Array.from(e.target.files).map(
-        (file) => URL.revokeObjectURL(file)
-      )
-    }
+  const imageHandleChange = async (e) => {
+    const urlArray = await fileUploadAndResize(e)
+    setImage1(urlArray)
+  }
+
+  const imageHandleSecond = async (e) => {
+    const urlArray = await fileUploadAndResize(e)
+    setImage2(urlArray)
+  }
+
+  const imageHandlethird = async (e) => {
+    const urlArray = await fileUploadAndResize(e)
+    setImage3(urlArray)
+  }
+
+  const imageHandlefourth = async (e) => {
+    const urlArray = await fileUploadAndResize(e)
+    setImage4(urlArray)
   }
 
 
-  const imageHandsecond = (e) => {
-    setFilesecondupload(e.target.files[0])
-
-
-    if (e.target.files) {
-      const fileArray = Array.from(e.target.files).map((file) => URL.createObjectURL(file))
-      setSelectedimage((prevImages) => prevImages.concat(fileArray))
-      Array.from(e.target.files).map(
-        (file) => URL.revokeObjectURL(file)
-      )
-    }
-  }
-
-  const imageHandthird = (e) => {
-    setFilethirdupload(e.target.files[0])
-
-
-    if (e.target.files) {
-      const fileArray = Array.from(e.target.files).map((file) => URL.createObjectURL(file))
-      setSelectedimage((prevImages) => prevImages.concat(fileArray))
-      Array.from(e.target.files).map(
-        (file) => URL.revokeObjectURL(file)
-      )
-    }
-  }
-
-  const imageHandfourth = (e) => {
-    setFilefourthupload(e.target.files[0])
-
-
-    if (e.target.files) {
-      const fileArray = Array.from(e.target.files).map((file) => URL.createObjectURL(file))
-      setSelectedimage((prevImages) => prevImages.concat(fileArray))
-      Array.from(e.target.files).map(
-        (file) => URL.revokeObjectURL(file)
-      )
-    }
-  }
-  console.log('values...'+value)
-  console.log(fileUpload);
 
   const submitHandler = async (e) => {
     e.preventDefault()
-    console.log('ok');
-    let formData = new FormData()
-    // formData.append("image", JSON.stringify(fileUpload))
-    formData.append("image", fileUpload)
-    formData.append("image2", filesecondUpload)
-    formData.append("image3", filethirdUpload)
-    formData.append("image4", filefourthUpload)
-    formData.append("data", JSON.stringify(value))
-    console.log(value)
-
-    // console.log('function called...')
-
-    axios.post('http://localhost:3000/users/addproducts', formData).then(() => {
-      console.log('success')
+    const productdetails = { image1, image2, image3, image4, value }
+    axios.post('http://localhost:3000/users/addproducts', productdetails).then(() => {
     }).catch((err) => {
       console.log(err)
     })
@@ -103,7 +75,26 @@ export function BasicElements() {
     setValues(newValues)
   }
 
-  console.log(value)
+  
+
+  const categoryHandler= (e)=>{
+     const data = e.target.value 
+    const newValues = { ...value }
+    newValues[e.target.id] = e.target.value
+    setValues(newValues)
+    axios.get(`http://localhost:3000/users/getsubcategorydetails/${data}`).then((res)=>{
+      console.log('data fetched to frontend')
+      setCategoryData(res.data.Subcategory)
+    })
+  }
+
+  const subCategoryHandler=(e)=>{
+    const newValues = { ...value }
+    newValues[e.target.id] = e.target.value
+    setValues(newValues)
+  }
+
+  
 
   return (
     <div>
@@ -147,12 +138,26 @@ export function BasicElements() {
                   <Form.Control type="text" onChange={textChange} className="form-control" id="size" placeholder="size" />
                 </Form.Group>
                 <Form.Group>
-                  <label htmlFor="exampleInputPassword4">Product Brand</label>
-                  <Form.Control type="text" onChange={textChange} className="form-control" id="subcategory" placeholder="Product brand" />
+                  <label htmlFor="exampleInputPassword4">Category</label>
+                  <select className="form-control" onChange={categoryHandler} id="maincategory">
+                  <option>Select</option>
+                  {categoryDetails.map((item, key)=>{
+                    return(
+                      <option>{item.Categoryname}</option>
+                    )
+                  })}
+                  </select>
                 </Form.Group>
                 <Form.Group>
-                  <label htmlFor="exampleInputPassword4">Category</label>
-                  <Form.Control type="text" onChange={textChange} className="form-control" id="maincategory" placeholder="category" />
+                  <label htmlFor="exampleInputPassword4">SubCategory</label>
+                  <select className="form-control" onChange={subCategoryHandler} id="subcategory">
+                  <option>Select</option>
+                    {categorydata.map((item, key)=>{
+                      return(
+                        <option>{item}</option>
+                      )
+                    })}
+                  </select>
                 </Form.Group>
                 <Form.Group>
                   <label htmlFor="exampleSelectGender">Stockdetails</label>
@@ -175,7 +180,7 @@ export function BasicElements() {
                     <form >
                       <label className="label-text">File upload</label>
                       <div className="file-upload-wrapper" data-text="Select your file!">
-                        <input type="file" onChange={imageHandsecond} name="Img2" className="file-upload-field" id="file-upload-field" />
+                        <input type="file" onChange={imageHandleSecond} name="Img2" className="file-upload-field" id="file-upload-field" />
                       </div>
                     </form>
                   </div>
@@ -183,7 +188,7 @@ export function BasicElements() {
                     <form >
                       <label className="label-text">File upload</label>
                       <div className="file-upload-wrapper" data-text="Select your file!">
-                        <input type="file" onChange={imageHandthird} name="Img3" className="file-upload-field" id="file-upload-field" />
+                        <input type="file" onChange={imageHandlethird} name="Img3" className="file-upload-field" id="file-upload-field" />
                       </div>
                     </form>
                   </div>
@@ -191,7 +196,7 @@ export function BasicElements() {
                     <form >
                       <label className="label-text">File upload</label>
                       <div className="file-upload-wrapper" data-text="Select your file!">
-                        <input type="file" onChange={imageHandfourth} name="Img4" className="file-upload-field" id="file-upload-field" />
+                        <input type="file" onChange={imageHandlefourth} name="Img4" className="file-upload-field" id="file-upload-field" />
                       </div>
                     </form>
                   </div>

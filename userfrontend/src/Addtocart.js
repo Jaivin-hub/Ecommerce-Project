@@ -131,12 +131,12 @@ function Addtocart() {
                                                 <td>
 
                                                     <div className="row">
-                                                        <div className="col-md-3">
-                                                            <img style={{ width: '80%' }} src="https://img.thewhiskyexchange.com/900/vatted_mon1.jpg" alt="" />
+                                                        <div className="col-md-5">
+                                                            <img style={{ width: '150%',height: '5em',borderRadius:"4px" }} src={item.image} alt="" />
                                                         </div>
-                                                        <div className="col-md-8">
-                                                            <small><u>{item.category}</u></small>
-                                                            <p>{item.name}</p>
+                                                        <div className="col-md-6 ms-3">
+                                                            <small><small><u>{item.subcategory}</u></small></small>
+                                                            <p><strong>{item.name}</strong></p>
                                                         </div>
                                                     </div>
 

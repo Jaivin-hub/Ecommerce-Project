@@ -1,3 +1,16 @@
+
+.body{
+    margin:0;
+}
+.firstImage{
+    width: 100%;
+    background-color: #dbdbdb;
+    height: 25%;
+    border: 3px linear black;
+    border-radius:5px;
+}
+
+
 .covidOffer{
     background-color:  #4e6446;
     color: #fff;

@@ -30,13 +30,17 @@ export function BasicElements() {
         })
     }
 
-    const userDetails = (id) => {
+    const [newData,setNewData] = useState()
+
+    const userDetails = (id,addressid) => {
         console.log('func')
-        console.log(id)
-        history.push(`/userdetails/${id}`);
+
+        const data = {id,addressid}
+        history.push(`/userdetails/${id}?addressid=${addressid}`);
     }
 
     const productsDetails = (id) => {
+
         history.push(`/productdetails/${id}`);
     }
 
@@ -103,7 +107,7 @@ export function BasicElements() {
                                                         <div className="d-flex">
                                                             <img src={require('../../assets/images/faces/face4.jpg')} alt="face" />
                                                             <span className="pl-2 pt-2">{data[key].userid}</span>
-                                                            <span><div onClick={() => { userDetails(data[key].userid) }} style={{ cursor: 'pointer' }} className="badge badge-outline-primary">Details</div></span>
+                                                            <span><div onClick={() => { userDetails(data[key].userid,data[key].addressid) }} style={{ cursor: 'pointer' }} className="badge badge-outline-primary">Details</div></span>
                                                         </div>
                                                     </td>
                                                     <td>{key}</td>
@@ -116,7 +120,7 @@ export function BasicElements() {
                                                     </td>
                                                     <td>
                                                         <div className="badge badge-outline-info">
-                                                            <select className="form-control" onChange={optionChange} style={{ cursor: 'pointer', backgroundColor: 'black', color: '#fff' }} onChange={optionChange} id="status">
+                                                            <select className="form-control" onChange={()=>{}} style={{ cursor: 'pointer', backgroundColor: 'black', color: '#fff' }} onChange={optionChange} id="status">
                                                                 <option>Deleved</option>
                                                                 <option>Pending</option>
                                                                 <option>Placed</option>

@@ -5,12 +5,13 @@ import PayPal from './PayPal'
 import { Link } from 'react-router-dom'
 import { MdDelete } from 'react-icons/md';
 import { BiRupee } from 'react-icons/bi';
+import Footer from './Footer'
 
 
 function CheckoutCustomer() {
 
     const [granttotal, setGranttotal] = useState()
-    const [deleteAddress,setDeleteAddress] = useState(false)
+    const [deleteAddress, setDeleteAddress] = useState(false)
 
 
     useEffect(() => {
@@ -38,12 +39,14 @@ function CheckoutCustomer() {
     const [open, setOpen] = useState(false)
     const [openPayment, setOpenPayment] = useState(false)
     const [checkout, setCheckout] = useState(false)
-    const [addressId,setAddressId] = useState('')
-    const [userAddress, setUserAddress] = useState()
+    const [addressId, setAddressId] = useState('')
+    const [userAddress, setUserAddress] = useState([])
 
     const firstStep = () => {
         setDiv(false)
     }
+
+    console.log(userAddress)
 
     const [firstname, setFirstname] = useState()
     const [lastname, setLastname] = useState()
@@ -200,25 +203,30 @@ function CheckoutCustomer() {
     }
 
     const placeOrder = () => {
-        const details = { granttotal, userId ,addressId}
+        const details = { granttotal, userId, addressId }
         axios.post(`http://localhost:3000/users/orderplaced`, details).then((res) => {
             console.log('Order placed')
 
         })
     }
-    
+
+    const logOutHandler = () => {
+        setDiv(true)
+        localStorage.clear();
+    }
+
 
     const SelectedAddressHandler = (id) => {
-        //console.log(id)
         setAddressId(id)
         setOpenPayment(true)
     }
 
     console.log(addressId);
 
-    const props= {granttotal,addressId}
+    const props = { granttotal, addressId }
 
-    console.log(review)
+
+    const UserName = username.toUpperCase()
 
     return (
         <div className="col-md-12">
@@ -231,18 +239,43 @@ function CheckoutCustomer() {
                                     <div className="col-md-8">
                                         <div className="row">
                                             <h3><strong>CUSTOMER</strong></h3>
-                                            <small>{username}</small>
+                                            <small><strong>{UserName}</strong></small>
                                         </div>
                                     </div>
                                     <div className="col-md-4 text-end">
                                         <div className="signoutbtn pt-1">
-                                            <button onClick={() => setDiv(true)} className="btn">LOG OUT</button>
+                                            <button onClick={logOutHandler} className="btn">LOG OUT</button>
                                         </div>
                                     </div>
                                 </div>
-                                : null}
+                                :
+                                <div>
+                                    <div className="row">
+                                        <div className="col-md-8">
+                                            <h3><strong>CUSTOMER</strong></h3>
+                                            <small>Don’t have an account? Create an account to continue.</small>
+                                        </div>
+                                    </div>
+                                    <div className="stepone">
+                                        <div className="loginbox pt-3">
+                                            <label htmlFor="">Email</label><br />
+                                            <input className="logininp" type="text" />
+                                        </div>
+                                        <div className="loginbox pt-3">
+                                            <label htmlFor="">Password</label><br />
+                                            <input className="logininp" type="password" /><br />
+                                        </div>
+                                        <div className="pt-2">
+                                            <small>Forgot password?</small>
+                                        </div>
+                                        <div className="mt-3">
+                                            <button onClick={firstStep} className="btn">SIGN IN</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
-                        {!token ?
+                        {/* {!token ?
                             <div>
                                 <div className="row">
                                     <div className="col-md-8">
@@ -267,7 +300,7 @@ function CheckoutCustomer() {
                                     </div>
                                 </div>
                             </div>
-                            : null}
+                            : null} */}
                         <hr />
                         <div className="row">
                             <div className="row">
@@ -534,7 +567,7 @@ function CheckoutCustomer() {
                                                     <p>{item.name}</p>
                                                 </div>
                                                 <div className="col-md-3">
-                                                    <p><BiRupee/>{item.subtotal}</p>
+                                                    <p><BiRupee />{item.subtotal}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -549,7 +582,7 @@ function CheckoutCustomer() {
                                             <h6><strong>TAX</strong></h6>
                                         </div>
                                         <div className="col-md-6 text-end">
-                                            <p><BiRupee/>14.54</p>
+                                            <p><BiRupee />14.54</p>
                                         </div>
                                     </div>
                                     <div className="row pt-3">
@@ -557,32 +590,31 @@ function CheckoutCustomer() {
                                             <h4><strong>TOTAL (AUD)</strong></h4>
                                         </div>
                                         <div className="col-md-6 text-end">
-                                            <h5><BiRupee/>{granttotal}</h5>
+                                            <h5><BiRupee />{granttotal}</h5>
                                         </div>
                                     </div>
-
-                                    <div className="row pt-3">
-                                        <small>Coupon code</small>
-                                    </div>
-                                    <div className="row pt-1">
+                                    <div className="container">
+                                        <div className="row  pt-3 mt-4">
+                                            <small><u>Coupon code</u></small>
+                                        </div>
                                         <form onSubmit={sendCouponHandler}>
-                                            <div className="col-md-6">
-                                                <input id="couponcode" onChange={couponHandler} className="couponinp" type="text" />
-                                            </div>
-                                            <div className="col-md-6 text-end pt-2">
-                                                <button type="submit" className="btn">APPLY</button>
+                                            <div className="row pt-1">
+                                                <div className="col-md-6">
+                                                    <input id="couponcode" onChange={couponHandler} className="couponinp" type="text" />
+                                                </div>
+                                                <div className="col-md-4 ms-3   mt-2">
+                                                    <button type="submit" className="btn">APPLY</button>
+                                                </div>
                                             </div>
                                         </form>
-
                                     </div>
-
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     )
 }

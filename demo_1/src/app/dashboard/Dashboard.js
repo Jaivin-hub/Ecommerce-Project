@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import {Line, Bar, Pie, Scatter} from 'react-chartjs-2';
+import { Line, Bar, Pie, Scatter } from 'react-chartjs-2';
 
 import Slider from "react-slick";
 import { TodoListComponent } from '../apps/TodoList'
@@ -41,39 +41,39 @@ export class Dashboard extends Component {
       borderWidth: 1,
       fill: false
     }]
-};
+  };
 
-options = {
-  scales: {
-    yAxes: [{
-      ticks: {
-        beginAtZero: true
-      },
-      gridLines: {
-        color: "rgba(204, 204, 204,0.1)"
+  options = {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        },
+        gridLines: {
+          color: "rgba(204, 204, 204,0.1)"
+        }
+      }],
+      xAxes: [{
+        gridLines: {
+          color: "rgba(204, 204, 204,0.1)"
+        }
+      }]
+    },
+    legend: {
+      display: false
+    },
+    elements: {
+      point: {
+        radius: 0
       }
-    }],
-    xAxes: [{
-      gridLines: {
-        color: "rgba(204, 204, 204,0.1)"
-      }
-    }]
-  },
-  legend: {
-    display: false
-  },
-  elements: {
-    point: {
-      radius: 0
     }
   }
-}
 
-areaData = {
-    labels: ["2013", "2014", "2015", "2016", "2017"],
+  areaData = {
+    labels: ["2017", "2018", "2019", "2020", "2021"],
     datasets: [{
       label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
+      data: [4, 2, 3, 5, 2, 3],
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -93,9 +93,9 @@ areaData = {
       borderWidth: 1,
       fill: true, // 3: no fill
     }]
-};
+  };
 
-areaOptions = {
+  areaOptions = {
     plugins: {
       filler: {
         propagate: true
@@ -113,9 +113,9 @@ areaOptions = {
         }
       }]
     }
-}
+  }
 
-doughnutPieData = {
+  doughnutPieData = {
     datasets: [{
       data: [30, 40, 30],
       backgroundColor: [
@@ -142,17 +142,17 @@ doughnutPieData = {
       'Blue',
       'Yellow',
     ]
-};
+  };
 
-doughnutPieOptions = {
+  doughnutPieOptions = {
     responsive: true,
     animation: {
       animateScale: true,
       animateRotate: true
     }
-};
+  };
 
-scatterChartData = {
+  scatterChartData = {
     datasets: [{
       label: 'First Dataset',
       data: [{
@@ -208,29 +208,29 @@ scatterChartData = {
       borderWidth: 1
     }
     ]
-}
-
-scatterChartOptions = {
-  scales: {
-    xAxes: [{
-      type: 'linear',
-      position: 'bottom',
-      gridLines: {
-        color: "rgba(204, 204, 204,0.1)"
-      }
-    }],
-    yAxes: [{
-      gridLines: {
-        color: "rgba(204, 204, 204,0.1)"
-      }
-    }]
   }
-}
+
+  scatterChartOptions = {
+    scales: {
+      xAxes: [{
+        type: 'linear',
+        position: 'bottom',
+        gridLines: {
+          color: "rgba(204, 204, 204,0.1)"
+        }
+      }],
+      yAxes: [{
+        gridLines: {
+          color: "rgba(204, 204, 204,0.1)"
+        }
+      }]
+    }
+  }
 
   toggleProBanner() {
     document.querySelector('.proBanner').classList.toggle("hide");
   }
-  render () {
+  render() {
     return (
       <div>
         <div className="row">
@@ -254,14 +254,14 @@ scatterChartOptions = {
           </div>
         </div>
         <div className="row">
-          <div className="col-xl-3 col-sm-6 grid-margin stretch-card">
+          <div className="col-xl-4 col-sm-6 grid-margin stretch-card">
             <div className="card">
               <div className="card-body">
                 <div className="row">
                   <div className="col-9">
                     <div className="d-flex align-items-center align-self-start">
-                      <h3 className="mb-0">$12.34</h3>
-                      <p className="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                      <h3 className="mb-0">12</h3>
+                      {/* <p className="text-success ml-2 mb-0 font-weight-medium">+3.5%</p> */}
                     </div>
                   </div>
                   <div className="col-3">
@@ -274,14 +274,14 @@ scatterChartOptions = {
               </div>
             </div>
           </div>
-          <div className="col-xl-3 col-sm-6 grid-margin stretch-card">
+          <div className="col-xl-4 col-sm-6 grid-margin stretch-card">
             <div className="card">
               <div className="card-body">
                 <div className="row">
                   <div className="col-9">
                     <div className="d-flex align-items-center align-self-start">
-                      <h3 className="mb-0">$17.34</h3>
-                      <p className="text-success ml-2 mb-0 font-weight-medium">+11%</p>
+                      <h3 className="mb-0">4</h3>
+                      {/* <p className="text-success ml-2 mb-0 font-weight-medium">+11%</p> */}
                     </div>
                   </div>
                   <div className="col-3">
@@ -290,18 +290,18 @@ scatterChartOptions = {
                     </div>
                   </div>
                 </div>
-                <h6 className="text-muted font-weight-normal">Revenue current</h6>
+                <h6 className="text-muted font-weight-normal">Orders</h6>
               </div>
             </div>
           </div>
-          <div className="col-xl-3 col-sm-6 grid-margin stretch-card">
+          <div className="col-xl-4 col-sm-6 grid-margin stretch-card">
             <div className="card">
               <div className="card-body">
                 <div className="row">
                   <div className="col-9">
                     <div className="d-flex align-items-center align-self-start">
-                      <h3 className="mb-0">$12.34</h3>
-                      <p className="text-danger ml-2 mb-0 font-weight-medium">-2.4%</p>
+                      <h3 className="mb-0">1</h3>
+                      {/* <p className="text-danger ml-2 mb-0 font-weight-medium">-2.4%</p> */}
                     </div>
                   </div>
                   <div className="col-3">
@@ -310,11 +310,11 @@ scatterChartOptions = {
                     </div>
                   </div>
                 </div>
-                <h6 className="text-muted font-weight-normal">Daily Income</h6>
+                <h6 className="text-muted font-weight-normal">All products</h6>
               </div>
             </div>
           </div>
-          <div className="col-xl-3 col-sm-6 grid-margin stretch-card">
+          {/* <div className="col-xl-3 col-sm-6 grid-margin stretch-card">
             <div className="card">
               <div className="card-body">
                 <div className="row">
@@ -333,21 +333,21 @@ scatterChartOptions = {
                 <h6 className="text-muted font-weight-normal">Expense current</h6>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="row text-center">
-         
-          
-                    <div className="col-md-8 grid-margin stretch-card">
-                        <div className="card">
-                            <div className="card-body">
-                                <h4 className="card-title">Sales Chart</h4>
-                                <Line data={this.areaData} options={this.areaOptions} />
-                            </div>
-                        </div>
-                    </div>
-                    {/* <div className="col-md-6 grid-margin stretch-card">
+
+
+          <div className="col-md-8 grid-margin stretch-card">
+            <div className="card">
+              <div className="card-body">
+                <h4 className="card-title">Sales Chart</h4>
+                <Line data={this.areaData} options={this.areaOptions} />
+              </div>
+            </div>
+          </div>
+          {/* <div className="col-md-6 grid-margin stretch-card">
                         <div className="card">
                             <div className="card-body">
                                 <h4 className="card-title">Doughnut Chart</h4>
@@ -355,70 +355,12 @@ scatterChartOptions = {
                             </div>
                         </div>
                     </div> */}
-                
-        </div>
-        <div className="row">
-          <div className="col-sm-4 grid-margin">
-            <div className="card">
-              <div className="card-body">
-                <h5>Revenue</h5>
-                <div className="row">
-                  <div className="col-8 col-sm-12 col-xl-8 my-auto">
-                    <div className="d-flex d-sm-block d-md-flex align-items-center">
-                      <h2 className="mb-0">$32123</h2>
-                      <p className="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
-                    </div>
-                    <h6 className="text-muted font-weight-normal">11.38% Since last month</h6>
-                  </div>
-                  <div className="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                    <i className="icon-lg mdi mdi-codepen text-primary ml-auto"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-4 grid-margin">
-            <div className="card">
-              <div className="card-body">
-                <h5>Sales</h5>
-                <div className="row">
-                  <div className="col-8 col-sm-12 col-xl-8 my-auto">
-                    <div className="d-flex d-sm-block d-md-flex align-items-center">
-                      <h2 className="mb-0">$45850</h2>
-                      <p className="text-success ml-2 mb-0 font-weight-medium">+8.3%</p>
-                    </div>
-                    <h6 className="text-muted font-weight-normal"> 9.61% Since last month</h6>
-                  </div>
-                  <div className="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                    <i className="icon-lg mdi mdi-wallet-travel text-danger ml-auto"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-4 grid-margin">
-            <div className="card">
-              <div className="card-body">
-                <h5>Purchase</h5>
-                <div className="row">
-                  <div className="col-8 col-sm-12 col-xl-8 my-auto">
-                    <div className="d-flex d-sm-block d-md-flex align-items-center">
-                      <h2 className="mb-0">$2039</h2>
-                      <p className="text-danger ml-2 mb-0 font-weight-medium">-2.1% </p>
-                    </div>
-                    <h6 className="text-muted font-weight-normal">2.27% Since last month</h6>
-                  </div>
-                  <div className="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                    <i className="icon-lg mdi mdi-monitor text-success ml-auto"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+
         </div>
         
-       
-      </div> 
+
+
+      </div>
     );
   }
 }

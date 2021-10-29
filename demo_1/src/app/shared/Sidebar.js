@@ -225,6 +225,13 @@ class Sidebar extends Component {
                 </ul>
               </div>
             </Collapse> 
+            <Collapse in={ this.state.categoryMenuOpen }>
+              <div>
+                <ul className="nav flex-column sub-menu">
+                  <li className="nav-item"> <Link className={ this.isPathActive('/form-elements/basic-elements') ? 'nav-link active' : 'nav-link' } to="/categoryOffers"><Trans>Category</Trans></Link></li>
+                </ul>
+              </div>
+            </Collapse> 
           </li>
 
 

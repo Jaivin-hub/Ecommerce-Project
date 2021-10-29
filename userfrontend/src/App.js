@@ -8,6 +8,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
+
 import ShowProduct from './ShowProduct';
 import Addtocart from './Addtocart';
 import CheckoutCustomer from './CheckoutCustomer';
@@ -16,6 +17,7 @@ import Whisky from './subCategory/whisky';
 import Profile from './userProfile'
 import History from './History'
 import Notification from './Notification'
+import OrderPlaced from './OrderPlaced'
 
 function App() {
 
@@ -53,24 +55,16 @@ function App() {
           <Route path="/checkoutcustomer">
             <CheckoutCustomer />
           </Route>
+          <Route path="/OdderPlaced">
+            <OrderPlaced />
+          </Route>
           <Route path="/editprofile">
             <EditProfile />
           </Route>
-          <Route path="/whisky">
-            <Whisky name='SCOTCH WHISKY' />
+          <Route path="/whisky/:data">
+            <Whisky />
           </Route>
-          <Route path="/japanese">
-            <Whisky name='JAPANESE WHISKY' />
-          </Route>
-          <Route path="/irish">
-            <Whisky name='IRISH WHISKY' />
-          </Route>
-          <Route path="/american">
-            <Whisky name='AMERICAN WHISKY' />
-          </Route>
-          <Route path="/australian">
-            <Whisky name='AUSTRALIAN WHISKY' />
-          </Route>
+
         </Switch>
       </Router>
     </div>

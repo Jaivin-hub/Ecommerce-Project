@@ -1,6 +1,6 @@
 import React, { useRef, useEffect,useState } from 'react'
 import axios from 'axios'
-
+import swal from 'sweetalert';
 
 function PayPal(props) {
     const paypal = useRef()
@@ -38,6 +38,13 @@ function PayPal(props) {
                 const details = {total,userId,addressId}
                 axios.post(`http://localhost:3000/users/orderplaced`,details).then((res) => {
                     console.log('Order placed')
+
+                    swal({
+                        title: "Good job!",
+                        text: "You clicked the button!",
+                        icon: "success",
+                        button: "Aww yiss!",
+                      });
                    
                 })
 

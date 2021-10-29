@@ -66,18 +66,25 @@ function Home(props) {
                             alt="Third slide"
                         />
                     </Carousel.Item>
+                    <Carousel.Item>
+                        <img
+                            className="d-block w-100"
+                            src="https://cdn11.bigcommerce.com/s-erpoah/images/stencil/original/carousel/1429/hpb5__29197.jpg?c=2"
+                            alt="Third slide"
+                        />
+                    </Carousel.Item>
                 </Carousel>
             </div>
-            <div className="row pt-5">
-                <div className="col-md-4 text-center">
-                    <img src="https://cdn11.bigcommerce.com/s-erpoah/images/stencil/500x500/q/fy21-fcatbanner63__20309.original.jpg" alt="" />
-                </div>
-                <div className="col-md-4 text-center">
-                    <img src="https://cdn11.bigcommerce.com/s-erpoah/images/stencil/500x500/m/fy21-fcatbanner47__77926.original.jpg" alt="" />
-                </div>
-                <div className="col-md-4 text-center">
-                    <img src="https://cdn11.bigcommerce.com/s-erpoah/images/stencil/500x500/n/fy21-fcatbanner42__54676.original.jpg" alt="" />
-                </div>
+            <div className="row d-flex justify-content-around p-4"> 
+             
+               
+                    <img  src="https://cdn11.bigcommerce.com/s-erpoah/images/stencil/500x500/q/fy21-fcatbanner63__20309.original.jpg" style={{height:"400px",width:"500px"}} alt="" />
+              
+                    <img src="https://cdn11.bigcommerce.com/s-erpoah/images/stencil/500x500/m/fy21-fcatbanner47__77926.original.jpg" style={{height:"400px",width:"500px"}} alt="" />
+              
+                    <img src="https://cdn11.bigcommerce.com/s-erpoah/images/stencil/500x500/n/fy21-fcatbanner42__54676.original.jpg" style={{height:"400px",width:"500px"}} alt="" />
+              
+           
             </div>
             <div className="row text-center pt-4">
                 <h3><strong>NEW PRODUCTS</strong></h3>

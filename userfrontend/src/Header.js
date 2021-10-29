@@ -20,7 +20,7 @@ function Header() {
 
     const [category, setCategory] = useState([])
     const [logout, setLogout] = useState(false)
-    const [coupons,setCoupons] = useState([])
+    const [coupons, setCoupons] = useState([])
 
     useEffect(() => {
         getCategory()
@@ -40,7 +40,7 @@ function Header() {
         })
     }
 
-    const getCoupon=()=>{
+    const getCoupon = () => {
         axios.get('http://localhost:3000/users/getalloffers').then((res) => {
             console.log(res.data)
             setCoupons(res.data)
@@ -76,83 +76,101 @@ function Header() {
         }
     }
 
-    console.log(category)
+    const subcategoryHandler = (subcategory, maincategory) => {
+        console.log(subcategory)
+        console.log(maincategory)
+        history.push(`/whisky/${subcategory}`)
+    }
+
+    //console.log('category-----'+category[0].Subcategory)
 
     return (
-        <div className="main">
+        <div className="col-md-12 main">
             <div className='row pt-3'>
-                <div className="col-md-4 col-4">
-                    <button onClick={swithHandler} width="100%" className="btn btn-"><StorefrontIcon /></button>
-                </div>
-                <div className="col-md-4 col-4 text-center">
-                    <h1>YourOwn</h1>
-                </div>
-                <div className="col-md-4 col-4">
+                <div className="col-md-6 pt-3">
                     <div className="row">
-                        <div className="col-md-2">
+                        <div className="col-md-1">
+                        <button onClick={swithHandler} width="100%" className="btn btn-"><StorefrontIcon /></button>
+
                         </div>
-                        <div className="col-md-10">
+                        <div className="col-md-11">
+                        <h1><strong>YourOwn</strong></h1>
+                        </div>
+                    </div>
+
+                    {/* <button onClick={swithHandler} width="100%" className="btn btn-"><StorefrontIcon /></button> */}
+                </div>
+                {/* <div className="col-md-4 pt-3 text-center">
+                    <h1><strong>YourOwn</strong></h1>
+                </div> */}
+
+
+
+                <div className="col-md-6 col-4">
+                    <div className="row ">
+                        <div className="col-md-6">
+
+                        </div>
+                        <div className="col-md-6">
                             <div className="row">
 
+                            
+                       
 
-                                <div className="col-md-3 ps-5 col-3 text-center">
-                                    {userName ?
-                                        <button width="100%" onClick={swithProfile} className="btn btn-">{userName} </button>
-                                        :
-                                        <button width="100%" onClick={swithProfile} className="btn btn-"><AccountCircleIcon /></button>
-                                    }
-                                </div>
-                                <div className="col-md-3 ps-5  col-3 text-center">
-                                    <button width="100%" className="btn btn-"><FavoriteBorderIcon /></button>
-                                </div>
-                                <div className="col-md-1  ps-1 col-3 text-center">
-                                    <button onClick={auth} width="100%" className="btn btn-"><ShoppingBagIcon /></button>
+                        <div className="col-md-3 pt-3 text-end">
+                            {userName ?
+                                <button width="100%" onClick={swithProfile} className="btn btn-">{userName} </button>
+                                :
+                                <button width="100%" onClick={swithProfile} className="btn btn-"><AccountCircleIcon /></button>
+                            }
+                        </div>
 
-                                </div>
-                                <div className="col-md-1 ms-1 col-3 text-center">
-                                    <Dropdown>
-                                        <Dropdown.Toggle style={{width: '10%'}} as="a" >
-                                            <div className="navbar-profile">
-                                                <p className="mb-0 d-none d-sm-block navbar-profile-name"> <button  width="100%" className="btn btn-"><CircleNotificationsIcon /></button></p>
-                                                <i className="mdi mdi-menu-down d-none d-sm-block"></i>
-                                            </div>
-                                        </Dropdown.Toggle>
+                        <div className="col-md-3 pt-3  text-end">
+                            <button onClick={auth} width="100%" className="btn btn-"><ShoppingBagIcon /></button>
+                        </div>
 
-                                        <Dropdown.Menu className="navbar-dropdown preview-list navbar-profile-dropdown-menu">
-                                            <h6 className="p-3 mb-0"><strong>Offers</strong></h6>
-                                            
-                                            {coupons.map((item, key)=>{
-                                                return(
-                                                    <Dropdown.Item href="!#" className="preview-item">
+                        <div className="col-md-3 pt-3 text-end">
+                            <Dropdown>
+                                <Dropdown.Toggle style={{ width: '10%' }} as="a" >
+                                    <div className="navbar-profile">
+                                        <p className="mb-0 d-none d-sm-block navbar-profile-name"> <button width="100%" className="btn btn-"><CircleNotificationsIcon /></button></p>
+                                        <i className="mdi mdi-menu-down d-none d-sm-block"></i>
+                                    </div>
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu className="navbar-dropdown preview-list navbar-profile-dropdown-menu">
+                                    <h6 className="p-3 mb-0"><strong>Offers</strong></h6>
+                                    {coupons.map((item, key) => {
+                                        return (
+                                            <Dropdown.Item href="!#" className="preview-item">
                                                 <div className="preview-thumbnail">
                                                     <div className="preview-icon bg-dark rounded-circle">
                                                         <i className="mdi mdi-logout text-danger"></i>
                                                     </div>
                                                 </div>
-                                                <div style={{borderRadius:'5em'}} className="preview-item-content">
-                                                    <p className="pt-2">buy upto {item.maxpurchaseamount} and get {item.discount}% off by using <small style={{color: 'green'}}>{item.couponcode}</small> Coupen code</p>
+                                                <div style={{ borderRadius: '5em' }} className="preview-item-content">
+                                                    <p className="pt-2">buy upto {item.maxpurchaseamount} and get {item.discount}% off by using <small style={{ color: 'green' }}>{item.couponcode}</small> Coupen code</p>
                                                     <p className="preview-subject mb-1"></p>
                                                     <hr />
                                                 </div>
                                             </Dropdown.Item>
-                                                )
-                                            })}
-                                            
-                                            
-                                           
-                                           
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                </div>
-                                {userName ?
-                                    <div className="col-md-3 ps-5 col-3 text-center">
-                                        <button onClick={LougoutHander} width="100%" className="btn btn-">Logout</button>
-                                    </div>
-                                    : null}
-                            </div>
+                                        )
+                                    })}
+                                </Dropdown.Menu>
+                            </Dropdown>
                         </div>
+                        {userName ?
+                            <div className="col-md-3 pt-3 col-3 text-end">
+                                <button onClick={LougoutHander} width="100%" className="btn btn-">Logout</button>
+                            </div>
+                            : null}
+                            </div>
+                            </div>
                     </div>
+
+
                 </div>
+
+
             </div>
             <div className="col-md-12 bg-dark">
                 <div className="container">
@@ -162,6 +180,12 @@ function Header() {
                                 return (
                                     <Nav className="me-auto">
                                         <NavDropdown title={itm.Categoryname} id="collasible-nav-dropdown">
+                                            {itm.Subcategory.map((item, key) =>
+                                            (
+                                                <NavDropdown.Item onClick={() => { subcategoryHandler(item, itm.Categoryname) }}>{item}</NavDropdown.Item>
+                                            )
+                                            )}
+                                            <NavDropdown.Divider />
                                         </NavDropdown>
                                     </Nav>
                                 )
@@ -170,7 +194,7 @@ function Header() {
                     </div>
                 </div>
             </div>
-            <div className="covidOffer row pt-2 text-center">
+            <div className="covidOffer col-md-12 pt-2 text-center">
                 <h6><NotificationsIcon />COVID Delivery Impact  | <FavoriteIcon /> We're Here To Help 9074607140</h6>
             </div>
         </div>

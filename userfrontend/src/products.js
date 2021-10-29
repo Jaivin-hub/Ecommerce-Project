@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BiRupee } from "react-icons/bi";
 import { GiShoppingBag } from "react-icons/gi";
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import {GiMoneyStack} from 'react-icons/gi';
-import {AiFillHeart} from 'react-icons/ai';
-
-
+import { useHistory } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './card.css'
 
 
@@ -20,7 +18,8 @@ function Products() {
     let Userid = localStorage.getItem('id')
 
     const [data, setData] = useState([])
-    const [show,setShow] = useState(false)
+
+    let history = useHistory();
 
     const getData = () => {
         axios.get('http://localhost:3000/users/getdetails').then((res) => {
@@ -29,125 +28,85 @@ function Products() {
         })
     }
 
-    const hoverCard = () => {
-        console.log('hovered');
-        setShow(true)
-    }
-
-    const leaveCard=()=>{
-        setShow(false)
-    }
-
-    const productSelected=(id)=>{
-        console.log(id)
-        let data = {id,Userid}
-        axios.post(`http://localhost:3000/users/senttheproduct`,data).then((res) => {
-            console.log('success');
+    const productSelected = (id) => {
+        toast.success("Product added to cart")
+        let data = { id, Userid }
+        axios.post(`http://localhost:3000/users/senttheproduct`, data).then((res) => {
         })
+    }
+
+    const itemSelected = (id) => {
+        history.push(`/productdetail/${id}`);
     }
 
 
     return (
-        <div classNameNameName="col-md-12 pt-4">
-            <header>
-                <div className="container text-center">
+        <div classNameNameName="col-md-12 pt-4 bg-primary">
+            <header className="">
+                <div className="col-md-12 ">
 
 
                     <div className="logo">
                         <h1><b>Buy a Bottle of vodka & GET A BOTTLE OF</b></h1>
+                        <h1>DAILY'S Grenadine Syrup</h1>
                     </div>
 
-                    <h1>DAILY'S Grenadine Syrup</h1>
+
 
                 </div>
             </header>
 
-            <div className="container">
+            <div className="">
                 <div className="row">
-                    {/* <div className="col-md-4">
-    <h4 className="text-center"><strong>STYLE 1</strong></h4>
-    <hr/> */}
-                    {/* <div className="profile-card-2"><img src="http://envato.jayasankarkr.in/code/profile/assets/img/profile-2.jpg" className="img img-responsive" />
-        <div className="profile-name">JOHN DOE</div>
-        <div className="profile-username">@johndoesurname</div>
-        <div className="profile-icons"><a href="#"><i className="fa fa-facebook"></i></a><a href="#"><i className="fa fa-twitter"></i></a><a href="#"><i className="fa fa-linkedin"></i></a></div>
-    </div> */}
-                    {/* </div> */}
 
                     {data.map((item, key) => {
                         return (
-                            <div className="col-md-4">
-                                {/* <h4 className="text-center"><strong>STYLE 2</strong></h4> */}
+                            <div className="col-md-3">
                                 <hr />
-                                <div onMouseLeave={leaveCard} onMouseEnter={hoverCard} className="card profile-card-6"><img src="http://envato.jayasankarkr.in/code/profile/assets/img/profile-6.jpg" className="img img-responsive" />
-                                    <div className="profile-name">{item.name}
-                                    </div>
-                                    <div className="profile-position">{item.category}</div>
-                                    <div className="profile-overview">
-                                        <div className="profile-overview">
-                                            <div className="row text-center">
-                                                <div className="col-xs-4">
-                                                    <h3>1</h3>
-                                                    <p>{item.name}</p>
-                                                </div>
-                                                <div className="col-xs-4">
-                                                    {/* <h3>50</h3> */}
-                                                    <p>{item.description}</p>
-                                                </div>
-                                                <div className="col-xs-4">
-                                                    <h3><BiRupee />{item.price}/-</h3>
-                                                </div>
-                                                {show?
-                                                <div className="row">
-                                                <div className="col-md-4">
-                                                    <button onClick={()=>{productSelected(item._id)}} className="usebtn"><GiShoppingBag/></button>
-                                                </div>
-                                                <div className="col-md-4">
-                                                <button className="usebtn"><AiFillHeart /></button>
-                                                </div>
-                                                <div className="col-md-4">
-                                                <button className="usebtn"><GiMoneyStack /></button>
+                                {item.images.map((image, index) => {
+                                    return (
+                                        <div onClick={() => { itemSelected(item._id) }} className="card profile-card-6"><img style={{ height: '25em' }} src={image.image1} className="img img-responsive" />
+                                            <div className="profile-name">{item.name}
+                                            </div>
+                                            <div className="profile-position">{item.category}</div>
+                                            <div className="profile-overview">
+                                                <div className="profile-overview">
+                                                    <div className="row text-center">
+                                                        <div className="col-xs-4">
+                                                            <h3>1</h3>
+                                                            <p>{item.name}</p>
+                                                        </div>
+                                                        <div className="col-xs-4">
+                                                            <p>{item.description}</p>
+                                                        </div>
+                                                        <div className="col-xs-4">
+                                                            <h3><BiRupee />{item.price}/-</h3>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                                :null}
-                                                
+                                        </div>
+                                    )
+                                })}
+
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <div className="row">
+                                            <div className="col-md-6 ps-5">
+                                                <button style={{ width: '100%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Add to Cart<GiShoppingBag /></button>
+                                                <ToastContainer />
+                                            </div>
+                                            <div className="col-md-6">
+                                                <button style={{ width: '80%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Buy now<GiShoppingBag /></button>
+
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         )
                     })}
-
-                    {/* <div className="col-md-4">
-    <h4 className="text-center"><strong>STYLE 3</strong></h4>
-    <hr/>
-    <div className="profile-card-4 text-center"><img src="http://envato.jayasankarkr.in/code/profile/assets/img/profile-4.jpg" className="img img-responsive" />
-        <div className="profile-content">
-            <div className="profile-name">John Doe
-                <p>@johndoedesigner</p>
-            </div>
-            <div className="profile-description">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.</div>
-            <div className="row">
-                <div className="col-xs-4">
-                    <div className="profile-overview">
-                        <p>TWEETS</p>
-                        <h4>1300</h4></div>
-                </div>
-                <div className="col-xs-4">
-                    <div className="profile-overview">
-                        <p>FOLLOWERS</p>
-                        <h4>250</h4></div>
-                </div>
-                <div className="col-xs-4">
-                    <div className="profile-overview">
-                        <p>FOLLOWING</p>
-                        <h4>168</h4></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> */}
                 </div>
             </div>
         </div>

@@ -67,15 +67,24 @@ function Buttons() {
                           <div className="card-body">
                             <h4 className="card-title">{item.name}</h4>
                             <Slider className="portfolio-slider" {...sliderSettings}>
-                              <div className="item">
-                                <img src={require('../../assets/images/dashboard/Rectangle.jpg')} alt="carousel-item" />
-                              </div>
-                              <div className="item">
-                                <img src={require('../../assets/images/dashboard/Img_5.jpg')} alt="carousel-item" />
-                              </div>
-                              <div className="item">
-                                <img src={require('../../assets/images/dashboard/img_6.jpg')} alt="carousel-item" />
-                              </div>
+                              {item.images.map((itm, k) => {
+                                return (
+                                  <div>
+                                    <div className="item">
+                                      <img src={itm.image1} alt="carousel-item" />
+                                    </div>
+                                    <div className="item">
+                                      <img src={itm.image2} alt="carousel-item" />
+                                    </div>
+                                    <div className="item">
+                                      <img src={itm.image3} alt="carousel-item" />
+                                    </div>
+                                    <div className="item">
+                                      <img src={itm.image4} alt="carousel-item" />
+                                    </div>
+                                  </div>
+                                )
+                              })}
                             </Slider>
                             <div className="d-flex py-4">
                               <div className="preview-list w-100">

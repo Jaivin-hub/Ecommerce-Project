@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Footer from './Footer';
 import {
     BrowserRouter as Router,
@@ -14,10 +14,14 @@ import { useForm } from 'react-hook-form'
 function Login() {
 
     let history = useHistory();
+    useEffect(()=>{
+
+    },[])
 
     // Inputs fields
 
-    const [email, setEmail] = useState('')
+    const [email, setEmail] = useState('hdsh')
+
     const [password, setPassword] = useState('')
     const [emailerr, setEmailerr] = useState('')
     const [passworderr, setPassworderr] = useState('')

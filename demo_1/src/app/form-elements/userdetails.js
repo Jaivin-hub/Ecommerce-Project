@@ -2,10 +2,11 @@ import React,{useState,useEffect} from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom'
 
-function Userdetails() {
+function Userdetails({match, location}) {
 
-    const id = useParams()
-    const userId=id.id
+    const id = match.params.id
+    const addressId= location.search.split('=')[1]
+    console.log('kkkkkkkk'+addressId +','+id)
 
     const [details,setDetails] = useState([])
 
@@ -14,13 +15,16 @@ function Userdetails() {
     },[])
 
     const getData=()=>{
+        const data ={id,addressId}
         console.log('funccccc')
-        axios.get(`http://localhost:3000/users/getaddress/${userId}`).then((res)=>{
+        axios.post(`http://localhost:3000/users/getaddress`,data).then((res)=>{
             console.log('done with details')
-            console.log(res.data)
-            setDetails(res.data)
+            // console.log(res.data[0].address)
+             setDetails(res.data[0].address)
         })
     }
+
+    console.log(details)
    
 
 
@@ -105,143 +109,149 @@ function Userdetails() {
                                 <h4 className="card-title mb-1">Billing Address</h4>
                                 <p className="text-muted mb-1">Client Address Status</p>
                             </div>
-                            {details.map((itm,k)=>{
-                                return(
-                                    <div className="row">
-                                <div className="col-12">
-                                    <div className="row">
-                                        <div className="col-md-6">
-                                        <div className="preview-list">
-                                        <div className="preview-item border-bottom">
-                                            <div className="preview-thumbnail">
-                                                
-                                            </div>
-                                            <div className="preview-item-content d-sm-flex flex-grow">
-                                                <div className="flex-grow">
-                                                    <h6 className="preview-subject">firstname</h6>
-                                                    <p className="text-muted mb-0">{itm.firstname}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="preview-item border-bottom">
-                                            <div className="preview-thumbnail">
-                                               
-                                            </div>
-                                            <div className="preview-item-content d-sm-flex flex-grow">
-                                                <div className="flex-grow">
-                                                    <h6 className="preview-subject">Country</h6>
-                                                    <p className="text-muted mb-0">India</p>
-                                                </div>
-                                              
-                                            </div>
-                                        </div>
-                                        <div className="preview-item border-bottom">
-                                            <div className="preview-thumbnail">
-                                              
-                                            </div>
-                                            <div className="preview-item-content d-sm-flex flex-grow">
-                                                <div className="flex-grow">
-                                                    <h6 className="preview-subject">State</h6>
-                                                    <p className="text-muted mb-0">{itm.statename}</p>
-                                                </div>
-                                               
-                                            </div>
-                                        </div>
-                                        <div className="preview-item border-bottom">
-                                            <div className="preview-thumbnail">
-                                               
-                                            </div>
-                                            <div className="preview-item-content d-sm-flex flex-grow">
-                                                <div className="flex-grow">
-                                                    <h6 className="preview-subject">Addressline1</h6>
-                                                    <p className="text-muted mb-0">{itm.addressline1}</p>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                        <div className="preview-item">
-                                            <div className="preview-thumbnail">
-                                               
-                                            </div>
-                                            <div className="preview-item-content d-sm-flex flex-grow">
-                                                <div className="flex-grow">
-                                                    <h6 className="preview-subject">postcode</h6>
-                                                    <p className="text-muted mb-0">{itm.postcode}</p>
-                                                </div>
-                                               
-                                            </div>
-                                        </div>
-                                    </div>
-                                        </div>
-                                        <div className="col-md-6">
-                                        <div className="preview-list">
-                                        <div className="preview-item border-bottom">
-                                            <div className="preview-thumbnail">
-                                               
-                                            </div>
-                                            <div className="preview-item-content d-sm-flex flex-grow">
-                                                <div className="flex-grow">
-                                                    <h6 className="preview-subject">lastname</h6>
-                                                    <p className="text-muted mb-0">{itm.lastname}</p>
-                                                </div>
-                                               
-                                            </div>
-                                        </div>
-                                        <div className="preview-item border-bottom">
-                                            <div className="preview-thumbnail">
-                                               
-                                            </div>
-                                            <div className="preview-item-content d-sm-flex flex-grow">
-                                                <div className="flex-grow">
-                                                    <h6 className="preview-subject">company</h6>
-                                                    <p className="text-muted mb-0">{itm.companyname}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="preview-item border-bottom">
-                                            <div className="preview-thumbnail">
-                                               
-                                            </div>
-                                            <div className="preview-item-content d-sm-flex flex-grow">
-                                                <div className="flex-grow">
-                                                    <h6 className="preview-subject">City</h6>
-                                                    <p className="text-muted mb-0">{itm.cityname}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="preview-item border-bottom">
-                                            <div className="preview-thumbnail">
-                                               
-                                            </div>
-                                            <div className="preview-item-content d-sm-flex flex-grow">
-                                                <div className="flex-grow">
-                                                    <h6 className="preview-subject">Addressline2</h6>
-                                                    <p className="text-muted mb-0">{itm.addressline2}</p>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                        <div className="preview-item">
-                                            <div className="preview-thumbnail">
-                                               
-                                            </div>
-                                            <div className="preview-item-content d-sm-flex flex-grow">
-                                                <div className="flex-grow">
-                                                    <h6 className="preview-subject">phone</h6>
-                                                    <p className="text-muted mb-0">{itm.phone}</p>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                        </div>
-                                    </div>
+                            {/* {details.map((itm,k)=>{
+                                return( */}
                                     
-                                </div>
+                                    <div className="row">
+                                        {/* {itm.address.map((item,key)=>{
+                                            return( */}
+                                                <div className="col-12">
+                                                <div className="row">
+                                                    <div className="col-md-6">
+                                                    <div className="preview-list">
+                                                    <div className="preview-item border-bottom">
+                                                        <div className="preview-thumbnail">
+                                                            
+                                                        </div>
+                                                        <div className="preview-item-content d-sm-flex flex-grow">
+                                                            <div className="flex-grow">
+                                                                <h6 className="preview-subject">firstname</h6>
+                                                                <p className="text-muted mb-0">{details.firstname}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="preview-item border-bottom">
+                                                        <div className="preview-thumbnail">
+                                                           
+                                                        </div>
+                                                        <div className="preview-item-content d-sm-flex flex-grow">
+                                                            <div className="flex-grow">
+                                                                <h6 className="preview-subject">Country</h6>
+                                                                <p className="text-muted mb-0">India</p>
+                                                            </div>
+                                                          
+                                                        </div>
+                                                    </div>
+                                                    <div className="preview-item border-bottom">
+                                                        <div className="preview-thumbnail">
+                                                          
+                                                        </div>
+                                                        <div className="preview-item-content d-sm-flex flex-grow">
+                                                            <div className="flex-grow">
+                                                                <h6 className="preview-subject">State</h6>
+                                                                <p className="text-muted mb-0">{details.statename}</p>
+                                                            </div>
+                                                           
+                                                        </div>
+                                                    </div>
+                                                    <div className="preview-item border-bottom">
+                                                        <div className="preview-thumbnail">
+                                                           
+                                                        </div>
+                                                        <div className="preview-item-content d-sm-flex flex-grow">
+                                                            <div className="flex-grow">
+                                                                <h6 className="preview-subject">Addressline1</h6>
+                                                                <p className="text-muted mb-0">{details.addressline1}</p>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <div className="preview-item">
+                                                        <div className="preview-thumbnail">
+                                                           
+                                                        </div>
+                                                        <div className="preview-item-content d-sm-flex flex-grow">
+                                                            <div className="flex-grow">
+                                                                <h6 className="preview-subject">postcode</h6>
+                                                                <p className="text-muted mb-0">{details.postcode}</p>
+                                                            </div>
+                                                           
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                    </div>
+                                                    <div className="col-md-6">
+                                                    <div className="preview-list">
+                                                    <div className="preview-item border-bottom">
+                                                        <div className="preview-thumbnail">
+                                                           
+                                                        </div>
+                                                        <div className="preview-item-content d-sm-flex flex-grow">
+                                                            <div className="flex-grow">
+                                                                <h6 className="preview-subject">lastname</h6>
+                                                                <p className="text-muted mb-0">{details.lastname}</p>
+                                                            </div>
+                                                           
+                                                        </div>
+                                                    </div>
+                                                    <div className="preview-item border-bottom">
+                                                        <div className="preview-thumbnail">
+                                                           
+                                                        </div>
+                                                        <div className="preview-item-content d-sm-flex flex-grow">
+                                                            <div className="flex-grow">
+                                                                <h6 className="preview-subject">company</h6>
+                                                                <p className="text-muted mb-0">{details.companyname}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="preview-item border-bottom">
+                                                        <div className="preview-thumbnail">
+                                                           
+                                                        </div>
+                                                        <div className="preview-item-content d-sm-flex flex-grow">
+                                                            <div className="flex-grow">
+                                                                <h6 className="preview-subject">City</h6>
+                                                                <p className="text-muted mb-0">{details.cityname}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="preview-item border-bottom">
+                                                        <div className="preview-thumbnail">
+                                                           
+                                                        </div>
+                                                        <div className="preview-item-content d-sm-flex flex-grow">
+                                                            <div className="flex-grow">
+                                                                <h6 className="preview-subject">Addressline2</h6>
+                                                                <p className="text-muted mb-0">{details.addressline2}</p>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <div className="preview-item">
+                                                        <div className="preview-thumbnail">
+                                                           
+                                                        </div>
+                                                        <div className="preview-item-content d-sm-flex flex-grow">
+                                                            <div className="flex-grow">
+                                                                <h6 className="preview-subject">phone</h6>
+                                                                <p className="text-muted mb-0">{details.phone}</p>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            {/* )
+                                        })} */}
+                               
                             </div>
-                                )
+                                {/* )
                                 
-                            })}
+                            })} */}
                             
                         </div>
                     </div>

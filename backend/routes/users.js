@@ -30,58 +30,10 @@ router.get('/getUser', (req, res, next) => {
 
 router.post('/addproducts', (req, res, next)=> {
   console.log('it came here')
-  let image1 = req.files.image
-  // let image2 = req.files.image2
-  // let image3 = req.files.image3
-  // let image4 = req.files.image4
-
-  // const result = JSON.parse(req.body.data)
-  // var { quantity, regularprice, price } = result
-  // var quantity = parseInt(quantity)
-  // var regularprice = parseInt(regularprice)
-  // var price = parseInt(price)
-  // const { name, size, subcategory, maincategory, description } = result
-  // const allDatas = { name, size, subcategory, maincategory, description, quantity, regularprice, price }
-  // userhelpers.addProducts (allDatas).then((id) => {
-    // console.log(id);
-    // console.log(image1.name)
-
-    const reader = new FileReader()
-     reader.readAsDataURL(image1)
-     reader.onloadend = () =>{
-       console.log('dddd')
-      //  console.log(reader.result);
-       console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu')
-      addCloud(reader.result)
-     }
-
-
-
-    // const addCloud=async (image)=>{
-    //   console.log('pppp')
-      // console.log(image)
-      
-      
-    //   const uploadedResponse =await  cloudinary.uploader.upload(image,{
-    //     upload_preset:'ml_default'
-    //   }).then((response) => {
-    //     // console.log(uploadedResponse)
-    //   res.json({msg:'yayayayay'})
-    //   console.log("thisnjj")
-    //   }).catch((err)=>{
-    //     console.log(err)
-    //     console.error({err:'somethng went wrong'})
-      // })
-    // }
- 
-
-  
-
-    // image1.mv(`./public/images/productsimgs/1/${id}.png`)
-    // image2.mv(`./public/images/productsimgs/2/${id}.png`)
-    // image3.mv(`./public/images/productsimgs/3/${id}.png`)
-    // image4.mv(`./public/images/productsimgs/4/${id}.png`)
-  // })
+ console.log(req.body)
+ userhelpers.addProducts(req.body).then((response)=> {
+   console.log('helpers returned')
+ })
 })
 
 router.get('/getproducts', (req, res) => {
@@ -128,23 +80,37 @@ router.get('/getProductsCategory', (req, res) => {
   })
 })
 
+router.get('/getrelated/:productId',(req, res)=>{
+  const productId = req.params.productId
+  console.log('ivideyum ethyyy')
+  userhelpers.findRelated(productId).then((response) => {
+    console.log('related helpers responding')
+    res.json(response)
+  })
+})
+
+router.get('/getSortData',(req, res)=>{
+  userhelpers.getSortData().then((response) => {
+    res.json(response)
+  })
+})
+
 router.get('/getwhisky/:name', (req, res) => {
   const name = req.params.name
-  console.log('csme ksf')
-
-  console.log(name)
   userhelpers.findwhisky(name).then((response) => {
     res.json(response)
   })
 })
 
+router.get('/findCategories', (req, res) => {
+  userhelpers.findCategories().then((response) => {
+    res.json(response)
+  })
+})
+
 router.post('/getexactproduct/:id', (req, res) => {
-  console.log('oooh')
   const id = req.params.id
-  console.log('it is')
-  console.log(id)
   userhelpers.getexactproduct(id).then((response) => {
-    console.log('success')
     console.log(response)
     res.json(response)
   })
@@ -164,15 +130,26 @@ router.get('/gettheproduct/:id', (req, res) => {
   })
 })
 
+router.post('/setdata', (req, res)=>{
+  console.log('routers')
+  console.log(req.body.id)
+  userhelpers.setdata(req.body.id).then((response)=>{
+    console.log('response from helpers')
+  })
+})
+
+
 router.post('/senttheproduct', (req, res) => {
   const productId = req.body.id
   const userid = req.body.Userid
   const productQuantity = 1
   userhelpers.getexactproduct(productId).then((response) => {
-    const { name, category, maincategory, description, price } = response
-    const subtotal = response.price
-    const product = { name, productQuantity, category, maincategory, description, price, userid, productId, subtotal }
-    userhelpers.addNewProducts(product)
+    console.log('res----ponse')
+    const image =  response.images[0].image1
+     const { name, quantity, size, subcategory, maincategory,regularprice,price, description} = response
+     const subtotal = response.price
+     const product = { name, quantity, size, subcategory, maincategory,regularprice,price, description,subtotal,productQuantity,userid,productId,image}
+     userhelpers.addNewProducts(product)
   })
 })
 
@@ -219,7 +196,14 @@ router.post('/addsubcatagory', (req, res) => {
   userhelpers.getSubcategory(req.body).then((response) => {
     console.log('kkkkkkk')
   })
+})
 
+router.get('/getsubcategorydetails/:data', (req, res)=>{
+  userhelpers.getSubcategoryDetails(req.params.data).then((response)=>{
+    console.log('response from helpers..')
+    console.log(response)
+    res.json(response)
+  })
 })
 
 router.get('/getcategorybackend', (req, res) => {
@@ -286,10 +270,8 @@ router.get('/getorders', (req, res) => {
   })
 })
 
-router.get('/getaddress/:id', (req, res) => {
-  console.log('came here')
-  const userId = req.params.id
-  userhelpers.getaddress(userId).then((response) => {
+router.post('/getaddress', (req, res) => {
+  userhelpers.getaddress(req.body).then((response) => {
     console.log('data fetched')
     res.json(response)
   })
@@ -315,6 +297,12 @@ router.get('/forhistory/:id', (req, res) => {
   console.log('ooooooo')
   userhelpers.forhistory(req.params.id).then((result) => {
     console.log('haavoo' + result + 'end')
+    res.json(result)
+  })
+})
+
+router.get('/findAddress/:id', (req, res)=>{
+  userhelpers.findAddress(req.params.id).then((result) => {
     res.json(result)
   })
 })
@@ -483,6 +471,12 @@ router.get('/getAllAddress/:id', (req, res)=>{
   })
 })
 
+router.post('/addoffer',(req, res)=>{
+  userhelpers.addOffer(req.body).then((res)=>{
+    console.log('response camed')
+  })
+})
+
 router.post('/deleteAddress', (req, res)=>{
   console.log(req.body)
   userhelpers.deleteAddress(req.body)
@@ -491,6 +485,25 @@ router.post('/deleteAddress', (req, res)=>{
 router.post('/checkpassword',(req, res)=>{
   userhelpers.checkPassword(req.body).then((response)=>{
     console.log('returning helpers')
+    res.json(response)
+  })
+})
+
+router.get('/getcategoryoffers',(req, res)=>{
+  userhelpers.getCategoryOffers(req.body).then((response)=>{
+    res.json(response)
+  })
+})
+
+router.post('/dltoffer',(req, res)=>{
+console.log('oooyaaa')
+  userhelpers.dltOffers(req.body)
+})
+
+router.post('/filterprice',(req, res)=>{
+  console.log('routers..')
+  userhelpers.felterPrice(req.body).then((response)=>{
+    console.log('data returned from helpers..')
     res.json(response)
   })
 })
