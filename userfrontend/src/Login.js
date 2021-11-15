@@ -20,7 +20,7 @@ function Login() {
 
     // Inputs fields
 
-    const [email, setEmail] = useState('hdsh')
+    const [email, setEmail] = useState('')
 
     const [password, setPassword] = useState('')
     const [emailerr, setEmailerr] = useState('')

@@ -1,14 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
-import DatePicker from "react-datepicker";
-import bsCustomFileInput from 'bs-custom-file-input';
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 import './style.css'
 import axios from 'axios';
 import { fileUploadAndResize } from '../FileUpload'
+import { Modal, Button } from 'react-bootstrap'
+
 
 export function BasicElements() {
 
+  const [categorydata, setCategoryData] = useState([])
+  const [selectedImage, setSelectedimage] = useState([])
+  const [value, setValues] = useState()
+  const [image1, setImage1] = useState('')
+  const [image2, setImage2] = useState('')
+  const [image3, setImage3] = useState('')
+  const [image4, setImage4] = useState('')
+  const [subcategory, setSubCategory] = useState('')
   const [categoryDetails, setCategoryDetails] = useState([])
+  const [srcImg, setSrcImg] = useState(null);
+  const [result, setResult] = useState(null);
+  const [image, setImage] = useState(null);
+  const [crop, setCrop] = useState({ aspect: 1 / 1 });
+  const [showImageHandler, setShowImageHandler] = useState(false)
+
 
 
   useEffect(() => {
@@ -21,16 +37,65 @@ export function BasicElements() {
     })
   }
 
-  const [categorydata,setCategoryData] = useState([])
-  const [selectedImage, setSelectedimage] = useState([])
-  const [value, setValues] = useState()
-  const [image1, setImage1] = useState('')
-  const [image2, setImage2] = useState('')
-  const [image3, setImage3] = useState('')
-  const [image4, setImage4] = useState('')
+  const onHide = () => {
+    setShowImageHandler(false)
 
-  const [subcategory,setSubCategory] = useState('')
+  }
 
+
+  const cropImage = (e) => {
+    console.log('hhdjhskjdskjsdkj')
+    setSrcImg(URL.createObjectURL(e.target.files[0]));
+    setShowImageHandler(true)
+  }
+
+  // const fetchImage = () => {
+  //   console.log('ggggggggg')
+  //   axios.post('http://localhost:5000/users/fetchUserImage', { 'email': email }).then((res) => {
+  //     setUserImage(res.data.image)
+  //     setSpinner(false)
+  //   })
+  // }
+
+  const getCroppedImg = async () => {
+    console.log('crop function')
+    try {
+      const canvas = document.createElement("canvas");
+      const scaleX = image.naturalWidth / image.width;
+      const scaleY = image.naturalHeight / image.height;
+      canvas.width = crop.width;
+      canvas.height = crop.height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(
+        image,
+        crop.x * scaleX,
+        crop.y * scaleY,
+        crop.width * scaleX,
+        crop.height * scaleY,
+        0,
+        0,
+        crop.width,
+        crop.height
+      );
+
+      const base64Image = canvas.toDataURL("image/jpeg", 1);
+     console.log(base64Image);
+      setResult(base64Image);
+      console.log('ooiiii')
+      setShowImageHandler(false)
+
+      const urlArray = await fileUploadAndResize(base64Image)
+      console.log('jdjdjdjdjdjdjdj')
+      console.log(urlArray)
+      setImage1(urlArray)
+      console.log('data came here')
+
+    } catch (e) {
+      console.log("crop the image");
+    }
+  };
+
+  
 
   const imageHandleChange = async (e) => {
     const urlArray = await fileUploadAndResize(e)
@@ -75,26 +140,28 @@ export function BasicElements() {
     setValues(newValues)
   }
 
-  
 
-  const categoryHandler= (e)=>{
-     const data = e.target.value 
+
+  const categoryHandler = (e) => {
+    const data = e.target.value
     const newValues = { ...value }
     newValues[e.target.id] = e.target.value
     setValues(newValues)
-    axios.get(`http://localhost:3000/users/getsubcategorydetails/${data}`).then((res)=>{
+    axios.get(`http://localhost:3000/users/getsubcategorydetails/${data}`).then((res) => {
       console.log('data fetched to frontend')
       setCategoryData(res.data.Subcategory)
     })
   }
 
-  const subCategoryHandler=(e)=>{
+  const subCategoryHandler = (e) => {
     const newValues = { ...value }
     newValues[e.target.id] = e.target.value
     setValues(newValues)
   }
 
-  
+
+
+
 
   return (
     <div>
@@ -114,19 +181,18 @@ export function BasicElements() {
               <div className="row">
                 <div className="col-md-2">
                   <h4 className="card-title">Product details</h4>
+                  {/* {image1?
+                  <img src={image1} alt="" />
+                  :null} */}
                 </div>
                 <div className="col-md-10">
                   <div className="row results ps-4">
-                    {/* <div className="col-md-4 results"> */}
-                    {renderPhotos(selectedImage)}
-                    {/* </div> */}
                   </div>
                 </div>
               </div>
-              <form onSubmit={submitHandler} className="forms-sample pt-4">
+              <form onSubmit={submitHandler}autocomplete='off'  className="forms-sample pt-4">
                 <Form.Group>
                   <label htmlFor="exampleInputName1">Product Name</label>
-
                   <Form.Control type="text" onChange={textChange} className="form-control" id="name" placeholder="Name" />
                 </Form.Group>
                 <Form.Group>
@@ -140,20 +206,20 @@ export function BasicElements() {
                 <Form.Group>
                   <label htmlFor="exampleInputPassword4">Category</label>
                   <select className="form-control" onChange={categoryHandler} id="maincategory">
-                  <option>Select</option>
-                  {categoryDetails.map((item, key)=>{
-                    return(
-                      <option>{item.Categoryname}</option>
-                    )
-                  })}
+                    <option>Select</option>
+                    {categoryDetails.map((item, key) => {
+                      return (
+                        <option>{item.Categoryname}</option>
+                      )
+                    })}
                   </select>
                 </Form.Group>
                 <Form.Group>
                   <label htmlFor="exampleInputPassword4">SubCategory</label>
                   <select className="form-control" onChange={subCategoryHandler} id="subcategory">
-                  <option>Select</option>
-                    {categorydata.map((item, key)=>{
-                      return(
+                    <option>Select</option>
+                    {categorydata.map((item, key) => {
+                      return (
                         <option>{item}</option>
                       )
                     })}
@@ -166,13 +232,65 @@ export function BasicElements() {
                     <option>Out of stock</option>
                   </select>
                 </Form.Group>
-
                 <div className="row">
                   <div className="form col-md-3">
+
+                    <Modal
+
+                      size="lg"
+                      aria-labelledby="contained-modal-title-vcenter"
+                      centered
+                      show={showImageHandler}
+                    >
+
+                      <Modal.Body>
+                        <div>
+                          {srcImg && (
+                            <div>
+                              <ReactCrop
+                                style={{ maxWidth: "50%" }}
+                                src={srcImg}
+                                onImageLoaded={setImage}
+                                crop={crop}
+                                onChange={setCrop}
+                              />
+                              <Button
+                                onClick={getCroppedImg}>
+                                crop
+                              </Button>
+                            </div>
+                          )}
+                          {result && (
+                            <div>
+                              <img src={result} alt="cropped image" />
+                            </div>
+                          )}
+                        </div>
+                        <Button onClick={onHide}>Close</Button>
+                      </Modal.Body>
+
+
+                    </Modal>
+
+                    <div className="row">
+                      <div className="col-md-3">
+                        <img src={image1} alt="ivide" />
+                      </div>
+                      <div className="col-md-3">
+
+                      </div>
+                      <div className="col-md-3">
+
+                      </div>
+                    </div>
+
+
+
                     <form >
                       <label>File upload</label>
+
                       <div className="file-upload-wrapper" data-text="Select your file!">
-                        <input type="file" onChange={imageHandleChange} name="Img1" className="file-upload-field" id="file-upload-field" />
+                        <input type="file" onChange={cropImage} name="Img1" className="file-upload-field" id="file-upload-field" />
                       </div>
                     </form>
                   </div>
@@ -180,7 +298,7 @@ export function BasicElements() {
                     <form >
                       <label className="label-text">File upload</label>
                       <div className="file-upload-wrapper" data-text="Select your file!">
-                        <input type="file" onChange={imageHandleSecond} name="Img2" className="file-upload-field" id="file-upload-field" />
+                        <input type="file" onChange={cropImage} name="Img2" className="file-upload-field" id="file-upload-field" />
                       </div>
                     </form>
                   </div>
@@ -188,7 +306,7 @@ export function BasicElements() {
                     <form >
                       <label className="label-text">File upload</label>
                       <div className="file-upload-wrapper" data-text="Select your file!">
-                        <input type="file" onChange={imageHandlethird} name="Img3" className="file-upload-field" id="file-upload-field" />
+                        <input type="file" onChange={cropImage} name="Img3" className="file-upload-field" id="file-upload-field" />
                       </div>
                     </form>
                   </div>
@@ -196,15 +314,14 @@ export function BasicElements() {
                     <form >
                       <label className="label-text">File upload</label>
                       <div className="file-upload-wrapper" data-text="Select your file!">
-                        <input type="file" onChange={imageHandlefourth} name="Img4" className="file-upload-field" id="file-upload-field" />
+                        <input type="file" onChange={cropImage} name="Img4" className="file-upload-field" id="file-upload-field" />
                       </div>
                     </form>
+
+
+
                   </div>
                 </div>
-                <Form.Group>
-                  <label htmlFor="exampleInputCity1">Regularprice</label>
-                  <Form.Control type="text" onChange={textChange} className="form-control" id="regularprice" placeholder="regularprice" />
-                </Form.Group>
                 <Form.Group>
                   <label htmlFor="exampleInputCity1">Price</label>
                   <Form.Control type="text" onChange={textChange} className="form-control" id="price" placeholder="price" />

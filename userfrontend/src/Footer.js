@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
+import axios from 'axios'
 
 function Header() {
+
+    useEffect(() => {
+        getData()
+    }, [])
+    const [data, setData] = useState([])
+    const getData = () => {
+        console.log('here,.....')
+        axios.get('http://localhost:3000/users/getAllCategories').then((response) => {
+            setData(response.data)
+        })
+    }
     return (
         <div>
             <div className="footer col-md-12 mt-5">
@@ -28,10 +40,13 @@ function Header() {
                                 <div className="col-md-4">
                                     <h6><strong>CATEGORIES</strong></h6>
                                     <div>
-                                        <small>Whisky</small><br />
-                                        <small>Spirits</small><br />
-                                        <small>Liqueur</small><br />
-                                        <small>Wine</small><br />
+                                        {data.map((item, key) => {
+                                            return (
+                                                <div className="row">
+                                                    <small>{item.Categoryname}</small>
+                                                </div>
+                                            )
+                                        })}
                                     </div>
                                 </div>
                                 <div className="col-md-4">

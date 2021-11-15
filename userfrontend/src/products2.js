@@ -54,18 +54,27 @@ function Products2() {
                 </div>
             </header>
 
-            <div className="container">
+            <div className="">
                 <div className="row">
 
                     {data.map((item, key) => {
                         return (
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                                 <hr />
                                 {item.images.map((image, index) => {
                                     return (
                                         <div onClick={() => { itemSelected(item._id) }} className="card profile-card-6"><img style={{height:"25em"}} src={image.image1} className="img img-responsive" />
-                                            <div className="profile-name">{item.name}
+                                            <div style={{ width: '95%' }} className="profile-name ">
+                                                <div className="row">
+                                                    <div className="col-md-6 ">
+                                                        <h4><strong>{item.name}</strong></h4>
+                                                    </div>
+                                                    <div className="col-md-6 text-end">
+                                                        <small><small>({item.offerdiscount}%Off)</small></small>
+                                                    </div>
+                                                </div>
                                             </div>
+
                                             <div className="profile-position">{item.category}</div>
                                             <div className="profile-overview">
                                                 <div className="profile-overview">
@@ -91,15 +100,15 @@ function Products2() {
 
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <div className="row">
-                                            <div className="col-md-6 ps-5">
-                                                <button style={{ width: '100%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Add to Cart<GiShoppingBag /></button>
+                                       
+                                            <div className="col-md-12 ps-5">
+                                                <button style={{ width: '70%',marginLeft: '11%'}} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Add to Cart<GiShoppingBag /></button>
                                                 <ToastContainer />
-                                            </div>
-                                            <div className="col-md-6">
+                                            
+                                            {/* <div className="col-md-6">
                                                 <button style={{ width: '80%' }} className="btn btn-outline-secondary btn-fw">Buy now<GiShoppingBag /></button>
 
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
 

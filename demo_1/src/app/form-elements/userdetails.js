@@ -20,7 +20,8 @@ function Userdetails({match, location}) {
         axios.post(`http://localhost:3000/users/getaddress`,data).then((res)=>{
             console.log('done with details')
             // console.log(res.data[0].address)
-             setDetails(res.data[0].address)
+            // console.log(res.data.addressline1)
+             setDetails(res.data)
         })
     }
 

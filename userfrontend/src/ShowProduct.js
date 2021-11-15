@@ -19,7 +19,6 @@ function ShowProduct() {
     let Userid = localStorage.getItem('id')
 
     const id = useParams()
-    console.log(id)
 
     useEffect(() => {
         getData()
@@ -36,45 +35,34 @@ function ShowProduct() {
 
     const getData = () => {
 
-        console.log('in the function')
         const productid = id.testvalue
-        console.log('getttttttttttttt')
         console.log(productid)
         axios.post(`http://localhost:3000/users/getexactproduct/${productid}`).then((res) => {
-            console.log('it is returning')
-            console.log('dhskj')
             const newData = res.data
             const newFiles = newData.images
-            console.log(newData.images)
-            console.log(newFiles.image1)
             setShowImages(newFiles[0].image1)
             setFiles(newFiles)
             setData(newData)
         })
     }
 
+    console.log('daata--'+data)
+
     const getRelatedproducts = () => {
-        console.log('njan')
         const productid = id.testvalue
         axios.get(`http://localhost:3000/users/getrelated/${productid}`).then((res) => {
             const newData = res.data
-            console.log('jjjj')
-            console.log(res.data)
             serRelatedData(newData)
         })
     }
 
     const productSelected = (id) => {
-        console.log(id)
         toast.success('Product added to cart')
         let data = { id, Userid }
         axios.post(`http://localhost:3000/users/senttheproduct`, data).then((res) => {
-            console.log('success');
         })
     }
 
-    console.log('uuuuuuuuu')
-    console.log(relatedData)
 
     const getCustomerAlseViewed = () => {
         axios.get(`http://localhost:3000/users/getSortData`).then((res) => {
@@ -83,24 +71,18 @@ function ShowProduct() {
     }
 
     const addtosubmit = (id) => {
-        console.log('onClicked')
         toast.success('Product added to cart')
         let data = { id, Userid }
         axios.post(`http://localhost:3000/users/senttheproduct`, data).then((res) => {
-            console.log('success');
         })
 
     }
 
     const imageSelected = (image) => {
-        console.log('inside')
-        console.log(image)
         setShowImages(image)
     }
 
     const itemSelected = (id) => {
-        console.log('get')
-        console.log(id)
         history.push(`/productdetail/${id}`);
     }
 
@@ -114,18 +96,18 @@ function ShowProduct() {
                                 <div className="row ">
 
 
-                                    <div className="col-md-3 ">
-                                        <div className="firstImage mt-2 bg-primary">
-                                            <img onClick={() => { imageSelected(item.image1) }} style={{ width: "100%", height: "100%", borderRadius: "5px", cursor: "pointer" }} src={item.image1} alt="oool" />
+                                    <div style={{height: '30em'}} className="col-md-3 pt-5 mt-4">
+                                        <div className="firstImage mt-2 ">
+                                            <img onClick={() => { imageSelected(item.image1) }} style={{ width: "100%", height: "80%", borderRadius: "5px", cursor: "pointer" }} src={item.image1} alt="oool" />
                                         </div>
                                         <div className="firstImage mt-1">
-                                            <img onClick={() => { imageSelected(item.image2) }} style={{ width: "100%", height: "100%", borderRadius: "5px", cursor: "pointer" }} src={item.image2} alt="" />
+                                            <img onClick={() => { imageSelected(item.image2) }} style={{ width: "100%", height: "80%", borderRadius: "5px", cursor: "pointer" }} src={item.image2} alt="" />
                                         </div>
                                         <div className="firstImage mt-1">
-                                            <img onClick={() => { imageSelected(item.image3) }} style={{ width: "100%", height: "100%", borderRadius: "5px", cursor: "pointer" }} src={item.image3} alt="" />
+                                            <img onClick={() => { imageSelected(item.image3) }} style={{ width: "100%", height: "80%", borderRadius: "5px", cursor: "pointer" }} src={item.image3} alt="" />
                                         </div>
                                         <div className="firstImage mt-1">
-                                            <img onClick={() => { imageSelected(item.image4) }} style={{ width: "100%", height: "100%", borderRadius: "5px", cursor: "pointer" }} src={item.image4} alt="" />
+                                            <img onClick={() => { imageSelected(item.image4) }} style={{ width: "100%", height: "80%", borderRadius: "5px", cursor: "pointer" }} src={item.image4} alt="" />
                                         </div>
                                     </div>
                                     <div className="col-md-9 mt-5">
@@ -270,20 +252,18 @@ function ShowProduct() {
                                 })}
 
                                 <div className="row">
-                                    <div className="col-md-12">
-                                        <div className="row">
-                                            <div className="col-md-6 ps-5">
-                                                <button style={{ width: '100%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Add to Cart<GiShoppingBag /></button>
+                                            <div className="col-md-12 ps-5">
+                                                <button style={{ width: '90%',marginLeft:'0%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Add to Cart<GiShoppingBag /></button>
                                                 <ToastContainer />
                                             </div>
-                                            <div className="col-md-6">
+                                            {/* <div className="col-md-6">
                                                 <button style={{ width: '80%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Buy now<GiShoppingBag /></button>
 
-                                            </div>
-                                        </div>
+                                            </div> */}
+                                        
                                     </div>
 
-                                </div>
+                               
                             </div>
                         )
                     })}
@@ -330,16 +310,13 @@ function ShowProduct() {
 
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <div className="row">
-                                            <div className="col-md-6 ps-5">
-                                                <button style={{ width: '100%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Add to Cart<GiShoppingBag /></button>
+                                                <button style={{ width: '80%',marginLeft: '11%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Add to Cart<GiShoppingBag /></button>
 
-                                            </div>
-                                            <div className="col-md-6">
+                                          
+                                            {/* <div className="col-md-6">
                                                 <button style={{ width: '80%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Buy now<GiShoppingBag /></button>
 
-                                            </div>
-                                        </div>
+                                            </div> */}
                                     </div>
 
                                 </div>

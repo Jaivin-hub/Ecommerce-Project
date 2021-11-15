@@ -12,12 +12,13 @@ import {
 import ShowProduct from './ShowProduct';
 import Addtocart from './Addtocart';
 import CheckoutCustomer from './CheckoutCustomer';
-import EditProfile from './editProfile';
 import Whisky from './subCategory/whisky';
 import Profile from './userProfile'
 import History from './History'
 import Notification from './Notification'
 import OrderPlaced from './OrderPlaced'
+import BuyNow from './BuyNow'
+import ToWishList from './ToWishList'
 
 function App() {
 
@@ -33,6 +34,15 @@ function App() {
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/buyNow">
+            <BuyNow />
+          </Route>
+          <Route path="/buyNow/:id">
+            <BuyNow />
+          </Route>
+          <Route path="/towishlist">
+            <ToWishList />
           </Route>
           <Route path="/notification">
             <Notification />
@@ -55,16 +65,12 @@ function App() {
           <Route path="/checkoutcustomer">
             <CheckoutCustomer />
           </Route>
-          <Route path="/OdderPlaced">
+          <Route path="/orderplaced">
             <OrderPlaced />
-          </Route>
-          <Route path="/editprofile">
-            <EditProfile />
           </Route>
           <Route path="/whisky/:data">
             <Whisky />
           </Route>
-
         </Switch>
       </Router>
     </div>

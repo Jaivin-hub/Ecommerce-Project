@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button } from 'react-bootstrap'
 import Slider from "react-slick";
 import axios from 'axios'
 import './style.css'
+import { useHistory } from "react-router-dom"
 
 
 function Buttons() {
 
   const [data, setData] = useState([])
   const [fordelete, setFordelete] = useState(false)
+  let history = useHistory();
 
   const sliderSettings = {
     infinite: true,
@@ -37,6 +38,10 @@ function Buttons() {
       console.log('all finish')
     })
   }
+
+  const EditProduct=(id)=>{
+    history.push(`/editproducts/${id}`);
+  } 
 
   return (
     <div>
@@ -69,19 +74,8 @@ function Buttons() {
                             <Slider className="portfolio-slider" {...sliderSettings}>
                               {item.images.map((itm, k) => {
                                 return (
-                                  <div>
-                                    <div className="item">
-                                      <img src={itm.image1} alt="carousel-item" />
-                                    </div>
-                                    <div className="item">
-                                      <img src={itm.image2} alt="carousel-item" />
-                                    </div>
-                                    <div className="item">
-                                      <img src={itm.image3} alt="carousel-item" />
-                                    </div>
-                                    <div className="item">
-                                      <img src={itm.image4} alt="carousel-item" />
-                                    </div>
+                                  <div className="parent">
+                                    <img style={{ height: "40em" }} className="image1" src={itm.image1} alt="carousel-item" />
                                   </div>
                                 )
                               })}
@@ -89,9 +83,6 @@ function Buttons() {
                             <div className="d-flex py-4">
                               <div className="preview-list w-100">
                                 <div className="preview-item p-0">
-                                  {/* <div className="preview-thumbnail">
-                        <img src={require('../../assets/images/faces/face12.jpg')} className="rounded-circle" alt="face" />
-                      </div> */}
                                   <div className="preview-item-content d-flex flex-grow">
                                     <div className="flex-grow">
                                       <div className="d-flex d-md-block d-xl-flex justify-content-between">
@@ -105,7 +96,9 @@ function Buttons() {
                               </div>
                             </div>
                             <div className=" progress-md portfolio-progress">
-                              <button onClick={() => { deleteProduct(item._id) }} type="button" className="btn btn-outline-danger btn-fw">Delete</button>
+                              <button onClick={() => { EditProduct(item._id) }} type="button" className="btn btn-outline-primary btn-fw">Edit</button>
+                              <button onClick={() => { deleteProduct(item._id) }} type="button" className="btn btn-outline-danger btn-fw ">Delete</button>
+                            
                             </div>
                           </div>
                         </div>

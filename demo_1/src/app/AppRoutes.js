@@ -10,7 +10,7 @@ const Dropdowns = lazy(() => import('./basic-ui/Dropdowns'));
 const Typography = lazy(() => import('./basic-ui/Typography'));
 const BasicElements = lazy(() => import('./form-elements/BasicElements'));
 const BasicTable = lazy(() => import('./tables/BasicTable'));
-const Mdi = lazy(() => import('./icons/Mdi'));
+const Mdi = lazy(() => import('./icons/glooo'));
 const ChartJs = lazy(() => import('./charts/ChartJs'));
 const Error404 = lazy(() => import('./error-pages/Error404'));
 const Error500 = lazy(() => import('./error-pages/Error500'));
@@ -22,7 +22,9 @@ const Userdetails = lazy(() => import('./form-elements/userdetails'))
 const Productdetails = lazy(() => import('./form-elements/Productdetails'))
 const OfferManagement = lazy(() => import('./form-elements/OfferManagement'))
 const Offers = lazy(() => import('./form-elements/Offers'))
-
+const Editproducts = lazy(()=>import('../Editproducts'))
+const Sailes = lazy(()=>import('./apps/Sailes'))
+const categorydetails = lazy(()=>import('./form-elements/categorydetails'))
 class AppRoutes extends Component {
   render() {
     return (
@@ -30,6 +32,7 @@ class AppRoutes extends Component {
         <Switch>
           <Route exact path="/login" component={Login} />
           <Route path="/dashboard" component={Dashboard} />
+          <Route path="/categoryDetails" component={categorydetails} />
           <Route path="/productdetails/:id" component={Productdetails} />
           <Route path="/offermanagement" component={OfferManagement} />
           <Route path="/categoryOffers" component={Offers} />
@@ -37,9 +40,11 @@ class AppRoutes extends Component {
           <Route path="/basic-ui/buttons" component={Buttons} />
           <Route path="/basic-ui/dropdowns" component={Dropdowns} />
           <Route path="/basic-ui/typography" component={Typography} />
+          <Route path='/sailes' component = {Sailes}/>
           <Route path="/orders" component={OrderMangement} />
           <Route path='/profile' component={Profile} />
           <Route path='/register' component={Register} />
+          <Route path='/editproducts/:id' component={Editproducts} />
           <Route path="/form-Elements/basic-elements" component={BasicElements} />
           <Route path="/category" component={Category} />
           <Route path="/subcategory" component={Subcategory} />

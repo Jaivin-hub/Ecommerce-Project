@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "homepage": "http://bootstrapdash.com/demo/corona-react-free/template/demo_1/preview",
   "private": true,
+  "proxy": "http://localhost:5000/",
   "dependencies": {
     "@lourenci/react-kanban": "^0.13.0",
     "@mdi/font": "^4.2.95",
@@ -40,8 +41,10 @@
     "react-dom": "^16.9.0",
     "react-dragula": "^1.1.17",
     "react-dropzone": "^10.1.9",
+    "react-html-table-to-excel": "^2.0.0",
     "react-i18next": "^11.1.0",
     "react-icons": "^4.3.1",
+    "react-image-crop": "^9.0.4",
     "react-image-file-resizer": "^0.4.7",
     "react-images": "^1.0.0",
     "react-input-mask": "^3.0.0-alpha.0",

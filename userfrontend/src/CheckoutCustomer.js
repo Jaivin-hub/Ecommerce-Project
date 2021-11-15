@@ -6,47 +6,135 @@ import { Link } from 'react-router-dom'
 import { MdDelete } from 'react-icons/md';
 import { BiRupee } from 'react-icons/bi';
 import Footer from './Footer'
+import { useHistory } from "react-router-dom"
+
 
 
 function CheckoutCustomer() {
 
-    const [granttotal, setGranttotal] = useState()
-    const [deleteAddress, setDeleteAddress] = useState(false)
-
-
-    useEffect(() => {
-        getCart()
-        getAddress()
-    }, [deleteAddress])
-
-
-
-
+    let Uname = localStorage.getItem('username')
+    let history = useHistory();
 
     let token = localStorage.getItem('token')
     let userId = localStorage.getItem('id')
     let username = localStorage.getItem('username')
-
-
     const [details, setDetails] = useState([])
     const [coupon, setCoupon] = useState()
-    const [allAddress, setAllAddress] = useState(false)
-
     const [div, setDiv] = useState(true)
-
     const [next, setNext] = useState(true)
-
     const [open, setOpen] = useState(false)
     const [openPayment, setOpenPayment] = useState(false)
     const [checkout, setCheckout] = useState(false)
     const [addressId, setAddressId] = useState('')
     const [userAddress, setUserAddress] = useState([])
+    const [granttotal, setGranttotal] = useState()
+    const [deleteAddress, setDeleteAddress] = useState(false)
+    // rasorpay 
+
+    function loadScript(src) {
+        console.log('2-step')
+        return new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = src;
+            script.onload = () => {
+                console.log('3-step')
+                resolve(true);
+            };
+            script.onerror = () => {
+                console.log('4-step')
+                resolve(false);
+            };
+            document.body.appendChild(script);
+        });
+    }
+
+    async function displayRazorpay() {
+        console.log('1-step')
+        const res = await loadScript(
+            "https://checkout.razorpay.com/v1/checkout.js",
+            "https://checkout.razorpay.com/v1/payment-button.js"
+        );
+
+
+
+        if (!res) {
+            alert("Razorpay SDK failed to load. Are you online?");
+            return;
+        }
+
+        const result = await axios.post("http://localhost:3000/users/orders", { total: granttotal });
+        console.log(result.data);
+
+        if (!result) {
+            alert("Server error. Are you online?");
+            return;
+        }
+
+        const { amount, id: order_id, currency } = result.data;
+        console.log('hhh')
+        const payment='razorpay'
+        const total = Math.floor(amount / 100)
+        const totalDetails = {total,userId,payment,addressId}
+
+        const options = {
+            key: "rzp_test_9DCRDXICx0vZ5R", // Enter the Key ID generated from the Dashboard
+            amount: amount.toString(),
+            currency: currency,
+            name: Uname,
+            description: "Test Transaction",
+            order_id: order_id,
+            handler: async function (response) {
+                console.log('here is the razorpay/')
+                console.log(response.data);
+                console.log('suceess')
+
+                const data = {
+                    orderCreationId: order_id,
+                    razorpayPaymentId: response.razorpay_payment_id,
+                    razorpayOrderId: response.razorpay_order_id,
+                    razorpaySignature: response.razorpay_signature,
+                };
+                console.log('data',data)
+
+                const result = await axios.post("http://localhost:3000/users/success", totalDetails);
+                if(result.data.msg==true){
+                    history.push("/orderplaced");
+                }
+            },
+
+        };
+
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
+    }
+
+
+
+    //end
+
+    const [allAddress, setAllAddress] = useState(false)
+
+
+
+    useEffect(() => {
+        getCart()
+        getAddress()
+
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        document.body.appendChild(script);
+    }, [deleteAddress, allAddress])
+
+
+
+
 
     const firstStep = () => {
         setDiv(false)
     }
 
-    console.log(userAddress)
+    console.log('address section')
+    console.log(addressId)
 
     const [firstname, setFirstname] = useState()
     const [lastname, setLastname] = useState()
@@ -164,7 +252,7 @@ function CheckoutCustomer() {
 
         })
 
-        setOpenPayment(true)
+
         SetAddAddress(false)
 
         console.log(Data)
@@ -177,19 +265,29 @@ function CheckoutCustomer() {
         setCoupon(coupenData)
     }
 
+    const [coupenPreview, setCoupenPreview] = useState('')
+
     const sendCouponHandler = (e) => {
         e.preventDefault()
         let name = coupon.couponcode
         let totalAmount = granttotal
-        let data = { name, totalAmount }
+        let data = { name, totalAmount, userId }
 
         axios.post("http://localhost:3000/users/coupenentered", data).then((res) => {
             console.log('success')
             console.log(res.data)
-            setGranttotal(res.data)
+            if (res.data == "Coupen already used") {
+                setCoupenPreview(res.data)
+            } else if (res.data == 'Invalid coupon') {
+                setCoupenPreview(res.data)
+            } else {
+                setGranttotal(res.data)
+                setCoupenPreview('Coupon applied')
+            }
         })
     }
 
+    const [razorpay, setRazorpay] = useState(false)
     console.log(coupon)
 
 
@@ -203,10 +301,17 @@ function CheckoutCustomer() {
     }
 
     const placeOrder = () => {
-        const details = { granttotal, userId, addressId }
+        const payment = 'COD'
+        console.log('cod')
+        console.log(granttotal)
+        const total = granttotal
+        const details = { total, userId, addressId, payment }
         axios.post(`http://localhost:3000/users/orderplaced`, details).then((res) => {
             console.log('Order placed')
+            if (res) {
+                history.push("/orderplaced");
 
+            }
         })
     }
 
@@ -215,14 +320,47 @@ function CheckoutCustomer() {
         localStorage.clear();
     }
 
+    const [firstConfirmation, setFirstConfirmation] = useState(false)
+    const [secondConfirmation, setSecondConfirmation] = useState(false)
+    const [thirdConfirmation, setThirdConfirmation] = useState(false)
+    const [ErrorMsg, setErrorMsg] = useState('')
+
 
     const SelectedAddressHandler = (id) => {
         setAddressId(id)
         setOpenPayment(true)
+        setFirstConfirmation(true)
     }
 
-    console.log(addressId);
+    const termsAndConditions = () => {
+        setThirdConfirmation(true)
+    }
 
+    const showError = () => {
+        setErrorMsg('Select all required fields')
+    }
+
+    const buttonHandler = () => {
+        setCheckout(false)
+        setRazorpay(false)
+        setSecondConfirmation(true)
+    }
+
+    const paybtn = () => {
+        setCheckout(true)
+        setRazorpay(false)
+        setSecondConfirmation(true)
+    }
+
+    const razBtn = () => {
+        setCheckout(false)
+        setRazorpay(true)
+        setSecondConfirmation(true)
+    }
+
+
+    console.log('ithaaanuu')
+    console.log(details)
     const props = { granttotal, addressId }
 
 
@@ -425,7 +563,6 @@ function CheckoutCustomer() {
                                     {userAddress.map((item, k) => {
                                         return (
                                             <div className="addressMangement">
-
                                                 <div className="row">
                                                     <div className="col-md-2 text-center mt-2">
                                                         <input className="ml-1" name="select" onClick={() => SelectedAddressHandler(item.id)} type="checkbox" />
@@ -475,10 +612,10 @@ function CheckoutCustomer() {
                                             </div>
                                         </div>
                                         <div className="row ">
-                                            <div className="col-md-6 text-center ">
+                                            <div className="col-md-3 text-center ">
                                                 <div className="row">
                                                     <div className="col-md-3">
-                                                        <input onChange={() => { setCheckout(true) }} className="mt3" name="radio" type="radio" />
+                                                        <input onChange={() => { paybtn() }} className="mt3" name="radio" type="radio" />
                                                     </div>
                                                     <div className="col-md-3">
                                                         <label htmlFor="">Paypal</label>
@@ -488,10 +625,20 @@ function CheckoutCustomer() {
                                             <div className="col-md-6 text-center">
                                                 <div className="row">
                                                     <div className="col-md-3">
-                                                        <input onChange={() => { setCheckout(false) }} className="mt3" name="radio" type="radio" />
+                                                        <input onChange={() => { buttonHandler() }} className="mt3" name="radio" type="radio" />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label htmlFor="">Cash on Delivery</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-3 text-center">
+                                                <div className="row">
+                                                    <div className="col-md-3">
+                                                        <input onChange={() => { razBtn() }} className="mt3" name="radio" type="radio" />
+                                                    </div>
+                                                    <div className="col-md-6">
+                                                        <label htmlFor="">Razorpay</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -515,7 +662,7 @@ function CheckoutCustomer() {
                                 </div>
                                 <div className="row mt-3">
                                     <div className="col-md-12">
-                                        <input type="checkbox" />
+                                        <input onChange={termsAndConditions} type="checkbox" />
                                         <label htmlFor="">Yes, I agree with the above terms and conditions</label>
                                     </div>
                                 </div>
@@ -524,15 +671,39 @@ function CheckoutCustomer() {
 
 
                                 <div className="row pt-3">
-                                    <div className="btn">
-                                        {checkout ?
-                                            <PayPal value={props} />
-                                            :
+
+
+                                    {firstConfirmation && secondConfirmation && thirdConfirmation ?
+                                        null
+                                        :
+                                        <p className="text-danger">{ErrorMsg}</p>
+                                    }
+                                    {firstConfirmation && secondConfirmation && thirdConfirmation ?
+
+                                        <div className="btn">
+                                            {checkout ?
+                                                <PayPal value={props} />
+
+                                                : razorpay ? <button style={{ backgroundColor: 'rgb(2,0,36)', background: 'linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%)', width: "50%", height: '3em', borderRadius: '5px', color: '#fff' }}
+                                                    className="App-link" data-payment_button_id="pl_IHRD263JqZbzZQ" onClick={displayRazorpay}>
+                                                    Buy Now <br /><small className="text-muted">secured by razorpay</small>
+                                                </button> :
+                                                    <button
+                                                        onClick={placeOrder}
+                                                        className="btn">PLACE YOUR ORDER</button>
+                                            }
+                                        </div>
+                                        :
+                                        <div className="btn">
+
                                             <button
-                                                onClick={placeOrder}
-                                                className="btn">PLACE YOUR ORDER</button>
-                                        }
-                                    </div>
+                                                onClick={showError}
+                                                className="btn">PLACE YOUR ORDER
+                                            </button>
+
+                                        </div>
+                                    }
+
                                 </div>
                             </div>
                             : null}
@@ -550,63 +721,82 @@ function CheckoutCustomer() {
                                     </div>
                                 </div>
                                 <hr />
-
-                                {details.map((item, k) => {
-                                    return (
-                                        <div>
+                                <div style={{ height: "15em", overflow: "scroll", overflowX: "hidden" }}>
 
 
-                                            <div className="row">
-                                                <h6><strong>{item.productQuantity}</strong> Bottles</h6>
+
+                                    {details.map((item, k) => {
+                                        return (
+                                            <div>
+
+
+                                                <div className="row">
+                                                    <h6 className=""><strong>{item.productQuantity}</strong> Bottles</h6>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-md-3">
+                                                        <img style={{ width: '100%', height: '5em', borderRadius: '5px' }} className="addedimg" src={item.image} alt="" />
+                                                    </div>
+                                                    <div className="col-md-6">
+                                                        <p>{item.name}</p>
+                                                        <p>{item.description}</p>
+                                                    </div>
+                                                    <div className="col-md-3">
+                                                        <p><BiRupee />{item.subtotal}</p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="row">
-                                                <div className="col-md-3">
-                                                    <img className="addedimg" src="https://cdn11.bigcommerce.com/s-erpoah/products/9181/images/17109/jack-daniels-white-rabbit-saloon-tennessee-whiskey-bottle-700ml__83763.1611800141.200.200.jpg?c=2" alt="" />
-                                                </div>
-                                                <div className="col-md-6">
-                                                    <p>{item.name}</p>
-                                                </div>
-                                                <div className="col-md-3">
-                                                    <p><BiRupee />{item.subtotal}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                })}
+                                        )
+                                    })}
 
-
+                                </div>
                                 <hr />
                                 <div className="row">
                                     <div className="row ">
-                                        <div className="col-md-6">
+                                        {/* <div className="col-md-6">
                                             <h6><strong>TAX</strong></h6>
                                         </div>
                                         <div className="col-md-6 text-end">
                                             <p><BiRupee />14.54</p>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="row pt-3">
                                         <div className="col-md-6">
-                                            <h4><strong>TOTAL (AUD)</strong></h4>
+                                            <h4><strong>TOTAL (INR)</strong></h4>
                                         </div>
                                         <div className="col-md-6 text-end">
                                             <h5><BiRupee />{granttotal}</h5>
                                         </div>
                                     </div>
                                     <div className="container">
-                                        <div className="row  pt-3 mt-4">
-                                            <small><u>Coupon code</u></small>
-                                        </div>
-                                        <form onSubmit={sendCouponHandler}>
-                                            <div className="row pt-1">
-                                                <div className="col-md-6">
-                                                    <input id="couponcode" onChange={couponHandler} className="couponinp" type="text" />
-                                                </div>
-                                                <div className="col-md-4 ms-3   mt-2">
-                                                    <button type="submit" className="btn">APPLY</button>
-                                                </div>
+
+                                        <div className="row  pt-3 ">
+                                            <div className="col-md-3 pt-4">
+                                                <small><u>Coupon code</u></small>
+                                                {coupenPreview == 'Coupon applied' ?
+                                                    <div className="row">
+                                                        <h5 className=" text-success"><strong><u>{coupenPreview}</u></strong></h5>
+                                                    </div>
+                                                    :
+                                                    <div className="row">
+                                                        <h5 className=" text-danger"><strong><u>{coupenPreview}</u></strong></h5>
+                                                    </div>
+                                                }
                                             </div>
-                                        </form>
+                                            <div className="col-md-9">
+                                                <form onSubmit={sendCouponHandler}>
+                                                    <div className=" pt-1">
+                                                        <div className="">
+                                                            <input id="couponcode" onChange={couponHandler} className="couponinp" type="text" />
+                                                        </div>
+                                                        <div className="mt-2">
+                                                            <button type="submit" className="btn">APPLY</button>
+                                                        </div>
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

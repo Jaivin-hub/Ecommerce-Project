@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './style.css'
-import { Table } from 'react-bootstrap'
+import { Table, Carousel } from 'react-bootstrap'
 import { BiRupee } from "react-icons/bi";
 import { BsPlus } from "react-icons/bs";
 import { BiMinus } from "react-icons/bi";
@@ -24,40 +24,39 @@ function Addtocart() {
     const [details, setDetails] = useState([])
     const [itemdlt, setitemdlt] = useState(false)
     const [addModified, setAddmodified] = useState(false)
-    const [ granttotal,setGranttotal] = useState()
+    const [granttotal, setGranttotal] = useState()
+    const [refresh, setRefresh] = useState(false)
     let sum = 0
 
     useEffect(() => {
         getcart()
+        getOffers()
     }, [addModified, itemdlt])
 
-    // const getData = () => {
-    //     axios.get(`http://localhost:3000/users/gettheproduct/${dataId}`).then((res) => {
-    //     })
-    // }
+    const [offerDetails, setOfferDetails] = useState([])
+
+    const getOffers = () => {
+        console.log('yaaa yaaa')
+        axios.get('http://localhost:3000/users/getcouponoffers').then((response) => {
+            console.log('data back')
+            setOfferDetails(response.data)
+            console.log(response.data)
+        })
+    }
 
 
     const getcart = () => {
-        console.log('function activated');
         axios.get(`http://localhost:3000/users/getcart/${Userid}`).then((res) => {
             const newdetails = res.data
-            console.log(newdetails.grantTotal)
-            console.log(newdetails.response.products)
-            // const values = newdetails.response
-            // console.log(values.products)
             setDetails(newdetails.response.products)
-            // console.log('ooooo'+ res.data)
             setGranttotal(newdetails.grantTotal)
         })
     }
 
     const deleteItem = (itemid) => {
         setitemdlt(!itemdlt)
-        console.log('deleteFunction'+ itemid)
-        const details = {Userid,itemid}
-        console.log('function activated')
-        axios.post(`http://localhost:3000/users/deleteitem`,details).then(() => {
-            console.log('okkkk')
+        const details = { Userid, itemid }
+        axios.post(`http://localhost:3000/users/deleteitem`, details).then(() => {
             window.location.reload();
         })
     }
@@ -66,29 +65,22 @@ function Addtocart() {
         history.push(`/checkoutcustomer`);
     }
 
-    const AddProduct = (productId,productPrice) => {
+    const AddProduct = (productId, productPrice) => {
         setAddmodified(!addModified)
         const userId = Userid
-        const productdetails = { productId,productPrice, userId }
-       console.log('hoooooo')
-        console.log(productdetails)
+        const productdetails = { productId, productPrice, userId }
         axios.post(`http://localhost:3000/users/updatequantity`, productdetails).then(() => {
-            console.log('okkkk')
         })
     }
 
-    const subtractProduct = (productId,productPrice) => {
+    const subtractProduct = (productId, productPrice) => {
         setAddmodified(!addModified)
         const userId = Userid
-        const productdetails = { productId,productPrice, userId }
+        const productdetails = { productId, productPrice, userId }
         axios.post(`http://localhost:3000/users/dltprd`, productdetails).then(() => {
-            console.log('okkkk')
         })
     }
-
-    console.log('all is set')
-    console.log(details)
-    const totalquantity=details.length
+    const totalquantity = details.length
 
     console.log(details)
 
@@ -101,8 +93,16 @@ function Addtocart() {
                 <div className="col-md-12">
                     <div className="row pt-5">
                         <div className="combooffer">
-                            <p>BUY ANY MIXED 12 BOTTLES OF WINE & RECEIVE 10% OFF! (Discount applied at the checkout.
-                                Excludes champagne). PURCHASE ANY 12 PACK STRAIGHT CASE OF WINE AND 10% DISCOUNT ALREADY APPLIES.</p>
+                            <Carousel >
+                                {offerDetails.map((item, k) => {
+                                    return (
+                                        <Carousel.Item className="text-center">
+                                            <h3><small>Buy upto {item.maxpurchaseamount} and get {item.discount}% off!
+                                                use <strong className="text-success"> {item.couponcode}</strong> copencode</small></h3>
+                                        </Carousel.Item>
+                                    )
+                                })}
+                            </Carousel>
                         </div>
                     </div>
                     <div className="row pt-5">
@@ -110,7 +110,7 @@ function Addtocart() {
                             <Table >
                                 <thead>
                                     <tr>
-                                        
+
                                         <th>ITEM</th>
                                         <th className="text-center">PRICE</th>
                                         <th className="text-center">QUANTITY</th>
@@ -122,7 +122,7 @@ function Addtocart() {
                                     {details.map((item, index) => {
 
 
-                                        
+
 
 
                                         return (
@@ -132,7 +132,7 @@ function Addtocart() {
 
                                                     <div className="row">
                                                         <div className="col-md-5">
-                                                            <img style={{ width: '150%',height: '5em',borderRadius:"4px" }} src={item.image} alt="" />
+                                                            <img style={{ width: '150%', height: '5em', borderRadius: "4px" }} src={item.image} alt="" />
                                                         </div>
                                                         <div className="col-md-6 ms-3">
                                                             <small><small><u>{item.subcategory}</u></small></small>
@@ -157,14 +157,14 @@ function Addtocart() {
                                                     {/* <div className="quantity"> */}
                                                     <div className="row mt-4">
                                                         <div className="col-md-2">
-                                                            <button onClick={() => { subtractProduct(item.productId,item.price) }} className="btn"><BiMinus /> </button>
+                                                            <button onClick={() => { subtractProduct(item.productId, item.price) }} className="btn"><BiMinus /> </button>
                                                         </div>
                                                         <div className="col-md-2 ms-2">
                                                             <button className="btn">{item.productQuantity}</button>
 
                                                         </div>
                                                         <div className="col-md-2">
-                                                            <button onClick={() => { AddProduct(item.productId,item.price) }} className="btn"><BsPlus /></button>
+                                                            <button onClick={() => { AddProduct(item.productId, item.price) }} className="btn"><BsPlus /></button>
                                                         </div>
                                                     </div>
                                                     {/* </div> */}
@@ -201,7 +201,7 @@ function Addtocart() {
                                     </div>
                                 </div>
                                 <hr />
-                                <div className="row">
+                                {/* <div className="row">
                                     <div className="col-md-6">
                                         <h6><strong>SHIPPING:</strong></h6>
                                     </div>
@@ -209,17 +209,7 @@ function Addtocart() {
                                         <h6>Add Info</h6>
                                     </div>
                                 </div>
-                                <hr />
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <h6><strong>TAX:</strong></h6>
-                                    </div>
-                                    <div className="col-md-6 text-end">
-                                        <h6><BiRupee />9.09</h6>
-                                    </div>
-                                </div>
-                                <hr />
-                               
+                                <hr /> */}
                                 <div className="row">
                                     <div className="col-md-6">
                                         <h6><strong>GRAND TOTAL:</strong></h6>

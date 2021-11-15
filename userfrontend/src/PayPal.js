@@ -1,17 +1,20 @@
-import React, { useRef, useEffect,useState } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import axios from 'axios'
-import swal from 'sweetalert';
+import { useHistory } from "react-router-dom";
 
 function PayPal(props) {
     const paypal = useRef()
 
+    let history = useHistory();
+
     const userId = localStorage.getItem('id')
 
-    console.log('propsss--'+props.value.addressId)
+    console.log('propsss--' + props.value.addressId)
     const total = props.value.granttotal
     const addressId = props.value.addressId
 
-    const [div,setDiv]= useState()
+    const [div, setDiv] = useState()
+    const [showPage, setShowPage] = useState(false)
 
 
     useEffect(() => {
@@ -33,19 +36,11 @@ function PayPal(props) {
             },
             onApprove: async (data, actions) => {
                 const order = await actions.order.capture()
-                console.log(order)
-                console.log('uproved')
-                const details = {total,userId,addressId}
-                axios.post(`http://localhost:3000/users/orderplaced`,details).then((res) => {
-                    console.log('Order placed')
+                const payment = 'paypal'
+                const details = { total, userId, addressId, payment }
+                history.push("/orderplaced");
+                axios.post(`http://localhost:3000/users/orderplaced`, details).then((res) => {
 
-                    swal({
-                        title: "Good job!",
-                        text: "You clicked the button!",
-                        icon: "success",
-                        button: "Aww yiss!",
-                      });
-                   
                 })
 
             },
@@ -57,7 +52,6 @@ function PayPal(props) {
     return (
         <div>
             <div ref={paypal}></div>
-            
         </div>
     )
 }

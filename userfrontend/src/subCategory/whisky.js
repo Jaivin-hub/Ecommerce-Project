@@ -28,6 +28,8 @@ function Whisky(props) {
         })
     }
 
+    console.log(data)
+
     const itemSelected = (id) => {
         history.push(`/productdetail/${id}`);
     }
@@ -67,13 +69,13 @@ function Whisky(props) {
 
                 <div>
                     <div className="row text-center pt-3">
-                        <h2><strong>SCOTCH WHISKY</strong></h2>
+                        <h2><strong>{categoryName}</strong></h2>
                         <div className="img pt-4">
                             <img src="https://cdn11.bigcommerce.com/s-erpoah/product_images/uploaded_images/fy21-catbanner8.jpg" alt="" />
                         </div>
                     </div>
                     <div className="row pt-5">
-                        <h3><strong>BUY SCOTCH WHISKY ONLINE IN INDIA</strong></h3>
+                        <h3><strong>BUY {categoryName} ONLINE IN INDIA</strong></h3>
                         <div className="message pt-3">
                             <p>Whisky is known worldwide for its unique aromas and distinctive flavors.
                                 Whether you are looking for popular editions or hard-to-find collectables,

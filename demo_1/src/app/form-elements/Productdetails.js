@@ -6,13 +6,14 @@ import Slider from "react-slick";
 function Productdetails() {
 
     const id = useParams()
-    
+
     // console.log(id.id)
     const userId = id.id
-    
-    
+
+
 
     const [data, setData] = useState([])
+    const [forStatus, setForStatus] = useState([])
 
 
     useEffect(() => {
@@ -22,20 +23,17 @@ function Productdetails() {
     const getData = () => {
         console.log('first')
         axios.get(`http://localhost:3000/users/getall/${userId}`).then((res) => {
-            // console.log(res.data[0].products)
-            
+            console.log('ithum koode set aayaalll')
+            setForStatus(res.data[0].products)
             axios.post(`http://localhost:3000/users/getallproduct`, res.data[0].products).then((res) => {
                 const value = res.data
                 setData(value)
-                // console.log(res.data)
             })
         })
-        
-    }
 
-    console.log(data);
-    
-    // console.log(data)
+    }
+    console.log('mapinu setaayiii')
+    console.log(forStatus)
 
     const sliderSettings = {
         infinite: true,
@@ -71,17 +69,20 @@ function Productdetails() {
 
                                                 <div className="col-md-6 col-xl-4 grid-margin stretch-card">
                                                     <div className="card">
-                                                        <div className="card-body">
+                                                        <div style={{ height: "40em" }} className="card-body">
                                                             <h4 className="card-title"></h4>
                                                             <Slider className="portfolio-slider" {...sliderSettings}>
-                                                                <div className="item">
-                                                                    <img src={require('../../assets/images/dashboard/Rectangle.jpg')} alt="carousel-item" />
+                                                                <div className="item ">
+                                                                    <img style={{ height: '30em' }} src={itm.images[0].image1} alt="" />
                                                                 </div>
                                                                 <div className="item">
-                                                                    <img src={require('../../assets/images/dashboard/Img_5.jpg')} alt="carousel-item" />
+                                                                    <img style={{ height: '30em' }} src={itm.images[0].image2} alt="carousel-item" />
                                                                 </div>
                                                                 <div className="item">
-                                                                    <img src={require('../../assets/images/dashboard/img_6.jpg')} alt="carousel-item" />
+                                                                    <img style={{ height: '30em' }} src={itm.images[0].image3} alt="carousel-item" />
+                                                                </div>
+                                                                <div className="item">
+                                                                    <img style={{ height: '30em' }} src={itm.images[0].image4} alt="carousel-item" />
                                                                 </div>
                                                             </Slider>
                                                             <div className="d-flex py-4">
@@ -103,10 +104,9 @@ function Productdetails() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            {/* <p className="text-muted">Sailes</p> */}
-
-
-
+                                                            {forStatus[k].status == 'canceled' ?
+                                                                <button className="btn btn-outline-danger btn-fw">{forStatus[k].status}</button>
+                                                                : null}
                                                         </div>
                                                     </div>
                                                 </div>

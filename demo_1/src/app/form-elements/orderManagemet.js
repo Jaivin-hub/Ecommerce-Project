@@ -10,46 +10,44 @@ export function BasicElements() {
 
     let history = useHistory();
 
+    const [newStatus, setNewStatus] = useState(false)
     const [data, setData] = useState([])
-    const [status,setStatus] = useState('')
+    const [status, setStatus] = useState('')
 
     useEffect(() => {
         getData()
-    }, [])
+    }, [newStatus])
 
-    console.log(data.id)
 
     const getData = () => {
         axios.get(`http://localhost:3000/users/getorders`).then((res) => {
-            console.log('success')
             const alldata = res.data
-            console.log(alldata)
             setData(alldata)
         }).catch((err) => {
             console.log(err)
         })
     }
 
-    const [newData,setNewData] = useState()
 
-    const userDetails = (id,addressid) => {
-        console.log('func')
-
-        const data = {id,addressid}
+    const userDetails = (id, addressid) => {
+        const data = { id, addressid }
         history.push(`/userdetails/${id}?addressid=${addressid}`);
     }
 
     const productsDetails = (id) => {
-
+        console.log(id)
         history.push(`/productdetails/${id}`);
     }
 
-    const optionChange = (e) => {
-        setStatus(e.target.value)
-        axios.post(`http://localhost:3000/users/setStatus`,status).then((response) =>{
+    const optionChange = (id, value) => {
+        const data = { id, value }
+        setNewStatus(!newStatus)
+        axios.post(`http://localhost:3000/users/setStatus`, data).then((response) => {
             console.log('all set')
         })
     }
+
+
 
 
 
@@ -64,9 +62,9 @@ export function BasicElements() {
                     </ol>
                 </nav>
             </div>
-            <div className="row ">
-                <div className="col-12 grid-margin">
-                    <div className="card">
+            <div className="row">
+                <div style={{  }} className="col-12 grid-margin">
+                    <div style={{ overflow: 'scroll', overflowX: 'hidden', overflowY: 'scroll' }} className="card">
                         <div className="card-body">
                             <h4 className="card-title">Order Status</h4>
                             <div className="table-responsive">
@@ -105,25 +103,28 @@ export function BasicElements() {
                                                     </td>
                                                     <td>
                                                         <div className="d-flex">
-                                                            <img src={require('../../assets/images/faces/face4.jpg')} alt="face" />
-                                                            <span className="pl-2 pt-2">{data[key].userid}</span>
-                                                            <span><div onClick={() => { userDetails(data[key].userid,data[key].addressid) }} style={{ cursor: 'pointer' }} className="badge badge-outline-primary">Details</div></span>
+                                                          
+                                                            <span><div onClick={() => { userDetails(data[key].userid, data[key].addressid) }} style={{ cursor: 'pointer', marginLeft: "10%" }} className="badge badge-outline-primary">Details</div></span>
                                                         </div>
                                                     </td>
                                                     <td>{key}</td>
                                                     <td> <BiRupee />{data[key].total} </td>
-                                                    <td> <div onClick={() => { productsDetails(data[key].userid) }} style={{ cursor: 'pointer' }} className="badge badge-outline-secondary">Details</div> </td>
-                                                    <td> Paypal </td>
-                                                    <td> 04 Dec 2019 </td>
+                                                    <td> <div onClick={() => { productsDetails(data[key]._id) }} style={{ cursor: 'pointer' }} className="badge badge-outline-secondary">Details</div> </td>
+                                                    <td> {data[key].payment} </td>
+                                                    <td> {data[key].orderdate}</td>
                                                     <td>
-                                                        <div className="badge badge-outline-success">Approved</div>
+                                                        {data[key].payment == 'COD' ?
+                                                            <div className="badge badge-outline-warning">Pending</div>
+                                                            :
+                                                            <div className="badge badge-outline-success">Approved</div>
+                                                        }
                                                     </td>
                                                     <td>
                                                         <div className="badge badge-outline-info">
-                                                            <select className="form-control" onChange={()=>{}} style={{ cursor: 'pointer', backgroundColor: 'black', color: '#fff' }} onChange={optionChange} id="status">
-                                                                <option>Deleved</option>
+                                                            <select className="form-control" style={{ cursor: 'pointer', backgroundColor: 'black', color: '#fff' }} value='kdj' onChange={(e) => { optionChange(data[key]._id, e.target.value) }} id="status">
+                                                                <option>{data[key].orderStatus}</option>
+                                                                <option>Delivered</option>
                                                                 <option>Pending</option>
-                                                                <option>Placed</option>
                                                             </select>
                                                         </div>
                                                     </td>

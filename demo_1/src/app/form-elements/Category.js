@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import bsCustomFileInput from 'bs-custom-file-input';
@@ -9,16 +9,16 @@ import axios from 'axios';
 export function BasicElements() {
 
     const [values, setValues] = useState()
-    const [categories,setCategories] = useState([])
-    const [added,setAdded] = useState(true)
-    const [del,setDel] = useState(true)
+    const [categories, setCategories] = useState([])
+    const [added, setAdded] = useState(true)
+    const [del, setDel] = useState(true)
 
-    useEffect(()=>{
+    useEffect(() => {
         getCategory()
-    },[added,del])
+    }, [added, del])
 
 
-   
+
 
 
     const valueAdded = (e) => {
@@ -27,7 +27,7 @@ export function BasicElements() {
         setValues(newData)
     }
 
-    const getCategory=()=>{
+    const getCategory = () => {
         axios.get('http://localhost:3000/users/getallcategory').then((res) => {
             setCategories(res.data)
         }).catch((err) => {
@@ -41,22 +41,24 @@ export function BasicElements() {
         setAdded(!added)
         axios.post('http://localhost:3000/users/addcatagory', values).then(() => {
             console.log('success')
-            
+
         }).catch((err) => {
             console.log(err)
         })
     }
 
-    const deleteHandler=(id)=>{
+    const deleteHandler = (id) => {
         setDel(!del)
         console.log('in the function')
         axios.post(`http://localhost:3000/users/deletecatagory/${id}`).then(() => {
             console.log('success')
-            
+
         }).catch((err) => {
             console.log(err)
         })
     }
+
+    const [showInputs,setShowInputs] = useState()
 
     console.log(categories);
 
@@ -84,10 +86,22 @@ export function BasicElements() {
                                         <Form.Control type="text" onChange={valueAdded} className="form-control" id="Category" placeholder="Category" />
                                     </div>
                                 </Form.Group>
-                                <button type="submit" className="btn btn-primary mr-2">Add</button>
-                                <button className="btn btn-dark">Cancel</button>
+                                <button onClick={()=>{setShowInputs(true)}} className="btn btn-primary mr-2">Add details</button>
+                                {showInputs ?
+                                    <Form.Group className="row pt-4">
+                                        <label htmlFor="exampleInputUsername2" className="col-sm-3 col-form-label">Category description</label>
+                                        <div className="col-sm-9">
+                                            <Form.Control type="text" onChange={valueAdded} className="form-control" id="Category" placeholder="Add extra details" />
+                                        </div>
+                                    </Form.Group>
+                                : null}
+                                <button type="submit" className="btn btn-primary mr-2">Submit</button>
+                                <button onClick={()=>{setShowInputs(false)}} className="btn btn-dark">Cancel</button>
+                           
                             </form>
+                          
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -99,7 +113,7 @@ export function BasicElements() {
                             <div className="table-responsive">
                                 <table className="table">
                                     <thead>
-                                        <tr>    
+                                        <tr>
                                             <th> Categories</th>
                                             <th></th>
                                             <th></th>
@@ -110,22 +124,22 @@ export function BasicElements() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {categories.map((itm,k)=>{
-                                            return(
+                                        {categories.map((itm, k) => {
+                                            return (
                                                 <tr>
-                                          
-                                                <td>
-                                                   {itm.Categoryname}
-                                                </td>
-                                                <td>  </td>
-                                                <td>  </td>
-                                                <td> </td>
-                                                <td>  </td>
-                                                <td>  </td>
-                                                <td>
-                                                <button onClick={()=>{deleteHandler(itm._id)}}  className="btn btn-outline-danger btn-fw">Delete</button>
-                                                </td>
-                                            </tr>
+
+                                                    <td>
+                                                        {itm.Categoryname}
+                                                    </td>
+                                                    <td>  </td>
+                                                    <td>  </td>
+                                                    <td> </td>
+                                                    <td>  </td>
+                                                    <td>  </td>
+                                                    <td>
+                                                        <button onClick={() => { deleteHandler(itm._id) }} className="btn btn-outline-danger btn-fw">Delete</button>
+                                                    </td>
+                                                </tr>
                                             )
                                         })}
                                     </tbody>

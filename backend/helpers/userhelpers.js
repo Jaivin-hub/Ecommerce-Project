@@ -6,23 +6,16 @@ const generateToken = require('../Utils/generateToken')
 module.exports = {
 
     addUser: (user) => {
-        console.log(user)
         return new Promise(async (resolve, reject) => {
             let res = await db.get().collection('usermanagement').insertOne(user)
             let id = "" + res.insertedId
             let response = await db.get().collection('usermanagement').find({ _id: ObjectID(id) }).project({ password: 0 }).toArray()
-            console.log("inside helper response");
-            // console.log(response[0])
             responseWithToken = { ...response[0], token: generateToken(response[0]._id) }
-
             resolve(responseWithToken)
-
         })
-        //user = {...user, token: generateToken(user._id)}
     },
 
     fetchUser: () => {
-        console.log('i am going to fetch data');
         return new Promise((resolve, reject) => {
             db.get().collection('usermanagement').find().toArray().then((res) => {
                 resolve(res)
@@ -30,38 +23,89 @@ module.exports = {
                 console.log(err)
             })
         })
-
     },
 
 
     addProducts: (products) => {
         return new Promise((resolve, reject) => {
-            console.log(products)
             const image1 = products.image1
             const image2 = products.image2
             const image3 = products.image3
             const image4 = products.image4
             const images = { image1, image2, image3, image4 }
-            console.log(products.value)
             const name = products.value.name
-            const quantity = products.value.quantity
+            const quantity = parseInt(products.value.quantity)
             const size = products.value.size
             const subcategory = products.value.subcategory
             const maincategory = products.value.maincategory
-            const regularprice = products.value.regularprice
-            const price = products.value.price
+            const price = parseInt(products.value.price)
             const description = products.value.description
-
-
-
-
-            db.get().collection('productmanagement').insertOne({ name: name, quantity: quantity, size: size, subcategory: subcategory, maincategory: maincategory, regularprice: regularprice, price: price, description: description, images: [images], date: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') }).then((res) => {
-                console.log(res.insertedId)
-                console.log('product added');
+            db.get().collection('productmanagement').insertOne({ name: name, quantity: quantity, size: size, subcategory: subcategory, maincategory: maincategory, price: price, description: description, images: [images], date: new Date() }).then((res) => {
                 resolve(res.insertedId)
             })
         })
     },
+
+
+    fetchReport: (type) => {
+        console.log("+++++++++++++++++++++++");
+        console.log(type);
+        const numberOfDays = type === 'daily' ? 1 : type === 'weekly' ? 7 : type === 'monthly' ? 30 : type === 'yearly' ? 365 : 0
+        return new Promise(async (resolve, reject) => {
+            const data = await db.get().collection('orderManagement').aggregate([
+                {
+                    $match: {
+                        orderdate: { $gte: new Date(new Date() - numberOfDays * 60 * 60 * 24 * 1000) },
+                    },
+                },
+            ]).toArray()
+            console.log(new Date(new Date() - numberOfDays * 60 * 60 * 24 * 1000))
+            console.log(data);
+
+            resolve(data)
+
+        })
+    },
+
+    getDataOfDaily: async () => {
+        console.log('helpers')
+        const orderdate = 'orderdate'
+        const dayOfYear = (date) =>
+            Math.floor(
+                (date - new Date(date.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24
+            )
+        return new Promise(async (resolve, reject) => {
+            const data = await db.get().collection('orderManagement').aggregate([
+                {
+                    $match: {
+                        orderdate: { $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000) },
+                    },
+                },
+
+
+                { $group: { _id: { $dayOfYear: '$orderdate' }, count: { $sum: 1 } } },
+            ]).toArray()
+
+            const thisday = dayOfYear(new Date())
+            let salesOfLastWeekData = []
+            for (let i = 0; i < 8; i++) {
+                let count = data.find((d) => d._id === thisday + i - 7)
+
+                if (count) {
+                    salesOfLastWeekData.push(count.count)
+                } else {
+                    salesOfLastWeekData.push(0)
+                }
+            }
+            // console.log(salesOfLastWeekData);
+
+            resolve(salesOfLastWeekData)
+
+        })
+    },
+
+
+
 
     fetchProducts: () => {
         return new Promise((resolve, reject) => {
@@ -73,7 +117,6 @@ module.exports = {
     },
 
     deleteProduct: (productId) => {
-        console.log(productId)
         return new Promise((resolve, reject) => {
             db.get().collection('productmanagement').deleteOne({ _id: ObjectID(productId) }).then(() => {
                 console.log('Document deleted')
@@ -82,11 +125,8 @@ module.exports = {
     },
 
     findProducts: (productId) => {
-        console.log('is this....')
         return new Promise((resolve, reject) => {
             db.get().collection('productmanagement').findOne({ _id: ObjectID(productId) }).then((res) => {
-                console.log('this is the response')
-                console.log(res)
                 resolve(res)
             }).catch((err) => {
                 console.log(err)
@@ -94,12 +134,17 @@ module.exports = {
         })
     },
 
+    findProductforEdit: (id) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection('productmanagement').find({ _id: ObjectID(id) }).toArray().then((res) => {
+                resolve(res)
+            })
+        })
+    },
+
     updateProduct: (product) => {
         const { _id } = product
-        console.log('iam')
-        console.log(_id)
         const { name, quantity, category, description, price } = product
-        console.log(name + quantity + category + description)
         db.get().collection('productmanagement').updateOne({ _id: ObjectID(_id) }, { $set: { name: name, quantity: quantity, category: category, description: description, price: price } }).then((done) => {
             console.log('done')
         })
@@ -115,14 +160,9 @@ module.exports = {
     },
 
     findRelated: (productId) => {
-        console.log('here tooo')
         return new Promise((resolve, reject) => {
             db.get().collection('productmanagement').findOne({ _id: ObjectID(productId) }).then((res) => {
-                console.log('returning')
-                console.log(res.maincategory)
                 db.get().collection('productmanagement').find({ maincategory: res.maincategory }).limit(3).toArray().then((response) => {
-                    console.log('category data')
-                    console.log(response)
                     resolve(response)
                 })
             })
@@ -132,7 +172,6 @@ module.exports = {
     getSortData: () => {
         return new Promise((resolve, reject) => {
             db.get().collection('productmanagement').find().limit(6).toArray().then((res) => {
-                console.log('kkkkkkkk')
                 resolve(res)
             })
         })
@@ -140,12 +179,8 @@ module.exports = {
 
     findwhisky: (name) => {
         return new Promise((resolve, reject) => {
-            console.log('last')
-            console.log(name)
             db.get().collection('productmanagement').find({ subcategory: name }).toArray().then((res) => {
                 resolve(res)
-                console.log(res)
-                console.log('kkkkk')
             }).catch((err) => {
                 console.log(err)
             })
@@ -165,7 +200,6 @@ module.exports = {
             db.get().collection('categoryManagement').findOne({ Categoryname: category }).then((res) => {
                 console.log('data find')
                 resolve(res)
-
             })
         })
     },
@@ -173,7 +207,6 @@ module.exports = {
     setdata: (id) => {
         return new Promise((resolve, reject) => {
             db.get().collection('productmanagement').findOne({ _id: ObjectID(id) }).then((res) => {
-                console.log('res')
                 if (res) {
                     db.get().collection('cart').insertOne(res).then((response) => {
                         console.log('data added to cart')
@@ -194,17 +227,12 @@ module.exports = {
     },
 
     addNewProducts: (product) => {
-        console.log(000000000000000000000)
-        console.log(product)
-        console.log('inside')
         const user = product.userid
         const productId = product.productId
         const subtotal = parseInt(product.subtotal)
         const price = parseInt(product.price)
         const regularprice = parseInt(product.regularprice)
         const quantity = parseInt(product.quantity)
-
-
         const { name, size, subcategory, maincategory, description, productQuantity, image } = product
         const data = { name, quantity, size, subcategory, maincategory, regularprice, price, description, subtotal, productQuantity, productId, image }
         var exportValue = data.price
@@ -231,9 +259,115 @@ module.exports = {
         })
     },
 
+    getWeeklySales: () => {
+        return new Promise(async (resolve, reject) => {
+            const dayOfYear = (date) =>
+                Math.floor(
+                    (date - new Date(date.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24
+                )
+            const salesOfLastWeek = await db.get().collection('orderManagement').aggregate([
+                {
+                    $match: {
+                        orderStatus: 'Delivered',
+                        orderdate: {
+                            $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000),
+                        },
+                    },
+                },
+                {
+                    $group: {
+                        _id: { $dayOfYear: '$orderdate' },
+                        count: { $sum: '$total' },
+                    },
+                },
+            ]).toArray()
+            const thisday = dayOfYear(new Date())
+            let salesOfLastWeekData = []
+            for (let i = 0; i < 8; i++) {
+                let count = salesOfLastWeek.find((d) => d._id === thisday + i - 7)
+
+                if (count) {
+                    salesOfLastWeekData.push(count.count)
+                } else {
+                    salesOfLastWeekData.push(0)
+                }
+            }
+            console.log(salesOfLastWeekData)
+            resolve(salesOfLastWeekData)
+
+
+        })
+
+
+
+    },
+
     fetchCart: (userid) => {
         return new Promise((resolve, reject) => {
             db.get().collection('cart').findOne({ userid: userid }).then((res) => {
+                resolve(res)
+            })
+        })
+    },
+
+    getallcategories:()=>{
+        return new Promise((resolve, reject) => {
+            db.get().collection('categoryManagement').find().toArray().then((res) => {
+                console.log('ithaanu sathanam')
+                console.log(res)
+                resolve(res)
+            })
+        })
+    },
+
+    // here is the work
+
+    blockUser: (id) => {
+        console.log('this is helpers')
+        console.log(id)
+        db.get().collection('usermanagement').findOne({ _id: ObjectID(id) }).then((res) => {
+            console.log('data finded')
+            console.log(res)
+        })
+    },
+
+    cancelProduct: (data) => {
+        console.log(data.UserId)
+        console.log(data.id)
+        console.log(data.productId)
+        return new Promise((resolve, reject) => {
+            const change = 'canceled'
+            const statusName = "products.$.status"
+            const arrayname = "products.product"
+            db.get().collection('orderManagement').updateOne({ _id: ObjectID(data.id), [arrayname]: data.productId }, { $set: { [statusName]: change } }).then((res) => {
+                console.log('set aaayiii')
+                console.log(res)
+                resolve(true)
+            })
+        })
+
+    },
+
+    getDataToDashbord: () => {
+        return new Promise((resolve, reject) => {
+            db.get().collection('orderManagement').count({ payment: "COD" }).then((res) => {
+                const COD = res
+                db.get().collection('orderManagement').count({ payment: "paypal" }).then((res) => {
+                    const paypal = res
+                    db.get().collection('orderManagement').count({ payment: "razorpay" }).then((res) => {
+                        const razorpay = res
+                        const data = { COD, paypal, razorpay }
+                        resolve(data)
+                    })
+                })
+            })
+        })
+    },
+
+
+    fetchWishList: (userid) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection('wishListManager').findOne({ userid: userid }).then((res) => {
                 resolve(res)
                 console.log('user product found')
             })
@@ -242,25 +376,17 @@ module.exports = {
     },
 
     deleteItem: (details) => {
-        console.log('yssss')
-        console.log(details)
         const userid = details.Userid
         const productId = details.itemid
         return new Promise((resolve, reject) => {
-            // > db.cart.update({_id:ObjectId("6170ce9b019a672d4cf3e7da")},{$pull:{products:{productId:"616f819ea514adc91bee18cd"}}},false,true)
-
             db.get().collection('cart').update({ userid: userid }, { $pull: { products: { productId: productId } } }, false, true).then((res) => {
-                console.log('Document deleted')
-                console.log(res)
             })
         })
 
     },
 
     category: (data) => {
-        console.log(data.Category)
         db.get().collection('categoryManagement').insertOne({ Categoryname: data.Category }).then((response) => {
-            console.log(response)
         })
     },
 
@@ -276,7 +402,6 @@ module.exports = {
     getSubcategory: (data) => {
         return new Promise((resolve, reject) => {
             db.get().collection('categoryManagement').updateOne({ Categoryname: data.Category }, { $push: { Subcategory: { $each: [data.subcategory] } } }).then((res) => {
-                console.log('subCategory added')
             }).catch((err) => {
                 console.log(err)
             })
@@ -284,12 +409,11 @@ module.exports = {
     },
 
     checkUser: (data) => {
-        console.log('heyyy')
         console.log(data)
         return new Promise((resolve, reject) => {
             db.get().collection('usermanagement').findOne({ email: data.email }).then((res) => {
                 if (res) {
-                    if (res.password == data.password) {
+                    if (res.password == data.password && res.ActiveStatus == '') {
                         console.log('User')
                         responseWithToken = { ...res, token: generateToken(res._id) }
                         resolve(responseWithToken)
@@ -307,7 +431,6 @@ module.exports = {
 
     deletecatagory: (id) => {
         db.get().collection('categoryManagement').deleteOne({ _id: ObjectID(id) }).then(() => {
-            console.log('category deleted')
         })
     },
 
@@ -317,9 +440,15 @@ module.exports = {
         const user = details.UserId
         const productPrice = details.productPrice
         const dbprice = "products.$.subtotal"
-        db.get().collection('cart').updateOne({ userid: user, products: { $elemMatch: { productId: productId } } }, { $inc: { [dbdata]: 1 } }).then((res) => {
-            db.get().collection('cart').updateOne({ userid: user, products: { $elemMatch: { productId: productId } } }, { $inc: { [dbprice]: productPrice } })
+        db.get().collection('cart').findOne({ userid: user }).then((res) => {
+            if (res.products[0].productQuantity < res.products[0].quantity) {
+                db.get().collection('cart').updateOne({ userid: user, products: { $elemMatch: { productId: productId } } }, { $inc: { [dbdata]: 1 } }).then((res) => {
+                    db.get().collection('cart').updateOne({ userid: user, products: { $elemMatch: { productId: productId } } }, { $inc: { [dbprice]: productPrice } })
+                })
+            } else {
+            }
         })
+
     },
 
     dltprd: (details) => {
@@ -327,26 +456,32 @@ module.exports = {
         const dbprice = "products.$.subtotal"
         const productId = details.productId
         const user = details.userId
+        console.log('came hereee...')
         const productPrice = details.productPrice
-        db.get().collection('cart').updateOne({ userid: user, products: { $elemMatch: { productId: productId } } }, { $inc: { [dbdata]: -1 } })
-        db.get().collection('cart').updateOne({ userid: user, products: { $elemMatch: { productId: productId } } }, { $inc: { [dbprice]: -productPrice } })
+        db.get().collection('cart').findOne({ userid: user }).then((res) => {
+            if (res.products[0].productQuantity > 1) {
+                db.get().collection('cart').updateOne({ userid: user, products: { $elemMatch: { productId: productId } } }, { $inc: { [dbdata]: -1 } })
+                db.get().collection('cart').updateOne({ userid: user, products: { $elemMatch: { productId: productId } } }, { $inc: { [dbprice]: -productPrice } })
+
+            } else {
+                console.log('cant minise')
+            }
+        })
+        //  db.get().collection('cart').updateOne({ userid: user, products: { $elemMatch: { productId: productId } } }, { $inc: { [dbdata]: -1 } })
+        // db.get().collection('cart').updateOne({ userid: user, products: { $elemMatch: { productId: productId } } }, { $inc: { [dbprice]: -productPrice } })
     },
 
     userBillingAddress: (address) => {
-        console.log('yaaa')
         const userId = address.userid
         const id = uuidv4()
-        console.log("custom id" + id)
         const { firstname, lastname, companyname, addressline1, addressline2, cityname, statename, postcode, phone } = address
         const data = { firstname, lastname, companyname, addressline1, addressline2, cityname, statename, postcode, phone, id }
         db.get().collection('billingAddressManagement').findOne({ userid: userId }).then((response) => {
             if (response) {
                 db.get().collection('billingAddressManagement').updateOne({ userid: userId }, { $push: { address: data } }).then((res) => {
-                    console.log('Address data  added')
                 })
             } else {
                 db.get().collection('billingAddressManagement').insertOne({ userid: userId, address: [data] }).then((result) => {
-                    console.log('New Address Added')
                 })
             }
         })
@@ -356,43 +491,42 @@ module.exports = {
         const total = details.total
         const userId = details.userId
         const addressId = details.addressId
-        console.log('came here')
+        const payment = details.payment
         let nameOfP = "products.productId"
+        let orderStatus = 'placed'
         let data = await db.get().collection('cart').aggregate([
             { $match: { userid: userId } },
             { $project: { [nameOfP]: 1 } }
         ]).toArray()
         const products = data[0].products
-        console.log(products)
         let array = []
         for (i = 0; i < products.length; i++) {
-            array[i] = products[i].productId
+            array[i] = { product: products[i].productId, status: null }
         }
-        const status = ''
-        db.get().collection('orderManagement').insertOne({ userid: userId, status: status, addressid: addressId, total: total, products: array }).then((response) => {
-            console.log('data added to collection')
+        return new Promise((resolve, reject) => {
+            // orderdate: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
+            db.get().collection('orderManagement').insertOne({ userid: userId, orderStatus: orderStatus, addressid: addressId, payment: payment, total: total, products: array, orderdate: new Date() }).then((response) => {
+                db.get().collection('cart').deleteOne({ userid: userId }).then((result) => {
+                    resolve(true)
+                })
+            })
         })
     },
 
     getorders: () => {
-        console.log('hooooiii')
         return new Promise((resolve, reject) => {
             db.get().collection('orderManagement').find().toArray().then((res) => {
-                console.log('shajanka')
-                console.log(res)
                 resolve(res)
             })
         })
     },
 
     getaddress: (details) => {
-        console.log()
         const unwindAddress = "$address"
         const insideAddress = "address.id"
         const userId = details.id
         const addressId = details.addressId
         return new Promise(async (resolve, reject) => {
-            // db.billingAddressManagement.aggregate({$match:{userid:"617064c5ea31fb7ce74ea000"}},{$unwind:"$address"},{$match:{"address.id":"ab45d8fd-7aef-45cf-a236-96fa4d1e2270"}}).pretty()
             let data = await db.get().collection('billingAddressManagement').aggregate([{ $match: { userid: userId } }, { $unwind: unwindAddress }, { $match: { [insideAddress]: addressId } }]).toArray()
             resolve(data[0].address)
         })
@@ -400,11 +534,9 @@ module.exports = {
 
     },
 
-    getall: (userId) => {
-        console.log('hooooiii')
+    getall: (id) => {
         return new Promise((resolve, reject) => {
-            db.get().collection('orderManagement').find({ userid: userId }).toArray().then((res) => {
-                console.log(res)
+            db.get().collection('orderManagement').find({ _id: ObjectID(id) }).toArray().then((res) => {
                 resolve(res)
             })
         })
@@ -412,7 +544,7 @@ module.exports = {
 
     gettheproduct: (productId) => {
         return new Promise((resolve, reject) => {
-            let pdtId = productId.map((i) => ObjectID(i))
+            let pdtId = productId.map((i) => ObjectID(i.product))
             db.get().collection('productmanagement').find({ _id: { $in: pdtId } }).toArray().then((res) => {
                 resolve(res)
             })
@@ -420,21 +552,35 @@ module.exports = {
     },
 
     forhistory: (userId) => {
-        console.log('came here')
-        console.log(userId)
+        const arr = []
         return new Promise((resolve, reject) => {
             db.get().collection('orderManagement').find({ userid: userId }).toArray().then((res) => {
+                const orderStatus = res[0].orderStatus
+                console.log('helpers..')
                 console.log(res)
-                console.log('jjjjj')
-                console.log(res[0])
-                console.log('pppp')
-                console.log(res[0].addressid)
-                const address = res[0].addressid
-                console.log(res[0].products)
-                let productId = res[0].products.map((i) => ObjectID(i))
-                db.get().collection('productmanagement').find({ _id: { $in: productId } }).toArray().then((result) => {
+                // for(i=0;i<res.length;i++){
+                //     const userId = res[i].userid
+                //     console.log(res[i].addressid
+                //     db.get().collection('billingAddressManagement').find({userid:userId}).then((response)=>{
+                //         console.log('data came')
+                //     })
+                // }
 
-                    console.log(result)
+                resolve(res)
+                // let productId = res[0].products.map((i) => ObjectID(i.product))
+                // db.get().collection('productmanagement').find({ _id: { $in: productId } }).toArray().then((result) => {
+                //     const data = { orderStatus, result }
+                //     resolve(data)
+                // })
+            })
+        })
+    },
+
+    picImage: (id) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection('orderManagement').findOne({ _id: ObjectID(id) }).then((res) => {
+                let productId = res.products.map((i) => ObjectID(i.product))
+                db.get().collection('productmanagement').find({ _id: { $in: productId } }).toArray().then((result) => {
                     resolve(result)
                 })
             })
@@ -442,15 +588,19 @@ module.exports = {
     },
 
     findAddress: (id) => {
-        console.log('dont worry...')
         return new Promise((resolve, reject) => {
             db.get().collection('orderManagement').find({ userid: id }).toArray().then((res) => {
                 resolve(res.addressid)
-                db.get().collection('billingAddressManagement').find({ userid: id, addressid: res.addressid }).toArray().then((result) => {
-                    console.log('result')
-                    console.log(result[0].address)
-                    resolve(result[0].address)
-                })
+                console.log('address aaanee')
+                for (i = 0; i < res.length; i++) {
+                    console.log(res[i].addressid)
+                    console.log('data ')
+                    console.log(res[i].addressid)
+                }
+
+                // db.get().collection('billingAddressManagement').find({ userid: id, addressid: res.addressid }).toArray().then((result) => {
+                //     resolve(result[0].address)
+                // })
             })
         })
     },
@@ -465,7 +615,6 @@ module.exports = {
             var maxdiscountamount = parseInt(maxdiscountamount)
             var { couponcode, couponExpiredate } = data
             const value = { maxdiscountamount, maxpurchaseamount, discount, couponcode, couponExpiredate }
-
             db.get().collection('couponManagement').insertOne(value).then((res) => {
             })
         })
@@ -480,8 +629,6 @@ module.exports = {
     },
 
     dltcoupon: (id) => {
-        console.log('database')
-        console.log(id)
         db.get().collection('couponManagement').deleteOne({ _id: ObjectID(id) })
     },
 
@@ -495,23 +642,53 @@ module.exports = {
 
     coupenentered: (data) => {
         return new Promise((resolve, reject) => {
-            db.get().collection('couponManagement').findOne({ couponcode: data }).then((res) => {
-                const maxdiscountamount = res.maxdiscountamount
-                resolve(maxdiscountamount)
+            const name = data.name
+            const userId = data.userId
+            console.log("================================")
+            db.get().collection('couponManagement').findOne({ couponcode: name }).then((res) => {
+                console.log(res)
+                if (res == null) {
+                    console.log("Invalid coupon")
+                    const msg = 'Invalid coupon'
+                    resolve(msg)
+                } else {
+                    const maxdiscountamount = res.maxdiscountamount
+                    db.get().collection('usermanagement').findOne({ _id: ObjectID(userId) }).then((response) => {
+                        if (response.coupons) {
+                            db.get().collection('usermanagement').findOne({ _id: ObjectID(userId), coupons: name }).then((res) => {
+                                if (res) {
+                                    console.log('coupon already exists')
+                                    const msg = 'Coupen already used'
+                                    resolve(msg)
+                                } else {
+                                    db.get().collection('usermanagement').updateOne({ _id: ObjectID(userId) }, { $push: { coupons: name } }).then((result) => {
+                                        console.log("coupen applied")
+                                        const msg = maxdiscountamount
+                                        resolve(msg)
+                                    })
+                                }
+                            })
+                        } else {
+                            db.get().collection('usermanagement').updateOne({ _id: ObjectID(userId) }, { $set: { coupons: [name] } }).then((result) => {
+                                const msg = maxdiscountamount
+                                resolve(msg)
+                            })
+                        }
+                    })
+                }
             })
+
+
+
         })
     },
 
     checkNumber: (number) => {
         return new Promise((resolve, reject) => {
             db.get().collection('usermanagement').findOne({ phone: number }).then((res) => {
-                console.log('usernumber')
                 if (res) {
-                    console.log('usernumber is in database')
-                    console.log(res)
                     resolve(res)
                 } else {
-                    console.log('userNumber not found')
                     resolve('')
                 }
             })
@@ -521,10 +698,7 @@ module.exports = {
     findUserInfo: (number) => {
         return new Promise((resolve, reject) => {
             db.get().collection('usermanagement').findOne({ phone: number }).then((res) => {
-                console.log('userFound')
-                console.log(res)
                 if (res) {
-
                     responseWithToken = { ...res, token: generateToken(res._id) }
                     resolve(responseWithToken)
                 }
@@ -532,17 +706,30 @@ module.exports = {
         })
     },
 
+
     addOffer: (data) => {
         return new Promise((resolve, reject) => {
-            console.log(data)
-            const offerAmount = data.maxdiscountamount
+            const offerAmount = parseInt(data.maxdiscountamount)
             const category = data.maincategory
-            const discount = data.discount
+            const discount = parseInt(data.discount)
             const expiredate = data.Expiredate
-            db.get().collection('productmanagement').updateOne({ maincategory: category }, { $set: { offer: offerAmount, offerdiscount: discount, offerexpiredate: expiredate } }).then((res) => {
-                db.get().collection('offermanagement').insertOne({ maincategory: category, offer: offerAmount, offerdiscount: discount, offerexpiredate: expiredate }).then((result) => {
-                    console.log('success')
+            let temp = null
+            let priceData = null
+            db.get().collection('productmanagement').find({ maincategory: category }).toArray().then((res) => {
+                res.map((item, k) => {
+                    temp = (item.price / 100) * discount;
+                    if (temp < offerAmount) {
+                        db.get().collection('productmanagement').updateMany({ maincategory: category, price: item.price }, { $set: { offer: temp, offerdiscount: discount, offerexpiredate: expiredate } }).then((res) => {
+                        })
+                    } else {
+                        priceData = item.price - offerAmount
+                        db.get().collection('productmanagement').updateMany({ maincategory: category, price: item.price }, { $set: { offer: priceData, offerdiscount: discount, offerexpiredate: expiredate } }).then((res) => {
+                        })
+                    }
                 })
+            })
+
+            db.get().collection('offermanagement').insertOne({ maincategory: category, status: 'active', offer: offerAmount, offerdiscount: discount, offerexpiredate: expiredate }).then((result) => {
             })
         })
     },
@@ -551,41 +738,83 @@ module.exports = {
         return new Promise((resolve, reject) => {
             const email = details.email
             const url = details.urlArray
-            console.log(url + email)
             db.get().collection('usermanagement').updateOne({ email: email }, { $set: { image: url } }).then((res) => {
-                console.log('Inside helpers')
-                console.log(res)
                 resolve(true)
             })
         })
     },
 
+    toWishList: (data) => {
+        return new Promise((resolve, reject) => {
+            const productId = data.id
+            const userId = data.Userid
+            db.get().collection('productmanagement').find({ _id: ObjectID(productId) }).toArray().then((res) => {
+                const image = res[0].images[0].image1
+                const { name, quantity, size, subcategory, maincategory, price, description, date, stock } = res[0]
+                const data = { name, quantity, size, subcategory, maincategory, price, description, date, stock, productId, image }
+                db.get().collection('wishListManager').findOne({ userid: userId }).then((res) => {
+                    if (res) {
+                        const checkid = "products.productId"
+                        db.get().collection('wishListManager').findOne({ userid: userId, [checkid]: productId }).then((result) => {
+                            if (result) {
+                                resolve(false)
+                            }
+                            else {
+                                db.get().collection('wishListManager').updateOne({ userid: userId }, { $push: { products: data } }).then((res) => {
+                                    resolve(true)
+                                })
+                            }
+                        })
+                    } else {
+                        db.get().collection('wishListManager').insertOne({ userid: userId, products: [data] })
+                        resolve(true)
+                    }
+                })
+            })
+        })
+    },
+
+
+    editProductDetails: (details) => {
+        const image1 = details.image1
+        const image2 = details.image2
+        const image3 = details.image3
+        const image4 = details.image4
+        const images = { image1, image2, image3, image4 }
+        const name = details.data.name
+        const quantity = details.data.quantity
+        const size = details.data.size
+        const subcategory = details.data.subcategory
+        const maincategory = details.data.main
+        const stock = details.data.stock
+        const productId = details.data.productId
+        const price = details.data.price
+        const description = details.data.description
+        db.get().collection('productmanagement').updateOne({ _id: ObjectID(productId) }, { $set: { name: name, quantity: quantity, stock: stock, size: size, subcategory: subcategory, maincategory: maincategory, price: price, description: description, images: [images], date: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') } }).then((res) => {
+        })
+    },
+
     fetchUserImage: (email) => {
         return new Promise((resolve, reject) => {
-            console.log('inside')
             const UserEmail = toString(email)
-            console.log(UserEmail)
-            console.log('email from fetchUserImage', email)
-            //console.log()
             db.get().collection('usermanagement').findOne({ email: email.email }).then((res) => {
-                console.log('image returning user')
-                console.log(res)
                 resolve(res)
             })
         })
     },
 
     addStatus: (status) => {
+        const id = status.id
+        const value = status.value
         return new Promise((resolve, reject) => {
-            console.log(status)
-            db.get().collection('orderManagement').updateOne({})
+            db.get().collection('orderManagement').updateOne({ _id: ObjectID(id) }, { $set: { orderStatus: value, date: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') } }).then((res) => {
+            })
         })
     },
 
     getAllAddress: (userId) => {
         return new Promise((resolve, reject) => {
             db.get().collection('billingAddressManagement').find({ userid: userId }).toArray().then((res) => {
-                console.log(res[0].address)
                 resolve(res[0].address)
             })
         })
@@ -594,18 +823,29 @@ module.exports = {
     deleteAddress: (details) => {
         const userId = details.userId
         const id = details.id
-        db.get().collection('billingAddressManagement').update({ userid: userId }, { $pull: { address: { id: id } } }, false, true).then((response) => {
-            console.log('item deleted')
+        db.get().collection('billingAddressManagement').updateOne({ userid: userId }, { $pull: { address: { id: id } } }, false, true).then((response) => {
         })
     },
 
+
     checkPassword: (details) => {
         const email = details.email
-        const password = details.password
+        const password = details.userPassword
         return new Promise((resolve, reject) => {
-            db.get().collection('usermanagement').findOne({ email: email, password: password }).then((response) => {
-                console.log('data found')
-                resolve(response)
+            db.get().collection('usermanagement').findOne({ email: email, password: password.password }).then((response) => {
+                if (response == null) {
+                    resolve(false)
+                } else {
+                    resolve(true)
+                }
+            })
+        })
+    },
+
+    changePassword: (data) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection('usermanagement').updateMany({ email: data.email }, { $set: { password: data.data } }).then((res) => {
+                resolve(true)
             })
         })
     },
@@ -621,11 +861,8 @@ module.exports = {
     dltOffers: (data) => {
         const id = data.id
         const category = data.category
-        console.log('kkk')
         db.get().collection('offermanagement').deleteOne({ _id: ObjectID(id) }).then((response) => {
-            console.log('item dlt from offers')
             db.get().collection('productmanagement').updateMany({ maincategory: category }, { $unset: { offer: 1, offerdiscount: 1, offerexpiredate: 1 } }, false, true).then((result) => {
-                console.log('item dlt from products')
             })
         })
     },
@@ -634,15 +871,46 @@ module.exports = {
         const minValue = parseInt(data.minValue)
         const maxValue = parseInt(data.maxValue)
         const subcategory = data.subcategory
-        console.log(subcategory)
-        console.log(minValue + maxValue)
         return new Promise((resolve, reject) => {
-            db.get().collection('productmanagement').find({ subcategory: subcategory, price: { $gte: minValue, $lte: maxValue}}).toArray().then((result) => {
-                console.log(result)
+            db.get().collection('productmanagement').find({ subcategory: subcategory, price: { $gte: minValue, $lte: maxValue } }).toArray().then((result) => {
                 resolve(result)
             })
         })
 
+    },
+
+    EditUserDetails: (data) => {
+        const UserName = data.userName
+        const username = data.Uname
+        const lastname = data.lstName
+        const email = data.Umail
+        const phone = data.Uphone
+        const userId = data.UserId
+        return new Promise((resolve, reject) => {
+            db.get().collection('usermanagement').updateOne({ firstname: UserName }, { $set: { firstname: username, lastname: lastname, email: email, phone: phone } }).then((res) => {
+                if (res) {
+                    db.get().collection('usermanagement').findOne({ _id: ObjectID(userId) }).then((response) => {
+                        resolve(response)
+                    })
+                }
+            })
+        })
+    },
+
+    GetUserDetailsFromProfile: (id) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection('billingAddressManagement').find({ userid: id }).toArray().then((res) => {
+                resolve(res)
+            })
+        })
+    },
+
+    GetSalesReport: () => {
+        return new Promise((resolve, reject) => {
+            db.get().collection('orderManagement').find({ orderStatus: 'Delivered' }).toArray().then((res) => {
+                resolve(res)
+            })
+        })
     }
 
 }

@@ -1,16 +1,11 @@
 
 
-
-
-
-
-
 #progressbar {
     margin-bottom: 30px;
     overflow: hidden;
-    color: #455A64;
+    color: #f2f6f8;
     padding-left: 0px;
-    margin-top: 30px
+    margin-top: 30px;
 }
 
 #progressbar li {
@@ -33,7 +28,7 @@
 
 #progressbar #step2:before {
     content: "2";
-    color: #fff;
+    color: rgb(255, 255, 255);
     width: 29px
 }
 
@@ -67,7 +62,8 @@
 }
 
 #progressbar li:nth-child(2):after {
-    left: 50%
+
+    left: 5%
 }
 
 #progressbar li:nth-child(1):after {

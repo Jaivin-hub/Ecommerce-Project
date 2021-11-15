@@ -5,13 +5,11 @@ import axios from 'axios'
 
 function Offers() {
 
-
-
     const [values, setValues] = useState()
     const [coupons, setCoupons] = useState([])
     const [ok, setOk] = useState(true)
     const [categoryDetails, setCategoryDetails] = useState([])
-    const [offers,setOffers] = useState([])
+    const [offers, setOffers] = useState([])
 
 
 
@@ -34,27 +32,21 @@ function Offers() {
         })
     }
 
-    console.log('offers--')
-    console.log(offers)
+
     const getData = () => {
         axios.get('http://localhost:3000/users/getcategoryoffers').then((res) => {
             setOffers(res.data)
         })
     }
 
-    const deleteOffer = (id,category) => {
-        const data = {id,category}
+    const deleteOffer = (id, category) => {
+        const data = { id, category }
         setOk(!ok)
-        console.log(id)
-        console.log('yaaahoo')
-        axios.post(`http://localhost:3000/users/dltoffer`,data).then((res) => {
+        axios.post(`http://localhost:3000/users/dltoffer`, data).then((res) => {
             setCoupons(res.data)
         })
     }
 
-    console.log('ppppppp')
-
-    console.log(values)
 
     const getCategories = () => {
         axios.get('http://localhost:3000/users/findCategories').then((response) => {
@@ -62,7 +54,7 @@ function Offers() {
         })
     }
 
-   
+
 
 
 
@@ -129,7 +121,7 @@ function Offers() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                
+
                                     {offers.map((item, k) => {
                                         return (
                                             <tr>
@@ -137,8 +129,8 @@ function Offers() {
                                                 <td>{item.offerdiscount}</td>
                                                 <td>{item.offer}</td>
                                                 <td>{item.offerexpiredate}</td>
-                                                <td></td>
-                                                <td><button onClick={() => { deleteOffer(item._id,item.maincategory) }} type="button" className="btn btn-outline-danger btn-fw">Delete</button></td>
+                                                <td><label className="badge badge-danger">{item.status}</label></td>
+                                                <td><button onClick={() => { deleteOffer(item._id, item.maincategory) }} type="button" className="btn btn-outline-danger btn-fw">Delete</button></td>
                                             </tr>
                                         )
                                     })}

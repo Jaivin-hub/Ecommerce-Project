@@ -4,7 +4,7 @@
 }
 .firstImage{
     width: 100%;
-    background-color: #dbdbdb;
+   
     height: 25%;
     border: 3px linear black;
     border-radius:5px;
@@ -15,6 +15,17 @@
     background-color:  #4e6446;
     color: #fff;
 }
+
+.carousel-control-prev{
+   visibility:hidden;
+}
+.carousel-indicators{
+    visibility:hidden;
+}
+
+.carousel-control-next{
+    visibility:hidden;
+ }
 
 .userinputs{
     height: 5vh;

@@ -115,7 +115,8 @@ function Signup() {
                 email: email,
                 phone: phone,
                 password: password,
-                image:''
+                image:'',
+                ActiveStatus:''
             }
             axios.post("http://localhost:3000/users", data).then((res) => {
                 if (res.data.token) {

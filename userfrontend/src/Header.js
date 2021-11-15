@@ -63,6 +63,10 @@ function Header() {
         setLogout(!logout)
     }
 
+    const toWishlist = () => {
+        history.push("/towishlist");
+    }
+
     const swithHandler = () => {
         history.push("/");
     }
@@ -82,95 +86,120 @@ function Header() {
         history.push(`/whisky/${subcategory}`)
     }
 
-    //console.log('category-----'+category[0].Subcategory)
-
     return (
         <div className="col-md-12 main">
             <div className='row pt-3'>
-                <div className="col-md-6 pt-3">
+                <div className="col-md-6 ">
                     <div className="row">
-                        <div className="col-md-1">
-                        <button onClick={swithHandler} width="100%" className="btn btn-"><StorefrontIcon /></button>
-
+                        <div className="col-md-1 pt-3">
+                            <button onClick={swithHandler} width="100%" className="btn btn-"><StorefrontIcon /></button>
                         </div>
                         <div className="col-md-11">
-                        <h1><strong>YourOwn</strong></h1>
+                            <h1 style={{fontSize:'4em'}}><strong>YourOwn</strong></h1>
                         </div>
                     </div>
-
-                    {/* <button onClick={swithHandler} width="100%" className="btn btn-"><StorefrontIcon /></button> */}
                 </div>
-                {/* <div className="col-md-4 pt-3 text-center">
-                    <h1><strong>YourOwn</strong></h1>
-                </div> */}
-
-
-
                 <div className="col-md-6 col-4">
-                    <div className="row ">
+                    <div className="row">
                         <div className="col-md-6">
-
                         </div>
                         <div className="col-md-6">
-                            <div className="row">
+                            <div className="row pt-3">
+                                {/* <div className="col-md-1">
+                                </div> */}
+                                <div className="col-md-3">
+                                {userName ?
+                                        <button width="100%" onClick={swithProfile} className="btn btn-">{userName} </button>
+                                        :
+                                        <button width="100%" onClick={swithProfile} className="btn btn-"><AccountCircleIcon /></button>
+                                    }
+                                </div>
+                                <div className="col-md-3">
+                                <button onClick={auth} width="100%" className="btn btn-"><ShoppingBagIcon /></button>
 
-                            
-                       
-
-                        <div className="col-md-3 pt-3 text-end">
-                            {userName ?
-                                <button width="100%" onClick={swithProfile} className="btn btn-">{userName} </button>
-                                :
-                                <button width="100%" onClick={swithProfile} className="btn btn-"><AccountCircleIcon /></button>
-                            }
-                        </div>
-
-                        <div className="col-md-3 pt-3  text-end">
-                            <button onClick={auth} width="100%" className="btn btn-"><ShoppingBagIcon /></button>
-                        </div>
-
-                        <div className="col-md-3 pt-3 text-end">
-                            <Dropdown>
-                                <Dropdown.Toggle style={{ width: '10%' }} as="a" >
-                                    <div className="navbar-profile">
-                                        <p className="mb-0 d-none d-sm-block navbar-profile-name"> <button width="100%" className="btn btn-"><CircleNotificationsIcon /></button></p>
-                                        <i className="mdi mdi-menu-down d-none d-sm-block"></i>
-                                    </div>
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu className="navbar-dropdown preview-list navbar-profile-dropdown-menu">
-                                    <h6 className="p-3 mb-0"><strong>Offers</strong></h6>
-                                    {coupons.map((item, key) => {
-                                        return (
-                                            <Dropdown.Item href="!#" className="preview-item">
-                                                <div className="preview-thumbnail">
-                                                    <div className="preview-icon bg-dark rounded-circle">
-                                                        <i className="mdi mdi-logout text-danger"></i>
-                                                    </div>
-                                                </div>
-                                                <div style={{ borderRadius: '5em' }} className="preview-item-content">
-                                                    <p className="pt-2">buy upto {item.maxpurchaseamount} and get {item.discount}% off by using <small style={{ color: 'green' }}>{item.couponcode}</small> Coupen code</p>
-                                                    <p className="preview-subject mb-1"></p>
-                                                    <hr />
-                                                </div>
-                                            </Dropdown.Item>
-                                        )
-                                    })}
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </div>
-                        {userName ?
-                            <div className="col-md-3 pt-3 col-3 text-end">
-                                <button onClick={LougoutHander} width="100%" className="btn btn-">Logout</button>
+                                </div>
+                                <div className="col-md-3">
+                                <Dropdown>
+                                        <Dropdown.Toggle style={{ width: '10%' }} as="a" >
+                                            <div className="navbar-profile">
+                                                <p className="mb-0 d-none d-sm-block navbar-profile-name"> <button width="100%" className="btn btn-"><CircleNotificationsIcon /></button></p>
+                                                <i className="mdi mdi-menu-down d-none d-sm-block"></i>
+                                            </div>
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu className="navbar-dropdown preview-list navbar-profile-dropdown-menu">
+                                            <h6 className="p-3 mb-0"><strong>Offers</strong></h6>
+                                            {coupons.map((item, key) => {
+                                                return (
+                                                    <Dropdown.Item href="!#" className="preview-item">
+                                                        <div className="preview-thumbnail">
+                                                            <div className="preview-icon bg-dark rounded-circle">
+                                                                <i className="mdi mdi-logout text-danger"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div style={{ borderRadius: '5em' }} className="preview-item-content">
+                                                            <p className="pt-2">buy upto {item.maxpurchaseamount} and get {item.discount}% off by using <small style={{ color: 'green' }}>{item.couponcode}</small> Coupen code</p>
+                                                            <p className="preview-subject mb-1"></p>
+                                                            <hr />
+                                                        </div>
+                                                    </Dropdown.Item>
+                                                )
+                                            })}
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </div>
+                                <div className="col-md-3">
+                                {userName ?
+                                        <button onClick={LougoutHander} width="100%" className="btn btn-">Logout</button>
+                                        : null}
+                                </div>
+                                {/* <div className="col-md-2">
+                                    {userName ?
+                                        <button width="100%" onClick={swithProfile} className="btn btn-">{userName} </button>
+                                        :
+                                        <button width="100%" onClick={swithProfile} className="btn btn-"><AccountCircleIcon /></button>
+                                    }
+                                </div> */}
+                                {/* <div className="col-md-2">
+                                    <button onClick={auth} width="100%" className="btn btn-"><ShoppingBagIcon /></button>
+                                </div> */}
+                                {/* <div className="col-md-2">
+                                    <Dropdown>
+                                        <Dropdown.Toggle style={{ width: '10%' }} as="a" >
+                                            <div className="navbar-profile">
+                                                <p className="mb-0 d-none d-sm-block navbar-profile-name"> <button width="100%" className="btn btn-"><CircleNotificationsIcon /></button></p>
+                                                <i className="mdi mdi-menu-down d-none d-sm-block"></i>
+                                            </div>
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu className="navbar-dropdown preview-list navbar-profile-dropdown-menu">
+                                            <h6 className="p-3 mb-0"><strong>Offers</strong></h6>
+                                            {coupons.map((item, key) => {
+                                                return (
+                                                    <Dropdown.Item href="!#" className="preview-item">
+                                                        <div className="preview-thumbnail">
+                                                            <div className="preview-icon bg-dark rounded-circle">
+                                                                <i className="mdi mdi-logout text-danger"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div style={{ borderRadius: '5em' }} className="preview-item-content">
+                                                            <p className="pt-2">buy upto {item.maxpurchaseamount} and get {item.discount}% off by using <small style={{ color: 'green' }}>{item.couponcode}</small> Coupen code</p>
+                                                            <p className="preview-subject mb-1"></p>
+                                                            <hr />
+                                                        </div>
+                                                    </Dropdown.Item>
+                                                )
+                                            })}
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </div> */}
+                                {/* <div className="col-md-2">
+                                    {userName ?
+                                        <button onClick={LougoutHander} width="100%" className="btn btn-">Logout</button>
+                                        : null}
+                                </div> */}
                             </div>
-                            : null}
-                            </div>
-                            </div>
+                        </div>
                     </div>
-
-
                 </div>
-
-
             </div>
             <div className="col-md-12 bg-dark">
                 <div className="container">
