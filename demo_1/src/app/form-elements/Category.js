@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import bsCustomFileInput from 'bs-custom-file-input';
 import './style.css'
-import axios from 'axios';
+import instance from '../axios-orders';
 
 
 export function BasicElements() {
@@ -28,7 +28,7 @@ export function BasicElements() {
     }
 
     const getCategory = () => {
-        axios.get('http://localhost:3000/users/getallcategory').then((res) => {
+        instance.get('/getallcategory').then((res) => {
             setCategories(res.data)
         }).catch((err) => {
             console.log(err)
@@ -36,12 +36,10 @@ export function BasicElements() {
     }
 
     const handleSubmit = (e) => {
-        console.log('in function');
         e.preventDefault()
         setAdded(!added)
-        axios.post('http://localhost:3000/users/addcatagory', values).then(() => {
+        instance.post('/addcatagory', values).then(() => {
             console.log('success')
-
         }).catch((err) => {
             console.log(err)
         })
@@ -50,7 +48,7 @@ export function BasicElements() {
     const deleteHandler = (id) => {
         setDel(!del)
         console.log('in the function')
-        axios.post(`http://localhost:3000/users/deletecatagory/${id}`).then(() => {
+        instance.post(`/deletecatagory/${id}`).then(() => {
             console.log('success')
 
         }).catch((err) => {

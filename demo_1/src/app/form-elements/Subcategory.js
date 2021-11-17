@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import bsCustomFileInput from 'bs-custom-file-input';
 import './style.css'
-import axios from 'axios';
+import instance from '../axios-orders';
 
 
 export function Subcategory() {
@@ -16,22 +16,14 @@ export function Subcategory() {
     },[])
 
     const getCategory=()=>{
-        console.log('fucntion called');
-        axios.get('http://localhost:3000/users/getcatagory').then((res) => {
-            console.log('success')
-            console.log(res.data)
+        instance.get('/getcatagory').then((res) => {
             const data = res.data
-
-            // console.log(res.body)
             setCategories(data)
         }).catch((err) => {
             console.log(err)
         })
     }
     
-    console.log(categories);
-
-
     const textHandler = (e) => {
         const newData = { ...values }
         newData[e.target.id] = e.target.value
@@ -39,18 +31,13 @@ export function Subcategory() {
     }
 
     const handleSubmit = (e) => {
-        console.log('in function');
         e.preventDefault()
-        console.log(values)
-
-        axios.post('http://localhost:3000/users/addsubcatagory', values).then(() => {
+        instance.post('/addsubcatagory', values).then(() => {
             console.log('success')
         }).catch((err) => {
             console.log(err)
         })
     }
-
-    console.log(values);
 
     return (
         <div>

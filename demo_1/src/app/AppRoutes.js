@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Spinner from '../app/shared/Spinner';
 const Profile = lazy(() => import('./dashboard/Profile'))
 const Dashboard = lazy(() => import('./dashboard/Dashboard'));
-const Buttons = lazy(() => import('./basic-ui/Buttons'));
+const Buttons = lazy(() => import('./basic-ui/ProductManagement'));
 const Category = lazy(() => import('./form-elements/Category'));
 const Dropdowns = lazy(() => import('./basic-ui/Dropdowns'));
 const Typography = lazy(() => import('./basic-ui/Typography'));
@@ -22,16 +22,24 @@ const Userdetails = lazy(() => import('./form-elements/userdetails'))
 const Productdetails = lazy(() => import('./form-elements/Productdetails'))
 const OfferManagement = lazy(() => import('./form-elements/OfferManagement'))
 const Offers = lazy(() => import('./form-elements/Offers'))
-const Editproducts = lazy(()=>import('../Editproducts'))
-const Sailes = lazy(()=>import('./apps/Sailes'))
-const categorydetails = lazy(()=>import('./form-elements/categorydetails'))
+const Editproducts = lazy(() => import('../Editproducts'))
+const Sailes = lazy(() => import('./apps/Sailes'))
+const categorydetails = lazy(() => import('./form-elements/categorydetails'))
 class AppRoutes extends Component {
   render() {
+
+    var aValue = localStorage.getItem('admin');
+    console.log('data localstorage')
+    console.log(aValue)
     return (
       <Suspense fallback={<Spinner />}>
         <Switch>
-          <Route exact path="/login" component={Login} />
-          <Route path="/dashboard" component={Dashboard} />
+         
+            <Route path="/dashboard" component={Dashboard} />
+            
+            <Route exact path="/user-pages/login-1" component={Login} />
+          
+          {/* <Route exact path="/login" component={Login} /> */}
           <Route path="/categoryDetails" component={categorydetails} />
           <Route path="/productdetails/:id" component={Productdetails} />
           <Route path="/offermanagement" component={OfferManagement} />
@@ -40,7 +48,7 @@ class AppRoutes extends Component {
           <Route path="/basic-ui/buttons" component={Buttons} />
           <Route path="/basic-ui/dropdowns" component={Dropdowns} />
           <Route path="/basic-ui/typography" component={Typography} />
-          <Route path='/sailes' component = {Sailes}/>
+          <Route path='/sailes' component={Sailes} />
           <Route path="/orders" component={OrderMangement} />
           <Route path='/profile' component={Profile} />
           <Route path='/register' component={Register} />
@@ -55,7 +63,7 @@ class AppRoutes extends Component {
           <Route path="/error-pages/error-500" component={Error500} />
 
 
-          <Redirect to="/dashboard" />
+          <Redirect to="/user-pages/login-1" />
         </Switch>
       </Suspense>
     );

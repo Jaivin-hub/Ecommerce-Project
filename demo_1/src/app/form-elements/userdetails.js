@@ -1,13 +1,11 @@
 import React,{useState,useEffect} from 'react';
-import axios from 'axios';
+import instance from '../axios-orders';
 import { useParams } from 'react-router-dom'
 
 function Userdetails({match, location}) {
 
     const id = match.params.id
     const addressId= location.search.split('=')[1]
-    console.log('kkkkkkkk'+addressId +','+id)
-
     const [details,setDetails] = useState([])
 
     useEffect(() => {
@@ -16,19 +14,10 @@ function Userdetails({match, location}) {
 
     const getData=()=>{
         const data ={id,addressId}
-        console.log('funccccc')
-        axios.post(`http://localhost:3000/users/getaddress`,data).then((res)=>{
-            console.log('done with details')
-            // console.log(res.data[0].address)
-            // console.log(res.data.addressline1)
+        instance.post(`/getaddress`,data).then((res)=>{
              setDetails(res.data)
         })
     }
-
-    console.log(details)
-   
-
-
 
     return (
         <div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import instance from './axios-orders'
 import { BiRupee } from "react-icons/bi";
 import './card.css'
 
@@ -18,7 +18,7 @@ function Mostpopular() {
     const [category, setcategory] = useState([])
 
     const getData = () => {
-        axios.get('http://localhost:3000/users/getdetails').then((res) => {
+        instance.get('/getdetails').then((res) => {
             const newData = res.data
             setData(newData)
 

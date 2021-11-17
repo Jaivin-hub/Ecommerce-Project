@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { BiRupee } from "react-icons/bi";
 import { GiShoppingBag } from "react-icons/gi";
 import { useHistory } from "react-router-dom";
@@ -8,6 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import './card.css'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import BuyNow from './BuyNow'
+import instance from './axios-orders'
+
 
 
 
@@ -25,7 +26,7 @@ function Products() {
     let history = useHistory();
 
     const getData = () => {
-        axios.get('http://localhost:3000/users/getdetails').then((res) => {
+        instance.get(`/getdetails`).then((res) => {
             const newData = res.data
             setData(newData)
         })
@@ -34,13 +35,13 @@ function Products() {
     const productSelected = (id) => {
         toast.success("Product added to cart")
         let data = { id, Userid }
-        axios.post(`http://localhost:3000/users/senttheproduct`, data).then((res) => {
+        instance.post(`/senttheproduct`, data).then((res) => {
         })
     }
 
     const toWishlist = (id) => {
         let data = { id, Userid }
-        axios.post(`http://localhost:3000/users/towishlist`, data).then((res) => {
+        instance.post(`/towishlist`, data).then((res) => {
             console.log('jjjj')
             console.log(res.data.msg)
             if (res.data.msg == false) {

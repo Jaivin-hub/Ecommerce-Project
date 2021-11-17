@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
-import axios from 'axios'
+import instance from './axios-orders'
+
 
 function Header() {
 
@@ -10,7 +11,7 @@ function Header() {
     const [data, setData] = useState([])
     const getData = () => {
         console.log('here,.....')
-        axios.get('http://localhost:3000/users/getAllCategories').then((response) => {
+        instance.get('/getAllCategories').then((response) => {
             setData(response.data)
         })
     }

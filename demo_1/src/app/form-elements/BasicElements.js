@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import './style.css'
-import axios from 'axios';
+import instance from '../axios-orders'
 import { fileUploadAndResize } from '../FileUpload'
 import { Modal, Button } from 'react-bootstrap'
 
@@ -32,7 +32,7 @@ export function BasicElements() {
   }, [])
 
   const getCategories = () => {
-    axios.get('http://localhost:3000/users/findCategories').then((response) => {
+    instance.get('/findCategories').then((response) => {
       setCategoryDetails(response.data)
     })
   }
@@ -43,11 +43,6 @@ export function BasicElements() {
   }
 
 
-  const cropImage = (e) => {
-    console.log('hhdjhskjdskjsdkj')
-    setSrcImg(URL.createObjectURL(e.target.files[0]));
-    setShowImageHandler(true)
-  }
 
   // const fetchImage = () => {
   //   console.log('ggggggggg')
@@ -57,6 +52,15 @@ export function BasicElements() {
   //   })
   // }
 
+
+  // firstImg crop..
+  const cropImage = (e) => {
+    console.log('hhdjhskjdskjsdkj')
+    setSrcImg(URL.createObjectURL(e.target.files[0]));
+    setShowImageHandler(true)
+  }
+
+  const arr = []
   const getCroppedImg = async () => {
     console.log('crop function')
     try {
@@ -77,17 +81,14 @@ export function BasicElements() {
         crop.width,
         crop.height
       );
-
       const base64Image = canvas.toDataURL("image/jpeg", 1);
-     console.log(base64Image);
       setResult(base64Image);
-      console.log('ooiiii')
       setShowImageHandler(false)
-
       const urlArray = await fileUploadAndResize(base64Image)
-      console.log('jdjdjdjdjdjdjdj')
-      console.log(urlArray)
-      setImage1(urlArray)
+      // setImage1(urlArray)
+      for (var i = 0; i < 4; i++) {
+        arr[i] = urlArray
+      }
       console.log('data came here')
 
     } catch (e) {
@@ -95,7 +96,12 @@ export function BasicElements() {
     }
   };
 
-  
+  console.log('this is the array...', arr)
+
+  // end
+
+  // secondImg crop...
+
 
   const imageHandleChange = async (e) => {
     const urlArray = await fileUploadAndResize(e)
@@ -122,7 +128,7 @@ export function BasicElements() {
   const submitHandler = async (e) => {
     e.preventDefault()
     const productdetails = { image1, image2, image3, image4, value }
-    axios.post('http://localhost:3000/users/addproducts', productdetails).then(() => {
+    instance.post('/addproducts', productdetails).then(() => {
     }).catch((err) => {
       console.log(err)
     })
@@ -147,7 +153,7 @@ export function BasicElements() {
     const newValues = { ...value }
     newValues[e.target.id] = e.target.value
     setValues(newValues)
-    axios.get(`http://localhost:3000/users/getsubcategorydetails/${data}`).then((res) => {
+    instance.get(`/getsubcategorydetails/${data}`).then((res) => {
       console.log('data fetched to frontend')
       setCategoryData(res.data.Subcategory)
     })
@@ -190,7 +196,7 @@ export function BasicElements() {
                   </div>
                 </div>
               </div>
-              <form onSubmit={submitHandler}autocomplete='off'  className="forms-sample pt-4">
+              <form onSubmit={submitHandler} autocomplete='off' className="forms-sample pt-4">
                 <Form.Group>
                   <label htmlFor="exampleInputName1">Product Name</label>
                   <Form.Control type="text" onChange={textChange} className="form-control" id="name" placeholder="Name" />
@@ -235,14 +241,7 @@ export function BasicElements() {
                 <div className="row">
                   <div className="form col-md-3">
 
-                    <Modal
-
-                      size="lg"
-                      aria-labelledby="contained-modal-title-vcenter"
-                      centered
-                      show={showImageHandler}
-                    >
-
+                    <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered show={showImageHandler}>
                       <Modal.Body>
                         <div>
                           {srcImg && (
@@ -268,27 +267,19 @@ export function BasicElements() {
                         </div>
                         <Button onClick={onHide}>Close</Button>
                       </Modal.Body>
-
-
                     </Modal>
 
-                    <div className="row">
-                      <div className="col-md-3">
-                        <img src={image1} alt="ivide" />
-                      </div>
-                      <div className="col-md-3">
-
-                      </div>
-                      <div className="col-md-3">
-
-                      </div>
-                    </div>
 
 
 
                     <form >
-                      <label>File upload</label>
 
+                      <div className="row">
+                        <div className="col-md-3">
+                          <img src={image1} alt="" />
+                        </div>
+
+                      </div>
                       <div className="file-upload-wrapper" data-text="Select your file!">
                         <input type="file" onChange={cropImage} name="Img1" className="file-upload-field" id="file-upload-field" />
                       </div>
@@ -296,6 +287,12 @@ export function BasicElements() {
                   </div>
                   <div className="form col-md-3">
                     <form >
+                      <div className="row">
+                        <div className="col-md-3">
+                          <img src={image1} alt="" />
+                        </div>
+
+                      </div>
                       <label className="label-text">File upload</label>
                       <div className="file-upload-wrapper" data-text="Select your file!">
                         <input type="file" onChange={cropImage} name="Img2" className="file-upload-field" id="file-upload-field" />
@@ -304,6 +301,12 @@ export function BasicElements() {
                   </div>
                   <div className="form col-md-3">
                     <form >
+                      <div className="row">
+                        <div className="col-md-3">
+                          <img src={image1} alt="" />
+                        </div>
+
+                      </div>
                       <label className="label-text">File upload</label>
                       <div className="file-upload-wrapper" data-text="Select your file!">
                         <input type="file" onChange={cropImage} name="Img3" className="file-upload-field" id="file-upload-field" />
@@ -312,6 +315,12 @@ export function BasicElements() {
                   </div>
                   <div className="form col-md-3">
                     <form >
+                      <div className="row">
+                        <div className="col-md-3">
+                          <img src={image1} alt="" />
+                        </div>
+
+                      </div>
                       <label className="label-text">File upload</label>
                       <div className="file-upload-wrapper" data-text="Select your file!">
                         <input type="file" onChange={cropImage} name="Img4" className="file-upload-field" id="file-upload-field" />

@@ -1,6 +1,6 @@
 import { Form } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import instance from '../axios-orders'
 
 
 function Offers() {
@@ -27,14 +27,14 @@ function Offers() {
     const submitHandler = (e) => {
         e.preventDefault()
         setOk(!ok)
-        axios.post('http://localhost:3000/users/addoffer', values).then((res) => {
+        instance.post('/addoffer', values).then((res) => {
 
         })
     }
 
 
     const getData = () => {
-        axios.get('http://localhost:3000/users/getcategoryoffers').then((res) => {
+        instance.get('/getcategoryoffers').then((res) => {
             setOffers(res.data)
         })
     }
@@ -42,22 +42,17 @@ function Offers() {
     const deleteOffer = (id, category) => {
         const data = { id, category }
         setOk(!ok)
-        axios.post(`http://localhost:3000/users/dltoffer`, data).then((res) => {
+        instance.post(`/dltoffer`, data).then((res) => {
             setCoupons(res.data)
         })
     }
 
 
     const getCategories = () => {
-        axios.get('http://localhost:3000/users/findCategories').then((response) => {
+        instance.get('/findCategories').then((response) => {
             setCategoryDetails(response.data)
         })
     }
-
-
-
-
-
 
 
     return (

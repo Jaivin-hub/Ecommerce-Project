@@ -7,7 +7,8 @@ import { BiMinus } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import Footer from './Footer'
 import { useParams } from 'react-router-dom'
-import axios from 'axios'
+import instance from './axios-orders'
+
 import { useHistory } from "react-router-dom";
 
 function Addtocart() {
@@ -37,7 +38,7 @@ function Addtocart() {
 
     const getOffers = () => {
         console.log('yaaa yaaa')
-        axios.get('http://localhost:3000/users/getcouponoffers').then((response) => {
+        instance.get('/getcouponoffers').then((response) => {
             console.log('data back')
             setOfferDetails(response.data)
             console.log(response.data)
@@ -46,7 +47,7 @@ function Addtocart() {
 
 
     const getcart = () => {
-        axios.get(`http://localhost:3000/users/getcart/${Userid}`).then((res) => {
+        instance.get(`/getcart/${Userid}`).then((res) => {
             const newdetails = res.data
             setDetails(newdetails.response.products)
             setGranttotal(newdetails.grantTotal)
@@ -56,7 +57,7 @@ function Addtocart() {
     const deleteItem = (itemid) => {
         setitemdlt(!itemdlt)
         const details = { Userid, itemid }
-        axios.post(`http://localhost:3000/users/deleteitem`, details).then(() => {
+        instance.post(`/deleteitem`, details).then(() => {
             window.location.reload();
         })
     }
@@ -69,7 +70,7 @@ function Addtocart() {
         setAddmodified(!addModified)
         const userId = Userid
         const productdetails = { productId, productPrice, userId }
-        axios.post(`http://localhost:3000/users/updatequantity`, productdetails).then(() => {
+        instance.post(`/updatequantity`, productdetails).then(() => {
         })
     }
 
@@ -77,7 +78,7 @@ function Addtocart() {
         setAddmodified(!addModified)
         const userId = Userid
         const productdetails = { productId, productPrice, userId }
-        axios.post(`http://localhost:3000/users/dltprd`, productdetails).then(() => {
+        instance.post(`/dltprd`, productdetails).then(() => {
         })
     }
     const totalquantity = details.length

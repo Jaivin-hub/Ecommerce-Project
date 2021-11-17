@@ -1,4 +1,4 @@
-import axios from 'axios'
+import instance from './axios-orders'
 import React, { useEffect, useState } from 'react'
 import { Form } from 'react-bootstrap';
 import './hystory.css'
@@ -20,10 +20,10 @@ function History() {
 
     const getProduct = () => {
        
-        axios.get(`http://localhost:5000/users/forhistory/${userId}`).then((res) => {
+        instance.get(`/forhistory/${userId}`).then((res) => {
            
             if(res){
-                axios.get(`http://localhost:5000/users/findAddress/${userId}`).then((response) => {
+                instance.get(`/findAddress/${userId}`).then((response) => {
                     
                     setAddress(response)
                 })

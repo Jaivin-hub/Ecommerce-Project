@@ -10,7 +10,7 @@ import './editproduct.css'
 
 
 
-import axios from 'axios';
+import instance from './app/axios-orders';
 
 
 function Editproducts() {
@@ -38,7 +38,7 @@ function Editproducts() {
 
 
     const searchProduct = () => {
-        axios.get(`http://localhost:3000/users/findProduct/${productId}`).then((res) => {
+        instance.get(`/findProduct/${productId}`).then((res) => {
             setProductDetails(res.data)
             setName(res.data[0].name)
             setQuantity(res.data[0].quantity)
@@ -51,7 +51,7 @@ function Editproducts() {
     }
 
     const getCategories = () => {
-        axios.get('http://localhost:3000/users/findCategories').then((response) => {
+        instance.get('/findCategories').then((response) => {
             setCategoryDetails(response.data)
         })
     }
@@ -94,7 +94,7 @@ function Editproducts() {
         const newValues = { ...value }
         newValues[e.target.id] = e.target.value
         setValues(newValues)
-        axios.get(`http://localhost:3000/users/getsubcategorydetails/${data}`).then((res) => {
+        instance.get(`/getsubcategorydetails/${data}`).then((res) => {
             console.log('data fetched to frontend')
             setCategoryData(res.data.Subcategory)
         })
@@ -131,13 +131,15 @@ function Editproducts() {
         setDescription(e.target.value)
     }
 
+    console.log('hahahahah',value)
+
     const submitHandler = async (e) => {
         e.preventDefault()
         const main = value.maincategory
         const data = { name, stock, price, quantity, description, size, subcategory, main, productId }
         const productdetails = { image1, image2, image3, image4, data }
         console.log(productdetails)
-        axios.post('http://localhost:3000/users/editProductdetails', productdetails).then(() => {
+        instance.post('/editProductdetails', productdetails).then(() => {
         }).catch((err) => {
             console.log(err)
         })

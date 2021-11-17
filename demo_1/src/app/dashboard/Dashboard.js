@@ -1,4 +1,4 @@
-import axios from 'axios';
+import instance from '../axios-orders'
 import React, { useState, useEffect } from 'react';
 import { Line, Bar, Doughnut, Pie, Scatter } from 'react-chartjs-2';
 
@@ -18,9 +18,7 @@ function ChartJs() {
  
 
   const getData = () => {
-    axios.get('http://localhost:3000/users/getDataToDashbord').then((res) => {
-      console.log('data camed')
-      console.log(res.data)
+    instance.get('/getDataToDashbord').then((res) => {
       setCOD(res.data.COD)
       setPaypal(res.data.paypal)
       setRazorpay(res.data.razorpay)
@@ -30,30 +28,19 @@ function ChartJs() {
   const [dailyReport, setDailyReport] = useState([])
 
   const getDaily = () => {
-    axios.get('http://localhost:3000/users/getDataofDaily').then((res) => {
+    instance.get('/getDataofDaily').then((res) => {
       setDailyReport(res.data)
-      console.log('ithaaanuuu....')
-      console.log(res.data)
     })
   }
 
   const [dailyAmount, setDailyAmount] = useState([])
 
   const getWeeklySailes = () => {
-    console.log('ividddddeee')
-    axios.get('http://localhost:3000/users/getWeeklySailes').then((res) => {
-      // setDailyReport(res.data)
-      console.log('nee')
+    instance.get('/getWeeklySailes').then((res) => {
       setDailyAmount(res.data)
-      console.log(res.data)
-
     })
   }
-  console.log('this is the data')
-  console.log(dailyAmount)
-  console.log('hhahahahha')
-  console.log(dailyReport)
-
+  
   // first chart...
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const data = {
@@ -160,6 +147,8 @@ function ChartJs() {
       }]
     }
   }
+
+  
 
 
 

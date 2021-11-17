@@ -1,9 +1,37 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
+import axios from 'axios';
+import { useHistory } from "react-router-dom"
 
-export class Login extends Component {
-  render() {
+function Login() {
+  let history = useHistory();
+  const [userName,setUserName] = useState()
+  const [password,setPassword] = useState()
+  const usernameHandler = (e)=>{
+    setUserName(e.target.value)
+  }
+  const passwordHandler = (e)=>{
+    setPassword(e.target.value)
+  }
+  console.log(userName)
+  console.log(password)
+
+  const submitHandler = (e)=>{
+    e.preventDefault()
+    const data = {userName:userName,password:password}
+    if(userName!==null,password!==null){
+    axios.post('http://localhost:3000/users/checkadmin',data).then((response)=>{
+      console.log('returning')
+      if(response.data.msg=='admin'){
+        localStorage.setItem("admin",'admin');
+        history.push("/dashboard");
+      }
+    })
+
+    }
+    console.log('function activated')
+  }
     return (
       <div>
         <div className="d-flex align-items-center auth px-0">
@@ -13,33 +41,17 @@ export class Login extends Component {
                 <h2>YourOwn</h2>
                 <h4 className="pt-3">Welcome! Admin</h4>
                 <h6 className="font-weight-light">Sign in to continue.</h6>
-                <Form className="pt-3">
+                <Form onSubmit={submitHandler} className="pt-3">
                   <Form.Group className="d-flex search-field">
-                    <Form.Control type="email" placeholder="Username" size="lg" className="h-auto" />
+                    <Form.Control onInput={usernameHandler} type="text" placeholder="Username" size="lg" className="h-auto" />
                   </Form.Group>
                   <Form.Group className="d-flex search-field">
-                    <Form.Control type="password" placeholder="Password" size="lg" className="h-auto" />
+                    <Form.Control onInput={passwordHandler} type="password" placeholder="Password" size="lg" className="h-auto" />
                   </Form.Group>
                   <div className="mt-3">
-                    <Link className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" to="/register">SIGN IN</Link>
+                    <button className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" to="/register">SIGN IN</button>
                   </div>
                   <div className="my-2 d-flex justify-content-between align-items-center">
-                    <div className="form-check">
-                      <label className="form-check-label text-muted">
-                        <input type="checkbox" className="form-check-input" />
-                        <i className="input-helper"></i>
-                        Keep me signed in
-                      </label>
-                    </div>
-                    <a href="!#" onClick={event => event.preventDefault()} className="auth-link text-muted">Forgot password?</a>
-                  </div>
-                  <div className="mb-2">
-                    <button type="button" className="btn btn-block btn-facebook auth-form-btn">
-                      <i className="mdi mdi-facebook mr-2"></i>Connect using facebook
-                    </button>
-                  </div>
-                  <div className="text-center mt-4 font-weight-light">
-                    Don't have an account? <Link to="/register" className="text-primary">Create</Link>
                   </div>
                 </Form>
               </div>
@@ -48,7 +60,7 @@ export class Login extends Component {
         </div>
       </div>
     )
-  }
+  
 }
 
 export default Login

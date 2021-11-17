@@ -233,6 +233,21 @@ router.get('/getAllCategories',(req, res)=>{
   })
 })
 
+router.post('/checkadmin', (req, res)=>{
+  console.log(req.body)
+ const Admin = 'jaivin' 
+ const AdminPass = '1234'
+ const userName = req.body.userName
+ const password = req.body.password
+ if(Admin==userName&&AdminPass==password){
+   res.json({msg:'admin'})
+ }else{
+   res.json({msg:false})
+ }
+
+
+})
+
 router.get('/findCategories', (req, res) => {
   userhelpers.findCategories().then((response) => {
     res.json(response)

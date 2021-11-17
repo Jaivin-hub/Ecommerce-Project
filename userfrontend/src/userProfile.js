@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './style.css'
 import { Form, Table } from 'react-bootstrap';
-import axios from 'axios'
 import Uploads from './uploads'
 import { fileUploadAndResize } from './uploads';
 import ReactCrop from 'react-image-crop';
@@ -10,16 +9,11 @@ import './hystory.css'
 import { BiRupee } from "react-icons/bi";
 import Footer from './Footer'
 import Modalcomponent from './Modal'
-//import { Modal, Button } from 'antd';
+import instance from './axios-orders'
 import { Modal, Button, Accordion } from 'react-bootstrap'
 
 
-
-
-
-
 export function Profile() {
-
 
   var userName = localStorage.getItem('username');
   var email = localStorage.getItem('email');
@@ -53,7 +47,6 @@ export function Profile() {
   const [orderStatus, setOrderStatus] = useState()
   const [showProfile, setShowProfile] = useState(true)
 
-  //const [isModalVisible, setIsModalVisible] = useState(tru);
   const [srcImg, setSrcImg] = useState(null);
   const [result, setResult] = useState(null);
   const [image, setImage] = useState(null);
@@ -70,14 +63,6 @@ export function Profile() {
     newData[e.target.id] = e.target.value
     setUserPassword(newData)
   }
-
-  // const handleOk = () => {
-  //   setIsModalVisible(false);
-  // };
-
-  // const handleCancel = () => {
-  //   setIsModalVisible(false);
-  // };
 
   const newPassHandler = (e) => {
     const newData = { ...newPassword }
@@ -100,7 +85,7 @@ export function Profile() {
     setSpinner(true)
     const urlArray = await fileUploadAndResize(e)
     const details = { email, urlArray }
-    axios.post('http://localhost:5000/users/addUserImage', details).then((response) => {
+    instance.post('/addUserImage', details).then((response) => {
       if (response) {
         fetchImage()
       }
@@ -109,7 +94,7 @@ export function Profile() {
 
   const fetchImage = () => {
     console.log('ggggggggg')
-    axios.post('http://localhost:5000/users/fetchUserImage', { 'email': email }).then((res) => {
+    instance.post('/fetchUserImage', { 'email': email }).then((res) => {
       setUserImage(res.data.image)
       setSpinner(false)
     })
@@ -118,7 +103,7 @@ export function Profile() {
   const submitPassword = (e) => {
     e.preventDefault()
     const data = { email, userPassword }
-    axios.post(`http://localhost:5000/users/checkpassword`, data).then((res) => {
+    instance.post(`/checkpassword`, data).then((res) => {
       if (res.data.res === true) {
         setForPass(true)
         setSettings(false)
@@ -129,7 +114,7 @@ export function Profile() {
   }
 
   const billingAddressHandler = () => {
-    axios.get(`http://localhost:5000/users/getUserDetailsfromProfile/${UserId}`).then((res) => {
+    instance.get(`/getUserDetailsfromProfile/${UserId}`).then((res) => {
       setAddressDetails(res.data[0].address)
     })
   }
@@ -137,7 +122,7 @@ export function Profile() {
   const AddressDeleteHandler = (id) => {
     setDeleteAddress(!deleteAddress)
     const data = { id, UserId }
-    axios.post(`http://localhost:3000/users/deleteAddress`, data).then((res) => {
+    instance.post(`/deleteAddress`, data).then((res) => {
     })
   }
 
@@ -146,7 +131,7 @@ export function Profile() {
   const cancelHandler = (id, productId) => {
     const data = { id: id, UserId, productId }
     console.log('ivide ethyyy')
-    axios.post(`http://localhost:3000/users/cancelproduct`, data).then((res) => {
+    instance.post(`/cancelproduct`, data).then((res) => {
       console.log(res.data.msg)
       if(res.data.msg==true){
         setHideBtn(res.data.msg)
@@ -157,7 +142,7 @@ export function Profile() {
   const formSubmitHandler = (e) => {
     e.preventDefault()
     const data = { Uname, lstName, Umail, Uphone, userName, UserId }
-    axios.post(`http://localhost:5000/users/EditUserDetails`, data).then((res) => {
+    instance.post(`/EditUserDetails`, data).then((res) => {
       if (res) {
         localStorage.removeItem('email');
         localStorage.removeItem('username')
@@ -178,11 +163,11 @@ export function Profile() {
     setBillingAddress(false)
     setAddress(false)
     setOrders(true)
-    axios.get(`http://localhost:5000/users/forhistory/${UserId}`).then((res) => {
+    instance.get(`/forhistory/${UserId}`).then((res) => {
       if (res) {
         console.log('najajjajjjakajn')
         console.log(res.data)
-        axios.get(`http://localhost:5000/users/findAddress/${UserId}`).then((response) => {
+        instance.get(`/findAddress/${UserId}`).then((response) => {
           setOrderDetails(response)
         })
       }
@@ -201,7 +186,7 @@ export function Profile() {
     e.preventDefault()
     if (newPassword.newPassword === newPassword.retypePassword) {
       const newOne = newPassword.newPassword
-      axios.post('http://localhost:5000/users/changePassword', { data: newOne, email: email }).then((response) => {
+      instance.post('/changePassword', { data: newOne, email: email }).then((response) => {
         console.log('return to react')
         if (response.data.res === true) {
           setSuccess(false)
@@ -240,7 +225,7 @@ export function Profile() {
       const urlArray = await fileUploadAndResize(base64Image)
       console.log(urlArray)
       const details = { email, urlArray }
-      axios.post('http://localhost:5000/users/addUserImage', details).then((response) => {
+      instance.post('/addUserImage', details).then((response) => {
         if (response) {
           fetchImage()
         }
@@ -278,7 +263,7 @@ export function Profile() {
 
   const text = (addressId, id) => {
     console.log(addressId)
-    axios.get(`http://localhost:5000/users/picImage/${id}`).then((res) => {
+    instance.get(`/picImage/${id}`).then((res) => {
       setProductDetails(res.data)
       console.log(res.data)
     })

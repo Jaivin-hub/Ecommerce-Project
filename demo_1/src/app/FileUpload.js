@@ -1,18 +1,18 @@
 import React from "react";
 import Resizer from "react-image-file-resizer";
-import axios from "axios";
+import instance from "./axios-orders";
 export const fileUploadAndResize = (res) => {
   console.log('fileill')
   return new Promise((resolve, reject) => {
     let allUploadedFiles = ''
 
     if (res) {
-      axios
+      instance
         .post(
-          `http://localhost:5000/users/uploads`,
+          `/uploads`,
           { image: res },
         )
-        .then((response) => {
+        .then((response) => {   
           console.log('res aanu')
           allUploadedFiles = response.data.url;
           resolve(allUploadedFiles);

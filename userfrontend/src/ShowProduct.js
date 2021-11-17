@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
-import axios from 'axios';
+import instance from './axios-orders'
 import { BiRupee } from "react-icons/bi";
 import { AiOutlineArrowDown, AiFillStar } from "react-icons/ai";
 import Footer from './Footer'
@@ -37,7 +37,7 @@ function ShowProduct() {
 
         const productid = id.testvalue
         console.log(productid)
-        axios.post(`http://localhost:3000/users/getexactproduct/${productid}`).then((res) => {
+        instance.post(`/getexactproduct/${productid}`).then((res) => {
             const newData = res.data
             const newFiles = newData.images
             setShowImages(newFiles[0].image1)
@@ -50,7 +50,7 @@ function ShowProduct() {
 
     const getRelatedproducts = () => {
         const productid = id.testvalue
-        axios.get(`http://localhost:3000/users/getrelated/${productid}`).then((res) => {
+        instance.get(`/getrelated/${productid}`).then((res) => {
             const newData = res.data
             serRelatedData(newData)
         })
@@ -59,13 +59,13 @@ function ShowProduct() {
     const productSelected = (id) => {
         toast.success('Product added to cart')
         let data = { id, Userid }
-        axios.post(`http://localhost:3000/users/senttheproduct`, data).then((res) => {
+        instance.post(`/senttheproduct`, data).then((res) => {
         })
     }
 
 
     const getCustomerAlseViewed = () => {
-        axios.get(`http://localhost:3000/users/getSortData`).then((res) => {
+        instance.get(`/getSortData`).then((res) => {
             setViewedProducts(res.data)
         })
     }
@@ -73,7 +73,7 @@ function ShowProduct() {
     const addtosubmit = (id) => {
         toast.success('Product added to cart')
         let data = { id, Userid }
-        axios.post(`http://localhost:3000/users/senttheproduct`, data).then((res) => {
+        instance.post(`/senttheproduct`, data).then((res) => {
         })
 
     }

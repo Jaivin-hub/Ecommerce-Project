@@ -1,13 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import Footer from './Footer';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
-    useHistory
-} from "react-router-dom";
-import axios from "axios"
+import {BrowserRouter as Router, Switch, Route,Link,useHistory} from "react-router-dom";
+import instance from './axios-orders'
 import { useForm } from 'react-hook-form'
 
 
@@ -46,7 +40,7 @@ function Login() {
                 email: email,
                 password: password,
             }
-            axios.post("http://localhost:3000/users/checkusers", data).then((res) => {
+            instance.post("/checkusers", data).then((res) => {
                 console.log('success')
                 console.log(res)
                 if (res.data == 'user not found') {
@@ -119,7 +113,7 @@ function Login() {
     const otpSubmitHandler=(e)=>{
         e.preventDefault()
         console.log('in otp function')
-        axios.post("http://localhost:3000/users/getotp",otpvalue).then((res)=>{
+        instance.post("/getotp",otpvalue).then((res)=>{
             console.log('set')
             console.log(res.data.msg)
             if(res.data.msg=="Otp sended to number"){
@@ -140,7 +134,7 @@ function Login() {
 
     const setOtpHandler=(e)=>{
         console.log('get.....')
-        axios.post("http://localhost:3000/users/otpadded",alldetails).then((res)=>{
+        instance.post("/otpadded",alldetails).then((res)=>{
             console.log('set')
             // if(res.data.msg){
             //     setDisplay('Error OTP')

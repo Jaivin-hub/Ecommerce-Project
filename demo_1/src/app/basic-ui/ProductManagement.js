@@ -22,6 +22,8 @@ function Buttons() {
     getData()
   }, [fordelete])
 
+ 
+
   const getData = () => {
     axios.get('http://localhost:3000/users/getproducts').then((res) => {
       const newData = res.data
@@ -75,7 +77,7 @@ function Buttons() {
                               {item.images.map((itm, k) => {
                                 return (
                                   <div className="parent">
-                                    <img style={{ height: "40em" }} className="image1" src={itm.image1} alt="carousel-item" />
+                                    <img style={{ height: "30em" }} className="image1" src={itm.image1} alt="carousel-item" />
                                   </div>
                                 )
                               })}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './style.css'
-import axios from 'axios';
+import instance from '../axios-orders'
 import { useHistory } from "react-router-dom";
 import { BiRupee } from "react-icons/bi";
 
@@ -20,7 +20,7 @@ export function BasicElements() {
 
 
     const getData = () => {
-        axios.get(`http://localhost:3000/users/getorders`).then((res) => {
+        instance.get(`/getorders`).then((res) => {
             const alldata = res.data
             setData(alldata)
         }).catch((err) => {
@@ -42,7 +42,7 @@ export function BasicElements() {
     const optionChange = (id, value) => {
         const data = { id, value }
         setNewStatus(!newStatus)
-        axios.post(`http://localhost:3000/users/setStatus`, data).then((response) => {
+        instance.post(`/setStatus`, data).then((response) => {
             console.log('all set')
         })
     }

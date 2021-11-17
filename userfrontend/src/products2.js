@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import instance from './axios-orders'
 import { BiRupee } from "react-icons/bi";
 import { GiShoppingBag } from "react-icons/gi";
 import { useHistory } from "react-router-dom";
@@ -22,7 +22,7 @@ function Products2() {
     const [data, setData] = useState([])
 
     const getData = () => {
-        axios.get('http://localhost:3000/users/getdetails').then((res) => {
+        instance.get('/getdetails').then((res) => {
             const newData = res.data
             setData(newData)
         })
@@ -32,7 +32,7 @@ function Products2() {
         toast.success("Product added to cart.")
         console.log(id)
         let data = { id, Userid }
-        axios.post(`http://localhost:3000/users/senttheproduct`, data).then((res) => {
+        instance.post(`/senttheproduct`, data).then((res) => {
             console.log('success');
         })
     }

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
-import axios from 'axios'
+import instance from './axios-orders'
 import { useHistory } from "react-router-dom";
 
 function PayPal(props) {
@@ -39,7 +39,7 @@ function PayPal(props) {
                 const payment = 'paypal'
                 const details = { total, userId, addressId, payment }
                 history.push("/orderplaced");
-                axios.post(`http://localhost:3000/users/orderplaced`, details).then((res) => {
+                instance.post(`/orderplaced`, details).then((res) => {
 
                 })
 

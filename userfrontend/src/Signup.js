@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Footer from './Footer'
 import './style.css'
-import axios from 'axios'
+import instance from './axios-orders'
+
 import { Link,useHistory } from 'react-router-dom'
 
 function Signup() {
@@ -118,7 +119,7 @@ function Signup() {
                 image:'',
                 ActiveStatus:''
             }
-            axios.post("http://localhost:3000/users", data).then((res) => {
+            instance.post("/", data).then((res) => {
                 if (res.data.token) {
                     console.log(res.data)
                     localStorage.setItem('token', res.data.token)

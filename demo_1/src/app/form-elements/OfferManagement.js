@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Form } from 'react-bootstrap';
-import axios from 'axios';
+import instance from '../axios-orders'
 
 
 
@@ -26,20 +26,20 @@ function OfferManagement() {
     const submitHandler = (e) => {
         e.preventDefault()
         setOk(!ok)
-        axios.post('http://localhost:3000/users/addcoupon', values).then((res) => {
+        instance.post('/addcoupon', values).then((res) => {
 
         })
     }
 
     const getData = () => {
-        axios.get('http://localhost:3000/users/getcoupon').then((res) => {
+        instance.get('/getcoupon').then((res) => {
             setCoupons(res.data)
         })
     }
 
     const deleteOffer = (id) => {
         console.log(id)
-        axios.get(`http://localhost:3000/users/dltcoupon/${id}`).then((res) => {
+        instance.get(`/dltcoupon/${id}`).then((res) => {
             setCoupons(res.data)
         })
     }

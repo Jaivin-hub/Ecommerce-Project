@@ -1,7 +1,7 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Slider from "react-slick";
+import instance from '../axios-orders'
 
 function Productdetails() {
 
@@ -22,10 +22,10 @@ function Productdetails() {
 
     const getData = () => {
         console.log('first')
-        axios.get(`http://localhost:3000/users/getall/${userId}`).then((res) => {
+        instance.get(`/getall/${userId}`).then((res) => {
             console.log('ithum koode set aayaalll')
             setForStatus(res.data[0].products)
-            axios.post(`http://localhost:3000/users/getallproduct`, res.data[0].products).then((res) => {
+            instance.post(`/getallproduct`, res.data[0].products).then((res) => {
                 const value = res.data
                 setData(value)
             })

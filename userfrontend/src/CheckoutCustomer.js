@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import instance from './axios-orders'
 import PayPal from './PayPal'
 import { Link } from 'react-router-dom'
 import { MdDelete } from 'react-icons/md';
@@ -62,7 +62,7 @@ function CheckoutCustomer() {
             return;
         }
 
-        const result = await axios.post("http://localhost:3000/users/orders", { total: granttotal });
+        const result = await instance.post("/orders", { total: granttotal });
         console.log(result.data);
 
         if (!result) {
@@ -96,7 +96,7 @@ function CheckoutCustomer() {
                 };
                 console.log('data',data)
 
-                const result = await axios.post("http://localhost:3000/users/success", totalDetails);
+                const result = await instance.post("/success", totalDetails);
                 if(result.data.msg==true){
                     history.push("/orderplaced");
                 }
@@ -163,7 +163,7 @@ function CheckoutCustomer() {
 
     const getCart = () => {
         console.log('function activated');
-        axios.get(`http://localhost:3000/users/getcart/${userId}`).then((res) => {
+        instance.get(`/getcart/${userId}`).then((res) => {
             const newdetails = res.data
             const values = newdetails.response
             console.log('all set')
@@ -173,7 +173,7 @@ function CheckoutCustomer() {
     }
 
     const getAddress = () => {
-        axios.get(`http://localhost:3000/users/getAllAddress/${userId}`).then((res) => {
+        instance.get(`/getAllAddress/${userId}`).then((res) => {
             console.log('res' + res)
             setUserAddress(res.data)
         })
@@ -247,7 +247,7 @@ function CheckoutCustomer() {
             userid: userId
         }
 
-        axios.post("http://localhost:3000/users/userdetails", Data).then((res) => {
+        instance.post("/userdetails", Data).then((res) => {
             console.log('success')
 
         })
@@ -273,7 +273,7 @@ function CheckoutCustomer() {
         let totalAmount = granttotal
         let data = { name, totalAmount, userId }
 
-        axios.post("http://localhost:3000/users/coupenentered", data).then((res) => {
+        instance.post("/coupenentered", data).then((res) => {
             console.log('success')
             console.log(res.data)
             if (res.data == "Coupen already used") {
@@ -296,7 +296,7 @@ function CheckoutCustomer() {
         console.log(id)
         const data = { id, userId }
         console.log('action')
-        axios.post(`http://localhost:3000/users/deleteAddress`, data).then((res) => {
+        instance.post(`/deleteAddress`, data).then((res) => {
         })
     }
 
@@ -306,7 +306,7 @@ function CheckoutCustomer() {
         console.log(granttotal)
         const total = granttotal
         const details = { total, userId, addressId, payment }
-        axios.post(`http://localhost:3000/users/orderplaced`, details).then((res) => {
+        instance.post(`/orderplaced`, details).then((res) => {
             console.log('Order placed')
             if (res) {
                 history.push("/orderplaced");
