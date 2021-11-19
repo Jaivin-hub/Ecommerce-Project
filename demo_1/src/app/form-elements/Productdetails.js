@@ -55,7 +55,7 @@ function Productdetails() {
                         </ol>
                     </nav>
                 </div>
-                <div className="row">
+                <div className="row">productQuantity
                     <div className="col-12 grid-margin stretch-card">
                         <div className="card">
                             <div className="card-body">
@@ -94,6 +94,7 @@ function Productdetails() {
                                                                                     <h6 className="preview-subject">{itm.name}</h6>
                                                                                     <p className="text-muted text-small">{itm.maincategory}</p>
                                                                                 </div>
+                                                                                {itm.quantity}
                                                                                 <div className="d-flex d-md-block d-xl-flex justify-content-between">
                                                                                     <h6 className="preview-subject">{itm.subcategory}</h6>
                                                                                     <p className="text-muted text-small">{itm.price}</p>

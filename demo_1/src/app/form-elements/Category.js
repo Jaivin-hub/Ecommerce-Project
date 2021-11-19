@@ -77,7 +77,7 @@ export function BasicElements() {
                         <div className="card-body">
                             <h4 className="card-title">Add Category</h4>
                             <p className="card-description">you can add new categories.</p>
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={handleSubmit} autoComplete="off">
                                 <Form.Group className="row">
                                     <label htmlFor="exampleInputUsername2" className="col-sm-3 col-form-label">New Category</label>
                                     <div className="col-sm-9">

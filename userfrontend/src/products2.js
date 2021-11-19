@@ -80,7 +80,6 @@ function Products2() {
                                                 <div className="profile-overview">
                                                     <div className="row text-center">
                                                         <div className="col-xs-4">
-                                                            <h3>1</h3>
                                                             <p>{item.name}</p>
                                                         </div>
                                                         <div className="col-xs-4">

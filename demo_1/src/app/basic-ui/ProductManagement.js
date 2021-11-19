@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Slider from "react-slick";
 import axios from 'axios'
+import instance from '../axios-orders'
 import './style.css'
 import { useHistory } from "react-router-dom"
 
@@ -25,7 +26,7 @@ function Buttons() {
  
 
   const getData = () => {
-    axios.get('http://localhost:3000/users/getproducts').then((res) => {
+    instance.get('/getproducts').then((res) => {
       const newData = res.data
       setData(newData)
     })
@@ -36,7 +37,7 @@ function Buttons() {
   const deleteProduct = (productId) => {
     setFordelete(!fordelete)
     console.log(productId)
-    axios.post(`http://localhost:3000/users/deleteproduct/?id=${productId}`).then((response) => {
+    instance.post(`/deleteproduct/?id=${productId}`).then((response) => {
       console.log('all finish')
     })
   }
@@ -100,7 +101,6 @@ function Buttons() {
                             <div className=" progress-md portfolio-progress">
                               <button onClick={() => { EditProduct(item._id) }} type="button" className="btn btn-outline-primary btn-fw">Edit</button>
                               <button onClick={() => { deleteProduct(item._id) }} type="button" className="btn btn-outline-danger btn-fw ">Delete</button>
-                            
                             </div>
                           </div>
                         </div>

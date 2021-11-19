@@ -114,9 +114,10 @@ function Login() {
         e.preventDefault()
         console.log('in otp function')
         instance.post("/getotp",otpvalue).then((res)=>{
-            console.log('set')
-            console.log(res.data.msg)
+            console.log('set ayyii ellammm')
+            console.log('res-msg---',res.data.msg)
             if(res.data.msg=="Otp sended to number"){
+                console.log('if case..')
                 setDisplay('Otp sended to your number')
             }else{
                 setDisplay('User Not Found')
@@ -125,6 +126,8 @@ function Login() {
 
     }
 
+    
+    console.log('display...',display)
     const alldetails = {otpvalue,dataOtp}
     console.log('itis  ')
     console.log(alldetails)
@@ -202,15 +205,16 @@ function Login() {
                                             {/* <p className="err" style={{ color: 'red' }}>{emailerr}</p> */}
                                         </div>
                                         <div className="pt-5">
-                                        <button onClick={()=>setOtpfield(true)} type="submit" className="btn"><strong>Get OTP</strong></button>
+                                        <button  type="submit" className="btn"><strong>Get OTP</strong></button>
                                         <button style={{marginLeft:'4%'}} onClick={()=>setShow(false)}  type="submit" className="btn"><strong>Cancel</strong></button>
                                         
                                         </div>
                                         </form>
                                     </div>
+                                    // onClick={()=>setOtpfield(true)}
                                 }
 
-                                {otpfield&&display=='Otp sended to your number'?
+                                {display=='Otp sended to your number'?
                                  <div>
                                  <form onSubmit={otpSubmitHandler}>
                                  <div className="pt-5">

@@ -1,6 +1,7 @@
 import { Form } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import instance from '../axios-orders'
 import ReactHtmlTableToExcel from 'react-html-table-to-excel'
 import { Dropdown, ButtonGroup } from 'react-bootstrap';
 
@@ -28,14 +29,14 @@ function Sailes() {
   const submitHandler = (e) => {
     e.preventDefault()
     setOk(!ok)
-    axios.post('http://localhost:3000/users/addoffer', values).then((res) => {
+    instance.post('/addoffer', values).then((res) => {
 
     })
   }
 
 
   const getData = () => {
-    axios.get('http://localhost:3000/users/getcategoryoffers').then((res) => {
+    instance.get('/getcategoryoffers').then((res) => {
       setOffers(res.data)
     })
   }
@@ -43,7 +44,7 @@ function Sailes() {
   const deleteOffer = (id, category) => {
     const data = { id, category }
     setOk(!ok)
-    axios.post(`http://localhost:3000/users/dltoffer`, data).then((res) => {
+    instance.post(`/dltoffer`, data).then((res) => {
       setCoupons(res.data)
     })
   }
@@ -52,7 +53,7 @@ function Sailes() {
 
 
   const fetchReport = (type) => {
-    axios.get(`http://localhost:3000/users/fetchreport/${type}`).then((res) => {
+    instance.get(`/fetchreport/${type}`).then((res) => {
       console.log(res.data)
       setSalesReport(res.data)
     })
@@ -60,7 +61,7 @@ function Sailes() {
 
 
   const getSalesData = () => {
-    axios.get('http://localhost:3000/users/getSalesReport').then((res) => {
+    instance.get('/getSalesReport').then((res) => {
       setSalesReport(res.data)
     })
   }
@@ -87,8 +88,8 @@ function Sailes() {
                       Reports
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                    <Dropdown.Header></Dropdown.Header>
-                      <Dropdown.Header  onClick={() => { fetchReport('monthly') }}>Monthly</Dropdown.Header>
+                      <Dropdown.Header></Dropdown.Header>
+                      <Dropdown.Header onClick={() => { fetchReport('monthly') }}>Monthly</Dropdown.Header>
                       <Dropdown.Item onClick={() => { fetchReport('yearly') }}>Yearly</Dropdown.Item>
                       <Dropdown.Item onClick={() => { fetchReport('weekly') }}>Weekly</Dropdown.Item>
                       <Dropdown.Item onClick={() => { fetchReport('daily') }}>Daily</Dropdown.Item>
@@ -102,7 +103,7 @@ function Sailes() {
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                       <Dropdown.Header>< ReactHtmlTableToExcel className="btn" table="salesReport" filename="Excel file" sheet="Sheet" buttonText="Export to Excel" /></Dropdown.Header>
-                      
+
                     </Dropdown.Menu>
                   </Dropdown>
                 </div>

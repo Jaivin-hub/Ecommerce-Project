@@ -1,14 +1,14 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { Form } from 'react-bootstrap';
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
+
 import DatePicker from "react-datepicker";
 import bsCustomFileInput from 'bs-custom-file-input';
 import { useParams } from 'react-router-dom'
 import { fileUploadAndResize } from '../src/app/FileUpload';
 import './editproduct.css'
-
-
-
+import { Modal, Button, Form } from 'react-bootstrap'
 
 import instance from './app/axios-orders';
 
@@ -37,9 +37,12 @@ function Editproducts() {
     }, [])
 
 
+    const [proImgs, setProImgs] = useState()
     const searchProduct = () => {
         instance.get(`/findProduct/${productId}`).then((res) => {
             setProductDetails(res.data)
+            console.log('WORK SITE')
+            setProImgs(res.data[0].images[0])
             setName(res.data[0].name)
             setQuantity(res.data[0].quantity)
             setSize(res.data[0].size)
@@ -48,6 +51,12 @@ function Editproducts() {
             setPrice(res.data[0].price)
             setDescription(res.data[0].description)
         })
+    }
+    console.log("ithaanu...ellam....", proImgs)
+
+    const onHide = () => {
+        setShowImageHandler(false)
+
     }
 
     const getCategories = () => {
@@ -59,35 +68,118 @@ function Editproducts() {
 
     // images handlers...
 
-    const [image1, setImage1] = useState('')
-    const [image2, setImage2] = useState('')
-    const [image3, setImage3] = useState('')
-    const [image4, setImage4] = useState('')
+    // const [image1, setImage1] = useState('')
+    // const [image2, setImage2] = useState('')
+    // const [image3, setImage3] = useState('')
+    // const [image4, setImage4] = useState('')
 
-    const imageHandleChange = async (e) => {
-        const urlArray = await fileUploadAndResize(e)
-        setImage1(urlArray)
+    const [tempImage, setTempImage] = useState()
+    const [srcImg, setSrcImg] = useState(null);
+    const [result, setResult] = useState(null);
+    const [image, setImage] = useState(null);
+    const [crop, setCrop] = useState({ aspect: 1 / 1 });
+    const [showImageHandler, setShowImageHandler] = useState(false)
+    const [mainImage, setMainImage] = useState([]);
+    const [text1, setText1] = useState(false)
+    const [text2, setText2] = useState(false)
+    const [text3, setText3] = useState(false)
+    const [text4, setText4] = useState(false)
+
+
+
+    const imageHandleChange = async (e, type) => {
+        console.log('imageUpload function')
+        console.log(e, type)
+        if (type == "first") {
+            setSrcImg(URL.createObjectURL(e));
+            setShowImageHandler(true)
+            setText1(true);
+        } else if (type == "second") {
+            setSrcImg(URL.createObjectURL(e));
+            setShowImageHandler(true)
+            setText2(true);
+        } else if (type == "third") {
+            setSrcImg(URL.createObjectURL(e));
+            setShowImageHandler(true)
+            setText3(true);
+        } else if (type == "fourth") {
+            setSrcImg(URL.createObjectURL(e));
+            setShowImageHandler(true)
+            setText4(true);
+        } else {
+
+        }
+
+
+        // const urlArray = await fileUploadAndResize(e)
+        // console.log('url array....')
+        // console.log(urlArray)
+        // proImgs.image1= urlArray
+
+        // setImage1(urlArray)
     }
+
+    const getCroppedImg = async () => {
+        console.log('crop function')
+        try {
+            const canvas = document.createElement("canvas");
+            const scaleX = image.naturalWidth / image.width;
+            const scaleY = image.naturalHeight / image.height;
+            canvas.width = crop.width;
+            canvas.height = crop.height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(
+                image,
+                crop.x * scaleX,
+                crop.y * scaleY,
+                crop.width * scaleX,
+                crop.height * scaleY,
+                0,
+                0,
+                crop.width,
+                crop.height
+            );
+            const base64Image = canvas.toDataURL("image/jpeg", 1);
+            setResult(base64Image);
+            setShowImageHandler(false)
+            const urlArray = await fileUploadAndResize(base64Image)
+            console.log(urlArray)
+            if (text1 == true) {
+                proImgs.image1 = urlArray
+                console.log('first---')
+            } else if (text2 == true) {
+                proImgs.image2 = urlArray
+                console.log('second---')
+            } else if (text3 == true) {
+                proImgs.image3 = urlArray
+                console.log('third---')
+            } else if (text4 == true) {
+                proImgs.image4 = urlArray
+                console.log('fourth---')
+            }
+            // setMainImage(urlArray)
+            console.log('data came here')
+        } catch (e) {
+            console.log("crop the image");
+        }
+    };
 
     const imageHandleSecond = async (e) => {
         const urlArray = await fileUploadAndResize(e)
-        setImage2(urlArray)
+        // setImage2(urlArray)
     }
 
     const imageHandlethird = async (e) => {
         const urlArray = await fileUploadAndResize(e)
-        setImage3(urlArray)
+        // setImage3(urlArray)
     }
 
     const imageHandlefourth = async (e) => {
         const urlArray = await fileUploadAndResize(e)
-        setImage4(urlArray)
+        // setImage4(urlArray)
     }
 
     // images handlers ends...
-
-
-
 
     const categoryHandler = (e) => {
         const data = e.target.value
@@ -95,7 +187,6 @@ function Editproducts() {
         newValues[e.target.id] = e.target.value
         setValues(newValues)
         instance.get(`/getsubcategorydetails/${data}`).then((res) => {
-            console.log('data fetched to frontend')
             setCategoryData(res.data.Subcategory)
         })
     }
@@ -104,15 +195,11 @@ function Editproducts() {
     const [subcategory, setSubCategory] = useState('')
 
     const subCategoryHandler = (e) => {
-        console.log('fialsd')
         setSubCategory(e.target.value)
     }
 
-    console.log(subcategory)
-
 
     const textChange1 = (e) => {
-        console.log('uuuuu')
         setName(e.target.value)
     }
     const textChange2 = (e) => {
@@ -131,25 +218,26 @@ function Editproducts() {
         setDescription(e.target.value)
     }
 
-    console.log('hahahahah',value)
-
     const submitHandler = async (e) => {
         e.preventDefault()
-        const main = value.maincategory
-        const data = { name, stock, price, quantity, description, size, subcategory, main, productId }
+        // const main = value.maincategory
+        const data = { name, stock, price, quantity, description, size, subcategory, productId }
+        const { image1, image2, image3, image4 } = proImgs
         const productdetails = { image1, image2, image3, image4, data }
-        console.log(productdetails)
-        instance.post('/editProductdetails', productdetails).then(() => {
-        }).catch((err) => {
-            console.log(err)
-        })
+        console.log('Edit product data', productdetails)
+        // instance.post('/editProductdetails', productdetails).then(() => {
+        // }).catch((err) => {
+        //     console.log(err)
+        // })
     }
+
+    console.log('----',proImgs)
 
 
     return (
         <div>
             <div className="page-header">
-                <h3 className="page-title"> Add Products </h3>
+                <h3 className="page-title"> Edit Products </h3>
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item"><a href="!#" onClick={event => event.preventDefault()}>New Products</a></li>
@@ -217,46 +305,80 @@ function Editproducts() {
                                     </select>
                                 </Form.Group>
 
+
+                                <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered show={showImageHandler}>
+                                    <Modal.Body>
+                                        <div>
+                                            {srcImg && (
+                                                <div>
+                                                    <ReactCrop cropBoxResizable={false} cropBoxData={{ width: 100, height: 50 }} style={{ maxWidth: "50%" }} src={srcImg} onImageLoaded={setImage} crop={crop} onChange={setCrop} />
+                                                    <Button onClick={getCroppedImg}>crop</Button>
+                                                </div>
+                                            )}
+                                            {result && (
+                                                <div>
+                                                    <img src={result} alt="cropped image" />
+                                                </div>
+                                            )}
+                                        </div>
+                                        <Button onClick={onHide}>Close</Button>
+                                    </Modal.Body>
+                                </Modal>
                                 <div className="row">
+
+
+
+                                    {/* {proImgs.map((item, k) => {
+                                        return ( */}
+                                            {/* <div className="col-md-3">
+                                            <img src={proImgs.image1} alt="" />
+                                            </div> */}
+                                        {/* )
+                                    })} */}
+                                </div>
+
+                                <div className="row">
+
                                     {productDetails.map((item, k) => {
                                         return (
                                             <div className="row">
+
                                                 {item.images.map((image, i) => {
                                                     return (
                                                         <div style={{ marginLeft: "10%" }} className="row">
                                                             <div className="form col-md-3 text-center">
                                                                 <form >
                                                                     <label>Edit file</label><br />
-                                                                    <img style={{ width: "50%", height: "13em" }} src={image.image1} alt="" />
+                                                                    {/* <img style={{ width: "50%", height: "13em" }} src={image.image1} alt="" /> */}
                                                                     <div className="file-upload-wrapper mt-3" data-text="Select your file!">
-                                                                        <input type="file" onChange={imageHandleChange} name="Img1" className="file-upload-field" id="file-upload-field" />
+                                                                        <input type="file" onChange={(e) => { imageHandleChange(e.target.files[0], 'first') }} name="Img1" className="file-upload-field" id="file-upload-field" />
                                                                     </div>
                                                                 </form>
                                                             </div>
                                                             <div className="form col-md-3">
                                                                 <form >
                                                                     <label className="label-text">Edit file</label><br />
-                                                                    <img style={{ width: "50%", height: "13em" }} src={image.image2} alt="" />
+                                                                    {/* <img style={{ width: "50%", height: "13em" }} src={image.image2} alt="" /> */}
                                                                     <div className="file-upload-wrapper mt-3" data-text="Select your file!">
-                                                                        <input type="file" onChange={imageHandleSecond} name="Img2" className="file-upload-field" id="file-upload-field" />
+                                                                        <input type="file" onChange={(e) => { imageHandleChange(e.target.files[0], 'second') }} name="Img2" className="file-upload-field" id="file-upload-field" />
                                                                     </div>
                                                                 </form>
                                                             </div>
                                                             <div className="form col-md-3">
                                                                 <form >
                                                                     <label className="label-text">Edit file</label><br />
-                                                                    <img style={{ width: "50%", height: "13em" }} src={image.image3} alt="" />
+                                                                    {/* <img style={{ width: "50%", height: "13em" }} src={image.image3} alt="" /> */}
                                                                     <div className="file-upload-wrapper mt-3" data-text="Select your file!">
-                                                                        <input type="file" onChange={imageHandlethird} name="Img3" className="file-upload-field" id="file-upload-field" />
+                                                                        <input type="file" onChange={(e) => { imageHandleChange(e.target.files[0], 'third') }} name="Img3" className="file-upload-field" id="file-upload-field" />
                                                                     </div>
                                                                 </form>
                                                             </div>
                                                             <div className="form col-md-3">
                                                                 <form >
                                                                     <label className="label-text">Edit file</label><br />
-                                                                    <img style={{ width: "50%", height: "13em" }} src={image.image4} alt="" />
+                                                                    {/* <img style={{ width: "50%", height: "13em" }} src={image.image4} alt="" /> */}
                                                                     <div className="file-upload-wrapper mt-3" data-text="Select your file!">
-                                                                        <input type="file" onChange={imageHandlefourth} name="Img4" className="file-upload-field" id="file-upload-field" />
+                                                                        <input type="file" onChange={(e) => { imageHandleChange(e.target.files[0], 'fourth') }} name="Img4" className="file-upload-field" id="file-upload-field" />
                                                                     </div>
                                                                 </form>
                                                             </div>

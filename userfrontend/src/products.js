@@ -82,15 +82,17 @@ function Products() {
                                 {item.images.map((image, index) => {
                                     return (
                                         <div onClick={() => { itemSelected(item._id) }} className="card profile-card-6"><img style={{ height: '25em' }} src={image.image1} className="img img-responsive" />
-
                                             <div style={{ width: '95%' }} className="profile-name ">
                                                 <div className="row">
                                                     <div className="col-md-6 ">
                                                         <h4><strong>{item.name}</strong></h4>
                                                     </div>
-                                                    <div className="col-md-6 text-end">
-                                                        <small><small>({item.offerdiscount}%Off)</small></small>
-                                                    </div>
+                                                    {item.offerdiscount ?
+                                                        <div className="col-md-6 text-end">
+                                                            <small><small>({item.offerdiscount}%Off)</small></small>
+                                                        </div>
+                                                        : null
+                                                    }
                                                 </div>
                                             </div>
                                             <div className="profile-position">{item.category}</div>
@@ -98,7 +100,6 @@ function Products() {
                                                 <div className="profile-overview">
                                                     <div className="row text-center">
                                                         <div className="col-xs-4">
-                                                            <h3>1</h3>
                                                             <p>{item.name}</p>
                                                         </div>
                                                         <div className="col-xs-4">
@@ -120,27 +121,13 @@ function Products() {
                                         </div>
                                     )
                                 })}
-
-                                {/* <div className="row"> */}
-                                {/* <div className="col-md-12"> */}
                                 <div className="row ">
                                     <div className="col-md-12 col-12 ps-5">
                                         <button style={{ width: '70%', marginLeft: '11%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw"><small>AddToCart</small><GiShoppingBag /></button>
                                         <ToastContainer />
                                     </div>
-                                    {/* <div className="col-md-4 col-12 text-center">
-                                                <button style={{ width: '80%' }} onClick={() => { toWishlist(item._id) }} className="btn btn-outline-secondary btn-fw"><small>Wishlist <small><FavoriteBorderIcon /></small></small></button>
-                                            </div> */}
-                                    {/* <div className="col-md-4 col-12">
-                                                <button style={{ width: '80%' }} onClick={() => { buyNow(item._id) }} className="btn btn-outline-secondary btn-fw">Buynow<GiShoppingBag /></button>
-
-                                            </div> */}
-
                                 </div>
-                                {/* </div> */}
-
                             </div>
-                            // </div>
                         )
                     })}
                 </div>

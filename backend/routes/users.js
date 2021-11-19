@@ -7,7 +7,7 @@ var FileReader = require('filereader')
 var { upload, remove } = require('../Utils/cloudinary')
 var serviceSID = 'VA1285b0f4040f6828cc8ed6bf8c28124d'
 var accountSID = 'ACa5634a266ec8f11b8bdc468fca20c5fb'
-var authToken = '15aadfefa5318c45a52a3bc970bdd69b'
+var authToken = 'a329ab28ae61acb846baf9bbd7c3b7ca'
 var Client = require('twilio')(accountSID, authToken)
 const Razorpay = require("razorpay");
 const dotenv = require('dotenv');
@@ -59,9 +59,9 @@ router.get('/getUser', (req, res, next) => {
   })
 })
 
-router.post('/success', (req, res)=>{
+router.post('/success', (req, res) => {
   console.log('success router///')
-  userhelpers.getallfromcart(req.body).then((response)=>{
+  userhelpers.getallfromcart(req.body).then((response) => {
     console.log('payment success')
     res.json({ msg: response })
   })
@@ -75,7 +75,7 @@ router.get('/fetchreport/:type', (req, res) => {
   })
 })
 
-router.post('/blockUser',(req, res) => {
+router.post('/blockUser', (req, res) => {
   console.log('router')
   console.log(req.body.id)
   userhelpers.blockUser(req.body.id).then((response) => {
@@ -83,22 +83,22 @@ router.post('/blockUser',(req, res) => {
   })
 })
 
-router.get('/getDataofDaily',(req, res)=>{
+router.get('/getDataofDaily', (req, res) => {
   userhelpers.getDataOfDaily().then((response) => {
     // console.log('returning')
     res.json(response)
   })
 })
 
-router.get('/getWeeklySailes',(req, res)=>{
-console.log('ivide ethyyy')
+router.get('/getWeeklySailes', (req, res) => {
+  console.log('ivide ethyyy')
   userhelpers.getWeeklySales().then((response) => {
     console.log('returning kjsdkjksj')
     res.json(response)
   })
 })
 
-router.get('/getDataToDashbord',(req, res) => {
+router.get('/getDataToDashbord', (req, res) => {
   userhelpers.getDataToDashbord().then((response) => {
     res.json(response)
   })
@@ -191,6 +191,7 @@ router.get('/getdetails', (req, res) => {
 })
 
 router.get('/getProductsCategory', (req, res) => {
+  console.log('good part')
   userhelpers.findForCatagory().then((response) => {
     res.json(response)
   })
@@ -225,7 +226,7 @@ router.get('/getcouponoffers', (req, res) => {
   })
 })
 
-router.get('/getAllCategories',(req, res)=>{
+router.get('/getAllCategories', (req, res) => {
   console.log('routeril ethyyy.....')
   userhelpers.getallcategories().then((response) => {
     console.log('HELPERS RETURNING')
@@ -233,17 +234,18 @@ router.get('/getAllCategories',(req, res)=>{
   })
 })
 
-router.post('/checkadmin', (req, res)=>{
+router.post('/checkadmin', (req, res) => {
+  console.log('ividaaayiii')
   console.log(req.body)
- const Admin = 'jaivin' 
- const AdminPass = '1234'
- const userName = req.body.userName
- const password = req.body.password
- if(Admin==userName&&AdminPass==password){
-   res.json({msg:'admin'})
- }else{
-   res.json({msg:false})
- }
+  const Admin = 'jaivin'
+  const AdminPass = '1234'
+  const userName = req.body.userName
+  const password = req.body.password
+  if (Admin == userName && AdminPass == password) {
+    res.json({ msg: 'admin' })
+  } else {
+    res.json({ msg: false })
+  }
 
 
 })
@@ -344,6 +346,7 @@ router.get('/getsubcategorydetails/:data', (req, res) => {
 })
 
 router.get('/getcategorybackend', (req, res) => {
+  console.log('ividaaaayiiii...')
   userhelpers.getCategory().then((response) => {
     res.json(response)
   })
@@ -392,7 +395,6 @@ router.post('/userdetails', (req, res) => {
 
 router.post('/orderplaced', (req, res) => {
   userhelpers.getallfromcart(req.body).then((response) => {
-    console.log()
     res.json({ msg: response })
   })
 
@@ -501,38 +503,40 @@ router.post('/getotp', (req, res) => {
   let number = req.body.otp
   console.log('first router')
   console.log(number)
-  // userhelpers.checkNumber(number).then((response) => {
-  console.log('number find')
-  // if (response) {
+  userhelpers.checkNumber(number).then((response) => {
+    console.log('number find')
+    console.log(response)
+    
+    if (response) {
 
 
-  // client.verify.services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-  // .verifications
-  // .create({to: '+15017122661', channel: 'sms'})
-  // .then(verification => console.log(verification.status));
+      // client.verify.services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+      // .verifications
+      // .create({to: '+15017122661', channel: 'sms'})
+      // .then(verification => console.log(verification.status));
 
 
 
-  console.log('response find')
-  Client.verify
-    .services(serviceSID)
-    .verifications.create({
-      to: `+91${number}`,
-      channel: 'sms'
-    }).then((verification) => {
-      console.log('send otp')
-      console.log(verification.status)
-      // console.log('then activated')
-      // res.json({msg:"Otp sended to number"})
-    }).catch((err) => {
-      console.log(err);
-    })
-  // }else{
-  // console.log('else case')
-  // res.json({msg:"User not found"})
-  // }
+      console.log('response find')
+      Client.verify
+        .services(serviceSID)
+        .verifications.create({
+          to: `+91${number}`,
+          channel: 'sms'
+        }).then((verification) => {
+          console.log('send otp')
+          console.log(verification.status)
+          console.log('then activated')
+          res.json({ msg: "Otp sended to number" })
+        }).catch((err) => {
+          console.log(err);
+        })
+    } else {
+      console.log('else case')
+      res.json({ msg: "User not found" })
+    }
 
-  // })
+  })
 })
 
 router.post('/otpadded', (req, res) => {

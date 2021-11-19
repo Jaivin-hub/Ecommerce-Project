@@ -310,7 +310,7 @@ module.exports = {
         })
     },
 
-    getallcategories:()=>{
+    getallcategories: () => {
         return new Promise((resolve, reject) => {
             db.get().collection('categoryManagement').find().toArray().then((res) => {
                 console.log('ithaanu sathanam')
@@ -386,7 +386,8 @@ module.exports = {
     },
 
     category: (data) => {
-        db.get().collection('categoryManagement').insertOne({ Categoryname: data.Category }).then((response) => {
+        const category = data.Category.toUpperCase()
+        db.get().collection('categoryManagement').insertOne({ Categoryname: category ,Subcategory:[]}).then((response) => {
         })
     },
 
@@ -401,7 +402,8 @@ module.exports = {
 
     getSubcategory: (data) => {
         return new Promise((resolve, reject) => {
-            db.get().collection('categoryManagement').updateOne({ Categoryname: data.Category }, { $push: { Subcategory: { $each: [data.subcategory] } } }).then((res) => {
+            const newData = data.subcategory.toUpperCase()
+            db.get().collection('categoryManagement').updateOne({ Categoryname: data.Category }, { $push: { Subcategory: { $each: [newData] } } }).then((res) => {
             }).catch((err) => {
                 console.log(err)
             })
@@ -493,20 +495,48 @@ module.exports = {
         const addressId = details.addressId
         const payment = details.payment
         let nameOfP = "products.productId"
+        let nameOfJ = "products.productQuantity"
+
         let orderStatus = 'placed'
-        let data = await db.get().collection('cart').aggregate([
+        console.log('innu')
+        let productQuantityData = await db.get().collection('cart').aggregate([
             { $match: { userid: userId } },
-            { $project: { [nameOfP]: 1 } }
+            { $project: { [nameOfJ]: 1 } }
         ]).toArray()
-        const products = data[0].products
+        const productQuantity = productQuantityData[0].products
+        // let arr = []
         let array = []
-        for (i = 0; i < products.length; i++) {
-            array[i] = { product: products[i].productId, status: null }
+        const temp = []
+        for (i = 0; i < productQuantity.length; i++) {
+            temp[i] = productQuantity[i].productQuantity
+            console.log('temp', temp)
         }
+        let data = await db.get().collection('cart').aggregate([{ $match: { userid: userId } }, { $project: { [nameOfP]: 1 } }]).toArray()
+        const products = data[0].products
+        for (i = 0; i < products.length; i++) {
+            array[i] = { product: products[i].productId, status: null, productQuantity: temp[i] }
+            db.get().collection('productmanagement').updateOne({ _id: ObjectID(products[i].productId) }, { $inc: { quantity: -temp[i] } })
+            console.log('angane athum setaaayiiii...')
+        }
+
+        // console.log(arr)
+        // console.log(productQuantityData[0])
+        console.log('theeeernnu...')
+        // let data = await db.get().collection('cart').aggregate([
+        //     { $match: { userid: userId } },
+        //     { $project: { [nameOfP]: 1 } }
+        // ]).toArray()
+        // const products = data[0].productsx
+        // let array = []
+        // for (i = 0; i < products.length; i++) {
+        //     array[i] = { product: products[i].productId, status: null }
+        // }
         return new Promise((resolve, reject) => {
+            console.log('here oooooo')
             // orderdate: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
             db.get().collection('orderManagement').insertOne({ userid: userId, orderStatus: orderStatus, addressid: addressId, payment: payment, total: total, products: array, orderdate: new Date() }).then((response) => {
                 db.get().collection('cart').deleteOne({ userid: userId }).then((result) => {
+                    console.log('mongokkulilum')
                     resolve(true)
                 })
             })
@@ -687,6 +717,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection('usermanagement').findOne({ phone: number }).then((res) => {
                 if (res) {
+                    console.log('ivide response und number kitty')
                     resolve(res)
                 } else {
                     resolve('')

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import axios from 'axios';
+import instance from '../axios-orders'
 import { useHistory } from "react-router-dom"
 
 function Login() {
@@ -20,8 +21,9 @@ function Login() {
   const submitHandler = (e)=>{
     e.preventDefault()
     const data = {userName:userName,password:password}
-    if(userName!==null,password!==null){
-    axios.post('http://localhost:3000/users/checkadmin',data).then((response)=>{
+    if(userName!=null,password!=null){
+      console.log('uuuuuu8888uuuuuuu')
+      instance.post('/checkadmin',data).then((response)=>{
       console.log('returning')
       if(response.data.msg=='admin'){
         localStorage.setItem("admin",'admin');

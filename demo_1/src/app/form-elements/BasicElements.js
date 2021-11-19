@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Form } from 'react-bootstrap';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import './style.css'
 import instance from '../axios-orders'
 import { fileUploadAndResize } from '../FileUpload'
-import { Modal, Button } from 'react-bootstrap'
+import { Modal, Button ,Form} from 'react-bootstrap'
 
 
 export function BasicElements() {
@@ -19,11 +18,8 @@ export function BasicElements() {
   const [image4, setImage4] = useState('')
   const [subcategory, setSubCategory] = useState('')
   const [categoryDetails, setCategoryDetails] = useState([])
-  const [srcImg, setSrcImg] = useState(null);
-  const [result, setResult] = useState(null);
-  const [image, setImage] = useState(null);
-  const [crop, setCrop] = useState({ aspect: 1 / 1 });
-  const [showImageHandler, setShowImageHandler] = useState(false)
+
+
 
 
 
@@ -54,13 +50,19 @@ export function BasicElements() {
 
 
   // firstImg crop..
+  const [srcImg, setSrcImg] = useState(null);
+  const [result, setResult] = useState(null);
+  const [image, setImage] = useState(null);
+  const [crop, setCrop] = useState({ aspect: 1 / 1 });
+  const [showImageHandler, setShowImageHandler] = useState(false)
+  const [mainImage, setMainImage] = useState([]);
+  console.log('444', mainImage)
   const cropImage = (e) => {
     console.log('hhdjhskjdskjsdkj')
     setSrcImg(URL.createObjectURL(e.target.files[0]));
     setShowImageHandler(true)
   }
 
-  const arr = []
   const getCroppedImg = async () => {
     console.log('crop function')
     try {
@@ -85,49 +87,21 @@ export function BasicElements() {
       setResult(base64Image);
       setShowImageHandler(false)
       const urlArray = await fileUploadAndResize(base64Image)
-      // setImage1(urlArray)
-      for (var i = 0; i < 4; i++) {
-        arr[i] = urlArray
-      }
+      setMainImage(prev => [...prev, urlArray])
       console.log('data came here')
-
     } catch (e) {
       console.log("crop the image");
     }
   };
-
-  console.log('this is the array...', arr)
-
   // end
-
-  // secondImg crop...
-
-
-  const imageHandleChange = async (e) => {
-    const urlArray = await fileUploadAndResize(e)
-    setImage1(urlArray)
-  }
-
-  const imageHandleSecond = async (e) => {
-    const urlArray = await fileUploadAndResize(e)
-    setImage2(urlArray)
-  }
-
-  const imageHandlethird = async (e) => {
-    const urlArray = await fileUploadAndResize(e)
-    setImage3(urlArray)
-  }
-
-  const imageHandlefourth = async (e) => {
-    const urlArray = await fileUploadAndResize(e)
-    setImage4(urlArray)
-  }
 
 
 
   const submitHandler = async (e) => {
     e.preventDefault()
+    const [image1, image2, image3, image4] = mainImage
     const productdetails = { image1, image2, image3, image4, value }
+    console.log('here is the all data', productdetails)
     instance.post('/addproducts', productdetails).then(() => {
     }).catch((err) => {
       console.log(err)
@@ -187,9 +161,6 @@ export function BasicElements() {
               <div className="row">
                 <div className="col-md-2">
                   <h4 className="card-title">Product details</h4>
-                  {/* {image1?
-                  <img src={image1} alt="" />
-                  :null} */}
                 </div>
                 <div className="col-md-10">
                   <div className="row results ps-4">
@@ -246,17 +217,8 @@ export function BasicElements() {
                         <div>
                           {srcImg && (
                             <div>
-                              <ReactCrop
-                                style={{ maxWidth: "50%" }}
-                                src={srcImg}
-                                onImageLoaded={setImage}
-                                crop={crop}
-                                onChange={setCrop}
-                              />
-                              <Button
-                                onClick={getCroppedImg}>
-                                crop
-                              </Button>
+                              <ReactCrop cropBoxResizable={false} cropBoxData={{ width: 100, height: 50 }} style={{ maxWidth: "50%" }} src={srcImg} onImageLoaded={setImage} crop={crop} onChange={setCrop} />
+                              <Button onClick={getCroppedImg}>crop</Button>
                             </div>
                           )}
                           {result && (
@@ -269,16 +231,11 @@ export function BasicElements() {
                       </Modal.Body>
                     </Modal>
 
-
-
-
                     <form >
-
                       <div className="row">
-                        <div className="col-md-3">
-                          <img src={image1} alt="" />
+                        <div className="col-md-3 ms-5">
+                          <img src={mainImage[0]} alt="" />
                         </div>
-
                       </div>
                       <div className="file-upload-wrapper" data-text="Select your file!">
                         <input type="file" onChange={cropImage} name="Img1" className="file-upload-field" id="file-upload-field" />
@@ -289,11 +246,9 @@ export function BasicElements() {
                     <form >
                       <div className="row">
                         <div className="col-md-3">
-                          <img src={image1} alt="" />
+                          <img src={mainImage[1]} alt="" />
                         </div>
-
                       </div>
-                      <label className="label-text">File upload</label>
                       <div className="file-upload-wrapper" data-text="Select your file!">
                         <input type="file" onChange={cropImage} name="Img2" className="file-upload-field" id="file-upload-field" />
                       </div>
@@ -303,11 +258,9 @@ export function BasicElements() {
                     <form >
                       <div className="row">
                         <div className="col-md-3">
-                          <img src={image1} alt="" />
+                          <img src={mainImage[2]} alt="" />
                         </div>
-
                       </div>
-                      <label className="label-text">File upload</label>
                       <div className="file-upload-wrapper" data-text="Select your file!">
                         <input type="file" onChange={cropImage} name="Img3" className="file-upload-field" id="file-upload-field" />
                       </div>
@@ -317,18 +270,13 @@ export function BasicElements() {
                     <form >
                       <div className="row">
                         <div className="col-md-3">
-                          <img src={image1} alt="" />
+                          <img src={mainImage[3]} alt="" />
                         </div>
-
                       </div>
-                      <label className="label-text">File upload</label>
                       <div className="file-upload-wrapper" data-text="Select your file!">
                         <input type="file" onChange={cropImage} name="Img4" className="file-upload-field" id="file-upload-field" />
                       </div>
                     </form>
-
-
-
                   </div>
                 </div>
                 <Form.Group>

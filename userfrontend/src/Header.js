@@ -9,12 +9,13 @@ import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import './style.css'
+import axios from 'axios'
 import instance from './axios-orders'
 import { Dropdown } from 'react-bootstrap';
 import { BrowserRouter as Router, Switch, Route, Link, useHistory } from "react-router-dom";
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import { Trans } from 'react-i18next';
-function Header() {
+function Header() {  
 
     let history = useHistory();
 
@@ -23,19 +24,20 @@ function Header() {
     const [coupons, setCoupons] = useState([])
 
     useEffect(() => {
+        console.log("running use seffect")
         getCategory()
         getCoupon()
     }, [logout])
 
     var userName = localStorage.getItem('username');
 
-    const getCategory = () => {
+    const getCategory = async() => {
         console.log('helloo')
-        instance.get('/getcategorybackend').then((res) => {
-            console.log('success')
-            console.log(res.data)
+        instance.get('getcategorybackend').then((res) => {
+            console.log('successs fhsjkdhfkjhkjhkj')
             setCategory(res.data)
         }).catch((err) => {
+            console.log("error is here man");
             console.log(err)
         })
     }

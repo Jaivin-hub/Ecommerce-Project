@@ -1,8 +1,8 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { BiRupee } from "react-icons/bi";
 import { useHistory, useParams } from "react-router-dom";
 import Footer from '../Footer'
+import instance from '../axios-orders';
 
 
 
@@ -10,20 +10,20 @@ function Whisky(props) {
 
     const categories = useParams()
     const categoryName = categories.data
+    const [data, setdata] = useState([])
 
     useEffect(() => {
         getdata()
-    }, [])
+    }, [categories])
 
     let history = useHistory();
 
-    const [data, setdata] = useState([])
     const [filtered, setFiltered] = useState(true)
 
-
     const getdata = () => {
-        axios.get(`http://localhost:3000/users/getwhisky/${categoryName}`).then((res) => {
+        instance.get(`/getwhisky/${categoryName}`).then((res) => {
             const newdata = res.data
+            console.log('oooo',res.data)
             setdata(newdata)
         })
     }
@@ -53,7 +53,7 @@ function Whisky(props) {
         console.log(minValue)
         console.log(maxValue)
 
-        axios.post('http://localhost:3000/users/filterprice', mainData).then((res) => {
+        instance.post('/filterprice', mainData).then((res) => {
             console.log('data returned')
             console.log(res.data)
             setdata(res.data)
@@ -201,10 +201,10 @@ function Whisky(props) {
                     <div className="col-md-2">
                         <div className="row pt-5">
                             <h6><strong>REFINE BY</strong></h6>
-                            {filtered?
-                            <small className="pt-2">No filters applied</small>
-                            : null}
-                            
+                            {filtered ?
+                                <small className="pt-2">No filters applied</small>
+                                : null}
+
                             <h6 className="pt-3"><strong>Price</strong></h6>
                             <form onSubmit={filterHandler} autoComplete="off">
                                 <div className="row pt-3">
@@ -227,7 +227,7 @@ function Whisky(props) {
                                 return (
                                     <div className="row pt-2">
                                         <div className="col-md-2">
-                                            <input  type="checkbox" />
+                                            <input type="checkbox" />
                                         </div>
                                         <div className="col-md-10">
                                             <small key={item.name}><small>{item.name}</small></small>

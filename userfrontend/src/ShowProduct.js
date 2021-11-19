@@ -46,7 +46,7 @@ function ShowProduct() {
         })
     }
 
-    console.log('daata--'+data)
+    console.log('daata--' + data)
 
     const getRelatedproducts = () => {
         const productid = id.testvalue
@@ -96,7 +96,7 @@ function ShowProduct() {
                                 <div className="row ">
 
 
-                                    <div style={{height: '30em'}} className="col-md-3 pt-5 mt-4">
+                                    <div style={{ height: '30em' }} className="col-md-3 pt-5 mt-4">
                                         <div className="firstImage mt-2 ">
                                             <img onClick={() => { imageSelected(item.image1) }} style={{ width: "100%", height: "80%", borderRadius: "5px", cursor: "pointer" }} src={item.image1} alt="oool" />
                                         </div>
@@ -113,7 +113,7 @@ function ShowProduct() {
                                     <div className="col-md-9 mt-5">
                                         <div className="imgmain pt-5">
                                             <GlassMagnifier
-                                            style={{ width: '100%', height: "25em", borderRadius: '5px' }}
+                                                style={{ width: '100%', height: "25em", borderRadius: '5px' }}
                                                 imageSrc={showImages}
                                                 imageAlt=""
                                                 magnifierBorderSize={1}
@@ -147,10 +147,24 @@ function ShowProduct() {
                                                 <h6><small>Only for <small style={{ color: 'red' }}>{data.offerexpiredate}</small></small></h6>
                                             </div>
                                             :
-                                            <h5>MRP {data.price}</h5>
+                                            <>
+                                                <h5>MRP {data.price}</h5>
+
+                                            </>
                                         }
 
+                                        {data.quantity <= 3 && data.quantity > 1 ?
+                                            <h6 className="pt-1"><strong>Only {data.quantity} Left!</strong></h6>
+                                            :
 
+                                            null
+                                        }
+                                        {
+                                            data.quantity == 0 ?
+                                                <h6 className="pt-1 text-danger"><strong>Out of stock!</strong></h6>
+                                                :
+                                                null
+                                        }
                                         <hr />
                                     </div>
                                     <div className="optionsone">
@@ -168,7 +182,13 @@ function ShowProduct() {
                                         </div>
                                     </div>
                                     <div className="submit">
-                                        <button onClick={() => { addtosubmit(data._id) }} className="addtocartbtn">ADD TO CART</button>
+                                        {data.quantity == 0 ?
+                                            <button className="addtocartbtn">ADD TO CART</button>
+
+                                            :
+                                            <button onClick={() => { addtosubmit(data._id) }} className="addtocartbtn">ADD TO CART</button>
+
+                                        }
                                         <ToastContainer />
                                     </div>
                                     <hr />
@@ -252,18 +272,18 @@ function ShowProduct() {
                                 })}
 
                                 <div className="row">
-                                            <div className="col-md-12 ps-5">
-                                                <button style={{ width: '90%',marginLeft:'0%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Add to Cart<GiShoppingBag /></button>
-                                                <ToastContainer />
-                                            </div>
-                                            {/* <div className="col-md-6">
+                                    <div className="col-md-12 ps-5">
+                                        <button style={{ width: '90%', marginLeft: '0%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Add to Cart<GiShoppingBag /></button>
+                                        <ToastContainer />
+                                    </div>
+                                    {/* <div className="col-md-6">
                                                 <button style={{ width: '80%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Buy now<GiShoppingBag /></button>
 
                                             </div> */}
-                                        
-                                    </div>
 
-                               
+                                </div>
+
+
                             </div>
                         )
                     })}
@@ -310,10 +330,10 @@ function ShowProduct() {
 
                                 <div className="row">
                                     <div className="col-md-12">
-                                                <button style={{ width: '80%',marginLeft: '11%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Add to Cart<GiShoppingBag /></button>
+                                        <button style={{ width: '80%', marginLeft: '11%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Add to Cart<GiShoppingBag /></button>
 
-                                          
-                                            {/* <div className="col-md-6">
+
+                                        {/* <div className="col-md-6">
                                                 <button style={{ width: '80%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Buy now<GiShoppingBag /></button>
 
                                             </div> */}
