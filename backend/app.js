@@ -33,7 +33,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }))
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors({
-  origin: 'https://jaivin.online/users/'
+  origin: ['https://jaivin.online','https://admin.jaivin.online']
 }));
 
 // app.use(function (req, res, next) {
