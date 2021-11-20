@@ -32,11 +32,15 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }))
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', 'https://jaivin.online/users/');
-  res.header('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept')
-  next()
-})
+app.use(cors({
+  origin: 'https://jaivin.online/users/'
+}));
+
+// app.use(function (req, res, next) {
+//   res.header('Access-Control-Allow-Origin', 'https://jaivin.online/users/');
+//   res.header('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept')
+//   next()
+// })
 db.connect((err) => {
   if (err) console.log('connection error' + err)
   else console.log('Database connected to port');
