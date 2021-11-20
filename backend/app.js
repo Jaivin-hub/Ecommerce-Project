@@ -33,7 +33,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }))
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', 'https://jaivin.online/users/');
   res.header('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept')
   next()
 })
