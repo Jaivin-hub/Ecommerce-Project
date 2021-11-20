@@ -2,13 +2,13 @@ const cloudinary = require('cloudinary')
 
 // config
 cloudinary.config({
-  cloud_name: 'yourown'
+  cloud_name: process.env.CLOUDINARY_NAME
   //process.env.CLOUDINARY_NAME
   ,
-  api_key: 111526726122269
+  api_key: process.env.CLOUDINARY_API_KEY
   //process.env.CLOUDINARY_API_KEY
   ,
-  api_secret: 'DfeZyproNZs5_c429VB-oKdPLBk'
+  api_secret: process.env.CLOUDINARY_SECRET
   //process.env.CLOUDINARY_SECRET
   ,
 })

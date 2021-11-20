@@ -48,8 +48,6 @@ module.exports = {
 
 
     fetchReport: (type) => {
-        console.log("+++++++++++++++++++++++");
-        console.log(type);
         const numberOfDays = type === 'daily' ? 1 : type === 'weekly' ? 7 : type === 'monthly' ? 30 : type === 'yearly' ? 365 : 0
         return new Promise(async (resolve, reject) => {
             const data = await db.get().collection('orderManagement').aggregate([
@@ -61,14 +59,11 @@ module.exports = {
             ]).toArray()
             console.log(new Date(new Date() - numberOfDays * 60 * 60 * 24 * 1000))
             console.log(data);
-
             resolve(data)
-
         })
     },
 
     getDataOfDaily: async () => {
-        console.log('helpers')
         const orderdate = 'orderdate'
         const dayOfYear = (date) =>
             Math.floor(
@@ -81,26 +76,19 @@ module.exports = {
                         orderdate: { $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000) },
                     },
                 },
-
-
                 { $group: { _id: { $dayOfYear: '$orderdate' }, count: { $sum: 1 } } },
             ]).toArray()
-
             const thisday = dayOfYear(new Date())
             let salesOfLastWeekData = []
             for (let i = 0; i < 8; i++) {
                 let count = data.find((d) => d._id === thisday + i - 7)
-
                 if (count) {
                     salesOfLastWeekData.push(count.count)
                 } else {
                     salesOfLastWeekData.push(0)
                 }
             }
-            // console.log(salesOfLastWeekData);
-
             resolve(salesOfLastWeekData)
-
         })
     },
 
@@ -119,7 +107,6 @@ module.exports = {
     deleteProduct: (productId) => {
         return new Promise((resolve, reject) => {
             db.get().collection('productmanagement').deleteOne({ _id: ObjectID(productId) }).then(() => {
-                console.log('Document deleted')
             })
         })
     },
@@ -146,7 +133,6 @@ module.exports = {
         const { _id } = product
         const { name, quantity, category, description, price } = product
         db.get().collection('productmanagement').updateOne({ _id: ObjectID(_id) }, { $set: { name: name, quantity: quantity, category: category, description: description, price: price } }).then((done) => {
-            console.log('done')
         })
     },
 
@@ -198,7 +184,6 @@ module.exports = {
     getSubcategoryDetails: (category) => {
         return new Promise((resolve, reject) => {
             db.get().collection('categoryManagement').findOne({ Categoryname: category }).then((res) => {
-                console.log('data find')
                 resolve(res)
             })
         })
@@ -209,7 +194,6 @@ module.exports = {
             db.get().collection('productmanagement').findOne({ _id: ObjectID(id) }).then((res) => {
                 if (res) {
                     db.get().collection('cart').insertOne(res).then((response) => {
-                        console.log('data added to cart')
                     })
                 }
             })
@@ -292,10 +276,7 @@ module.exports = {
                     salesOfLastWeekData.push(0)
                 }
             }
-            console.log(salesOfLastWeekData)
             resolve(salesOfLastWeekData)
-
-
         })
 
 
@@ -313,8 +294,6 @@ module.exports = {
     getallcategories: () => {
         return new Promise((resolve, reject) => {
             db.get().collection('categoryManagement').find().toArray().then((res) => {
-                console.log('ithaanu sathanam')
-                console.log(res)
                 resolve(res)
             })
         })
@@ -323,25 +302,16 @@ module.exports = {
     // here is the work
 
     blockUser: (id) => {
-        console.log('this is helpers')
-        console.log(id)
         db.get().collection('usermanagement').findOne({ _id: ObjectID(id) }).then((res) => {
-            console.log('data finded')
-            console.log(res)
         })
     },
 
     cancelProduct: (data) => {
-        console.log(data.UserId)
-        console.log(data.id)
-        console.log(data.productId)
         return new Promise((resolve, reject) => {
             const change = 'canceled'
             const statusName = "products.$.status"
             const arrayname = "products.product"
             db.get().collection('orderManagement').updateOne({ _id: ObjectID(data.id), [arrayname]: data.productId }, { $set: { [statusName]: change } }).then((res) => {
-                console.log('set aaayiii')
-                console.log(res)
                 resolve(true)
             })
         })
@@ -369,7 +339,6 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection('wishListManager').findOne({ userid: userid }).then((res) => {
                 resolve(res)
-                console.log('user product found')
             })
         })
 
@@ -458,7 +427,6 @@ module.exports = {
         const dbprice = "products.$.subtotal"
         const productId = details.productId
         const user = details.userId
-        console.log('came hereee...')
         const productPrice = details.productPrice
         db.get().collection('cart').findOne({ userid: user }).then((res) => {
             if (res.products[0].productQuantity > 1) {
@@ -466,7 +434,6 @@ module.exports = {
                 db.get().collection('cart').updateOne({ userid: user, products: { $elemMatch: { productId: productId } } }, { $inc: { [dbprice]: -productPrice } })
 
             } else {
-                console.log('cant minise')
             }
         })
         //  db.get().collection('cart').updateOne({ userid: user, products: { $elemMatch: { productId: productId } } }, { $inc: { [dbdata]: -1 } })
@@ -498,7 +465,6 @@ module.exports = {
         let nameOfJ = "products.productQuantity"
 
         let orderStatus = 'placed'
-        console.log('innu')
         let productQuantityData = await db.get().collection('cart').aggregate([
             { $match: { userid: userId } },
             { $project: { [nameOfJ]: 1 } }
@@ -509,19 +475,17 @@ module.exports = {
         const temp = []
         for (i = 0; i < productQuantity.length; i++) {
             temp[i] = productQuantity[i].productQuantity
-            console.log('temp', temp)
         }
         let data = await db.get().collection('cart').aggregate([{ $match: { userid: userId } }, { $project: { [nameOfP]: 1 } }]).toArray()
         const products = data[0].products
         for (i = 0; i < products.length; i++) {
             array[i] = { product: products[i].productId, status: null, productQuantity: temp[i] }
             db.get().collection('productmanagement').updateOne({ _id: ObjectID(products[i].productId) }, { $inc: { quantity: -temp[i] } })
-            console.log('angane athum setaaayiiii...')
         }
 
         // console.log(arr)
         // console.log(productQuantityData[0])
-        console.log('theeeernnu...')
+        console.log('finish')
         // let data = await db.get().collection('cart').aggregate([
         //     { $match: { userid: userId } },
         //     { $project: { [nameOfP]: 1 } }
@@ -532,11 +496,9 @@ module.exports = {
         //     array[i] = { product: products[i].productId, status: null }
         // }
         return new Promise((resolve, reject) => {
-            console.log('here oooooo')
             // orderdate: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
             db.get().collection('orderManagement').insertOne({ userid: userId, orderStatus: orderStatus, addressid: addressId, payment: payment, total: total, products: array, orderdate: new Date() }).then((response) => {
                 db.get().collection('cart').deleteOne({ userid: userId }).then((result) => {
-                    console.log('mongokkulilum')
                     resolve(true)
                 })
             })
@@ -586,7 +548,6 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection('orderManagement').find({ userid: userId }).toArray().then((res) => {
                 const orderStatus = res[0].orderStatus
-                console.log('helpers..')
                 console.log(res)
                 // for(i=0;i<res.length;i++){
                 //     const userId = res[i].userid
@@ -621,10 +582,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection('orderManagement').find({ userid: id }).toArray().then((res) => {
                 resolve(res.addressid)
-                console.log('address aaanee')
                 for (i = 0; i < res.length; i++) {
                     console.log(res[i].addressid)
-                    console.log('data ')
                     console.log(res[i].addressid)
                 }
 
@@ -674,12 +633,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             const name = data.name
             const userId = data.userId
-            console.log("================================")
             db.get().collection('couponManagement').findOne({ couponcode: name }).then((res) => {
-                console.log(res)
                 if (res == null) {
-                    console.log("Invalid coupon")
-                    const msg = 'Invalid coupon'
                     resolve(msg)
                 } else {
                     const maxdiscountamount = res.maxdiscountamount
@@ -687,12 +642,10 @@ module.exports = {
                         if (response.coupons) {
                             db.get().collection('usermanagement').findOne({ _id: ObjectID(userId), coupons: name }).then((res) => {
                                 if (res) {
-                                    console.log('coupon already exists')
                                     const msg = 'Coupen already used'
                                     resolve(msg)
                                 } else {
                                     db.get().collection('usermanagement').updateOne({ _id: ObjectID(userId) }, { $push: { coupons: name } }).then((result) => {
-                                        console.log("coupen applied")
                                         const msg = maxdiscountamount
                                         resolve(msg)
                                     })
@@ -717,7 +670,6 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection('usermanagement').findOne({ phone: number }).then((res) => {
                 if (res) {
-                    console.log('ivide response und number kitty')
                     resolve(res)
                 } else {
                     resolve('')
@@ -759,7 +711,6 @@ module.exports = {
                     }
                 })
             })
-
             db.get().collection('offermanagement').insertOne({ maincategory: category, status: 'active', offer: offerAmount, offerdiscount: discount, offerexpiredate: expiredate }).then((result) => {
             })
         })

@@ -1,19 +1,26 @@
 var express = require('express');
 var router = express.Router();
+const dotenv = require('dotenv');
+dotenv.config()
 var userhelpers = require('../helpers/userhelpers');
 var ObjectID = require('mongodb').ObjectID
 var { cloudinary } = require('../Utils/cloudinary')
 var FileReader = require('filereader')
 var { upload, remove } = require('../Utils/cloudinary')
-var serviceSID = 'VA1285b0f4040f6828cc8ed6bf8c28124d'
-var accountSID = 'ACa5634a266ec8f11b8bdc468fca20c5fb'
-var authToken = 'a329ab28ae61acb846baf9bbd7c3b7ca'
+var serviceSID = process.env.serviceSID
+var accountSID = process.env.REACT_APP_accountSID
+var authToken = process.env.REACT_APP_authToken
+var RAZORPAY_SECRET = process.env.RAZORPAY_SECRET
+var RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID
 var Client = require('twilio')(accountSID, authToken)
 const Razorpay = require("razorpay");
-const dotenv = require('dotenv');
-const RAZORPAY_SECRET = '4xZM9M4X6Hj8y6S5chm6ANlw'
-const RAZORPAY_KEY_ID = 'rzp_test_9DCRDXICx0vZ5R'
-dotenv.config()
+
+// var accountSID = 'ACa5634a266ec8f11b8bdc468fca20c5fb'
+// var serviceSID = 'VA1285b0f4040f6828cc8ed6bf8c28124d'
+// var authToken = 'a329ab28ae61acb846baf9bbd7c3b7ca'
+// const RAZORPAY_SECRET = '4xZM9M4X6Hj8y6S5chm6ANlw'
+// const RAZORPAY_KEY_ID = 'rzp_test_9DCRDXICx0vZ5R'
+
 
 router.post('/', function (req, res, next) {
   const username = req.body.firstname
@@ -28,12 +35,12 @@ router.post("/orders", async (req, res) => {
   console.log(req.body)
 
   console.log('hereeeeeeeeeeee')
-  console.log('process.env', process.env.RAZORPAY_KEY_ID)
+  console.log('process.env', RAZORPAY_KEY_ID)
   try {
     const instance = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID,
+      key_id: RAZORPAY_KEY_ID,
 
-      key_secret: process.env.RAZORPAY_SECRET,
+      key_secret: RAZORPAY_SECRET,
     });
     console.log('instance', instance);
     const options = {
@@ -506,7 +513,7 @@ router.post('/getotp', (req, res) => {
   userhelpers.checkNumber(number).then((response) => {
     console.log('number find')
     console.log(response)
-    
+
     if (response) {
 
 
