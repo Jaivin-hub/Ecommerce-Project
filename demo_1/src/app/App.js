@@ -28,6 +28,7 @@ class App extends Component {
           <div className="main-panel">
             <div className="content-wrapper">
               <AppRoutes />
+              
             </div>
             {footerComponent}
           </div>
