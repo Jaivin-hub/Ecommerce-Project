@@ -39,7 +39,7 @@ app.use(function (req, res, next) {
 })
 db.connect((err) => {
   if (err) console.log('connection error' + err)
-  else console.log('Database connected to port')
+  else console.log('Database connected to port');
 })
 
 
