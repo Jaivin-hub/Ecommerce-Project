@@ -6,7 +6,9 @@ export const fileUploadAndResize = (res) => {
   return new Promise((resolve, reject) => {
     let allUploadedFiles = ''
 
+    console.log('folder')
     if (res) {
+      console.log('res und')
       instance
         .post(
           `/uploads`,

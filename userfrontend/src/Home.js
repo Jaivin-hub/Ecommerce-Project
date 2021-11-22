@@ -8,17 +8,15 @@ import Details from "./details"
 import Mostpopular from "./Mostpopular";
 import Footer from './Footer'
 import axios from 'axios'
+import instance from './axios-orders'
 import { useLocation } from "react-router-dom";
 import Header from '../src/Header'
+
 function Home(props) {
 
-    console.log('this is home')
     const location = useLocation();
-    // const userDetails =  location.state.details
-    // console.log(userDetails.firstname)
-    
-        
-
+  
+  
     useEffect(()=>{
         getProducts()
     },[])
@@ -26,10 +24,8 @@ function Home(props) {
 
 
     const getProducts=()=>{
-        console.log('its here...')
-        axios.get('/users/getProductsCategory').then((res)=>{
+        instance.get('/getProductsCategory').then((res)=>{
             const newData = res.data
-            console.log(newData[0])
         })
     }
 

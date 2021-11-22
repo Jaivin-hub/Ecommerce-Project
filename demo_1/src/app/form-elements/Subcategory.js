@@ -25,6 +25,7 @@ export function Subcategory() {
     }
 
     const textHandler = (e) => {
+        console.log(e.target.value)
         const newData = { ...values }
         newData[e.target.id] = e.target.value
         setValues(newData)
@@ -60,9 +61,10 @@ export function Subcategory() {
                                 <Form.Group>
                                     <label htmlFor="exampleSelectGender">Categories</label>
                                     <select onChange={textHandler} className="form-control" id="Category">
+                                        <option>Select</option>
                                         {categories.map((item, k) => {
                                             return (
-                                                <option>{item.Categoryname}</option>
+                                                <option  >{item.Categoryname}</option>
                                             )
                                         })}
                                     </select>

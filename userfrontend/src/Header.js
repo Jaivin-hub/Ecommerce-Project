@@ -22,14 +22,14 @@ function Header() {
     const [category, setCategory] = useState([])
     const [logout, setLogout] = useState(false)
     const [coupons, setCoupons] = useState([])
+    var userName = localStorage.getItem('username');
 
     useEffect(() => {
         console.log("running use seffect")
         getCategory()
         getCoupon()
-    }, [logout])
+    }, [logout,userName])
 
-    var userName = localStorage.getItem('username');
 
     const getCategory = async() => {
         console.log('helloo')

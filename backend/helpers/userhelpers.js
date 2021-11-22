@@ -371,8 +371,11 @@ module.exports = {
 
     getSubcategory: (data) => {
         return new Promise((resolve, reject) => {
+            console.log('subcategory addded function')
+            console.log(data.Category)
             const newData = data.subcategory.toUpperCase()
             db.get().collection('categoryManagement').updateOne({ Categoryname: data.Category }, { $push: { Subcategory: { $each: [newData] } } }).then((res) => {
+           console.log('category aaddedd')
             }).catch((err) => {
                 console.log(err)
             })

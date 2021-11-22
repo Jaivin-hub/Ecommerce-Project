@@ -18,6 +18,7 @@ export function BasicElements() {
   const [image4, setImage4] = useState('')
   const [subcategory, setSubCategory] = useState('')
   const [categoryDetails, setCategoryDetails] = useState([])
+  const [reload,setReload] = useState(true)
 
 
 
@@ -25,7 +26,7 @@ export function BasicElements() {
 
   useEffect(() => {
     getCategories()
-  }, [])
+  }, [reload])
 
   const getCategories = () => {
     instance.get('/findCategories').then((response) => {
@@ -56,12 +57,17 @@ export function BasicElements() {
   const [crop, setCrop] = useState({ aspect: 1 / 1 });
   const [showImageHandler, setShowImageHandler] = useState(false)
   const [mainImage, setMainImage] = useState([]);
+  const [fileName,setFileName] = useState([])
   console.log('444', mainImage)
+  
   const cropImage = (e) => {
-    console.log('hhdjhskjdskjsdkj')
+    console.log(e.target.files[0].name)
+    var temp = e.target.files[0].name
+    setFileName(prev => [...prev,temp])
     setSrcImg(URL.createObjectURL(e.target.files[0]));
     setShowImageHandler(true)
   }
+  console.log('file naems;;',fileName)
 
   const getCroppedImg = async () => {
     console.log('crop function')
@@ -85,8 +91,12 @@ export function BasicElements() {
       );
       const base64Image = canvas.toDataURL("image/jpeg", 1);
       setResult(base64Image);
+      
       setShowImageHandler(false)
+      console.log('here toooo')
       const urlArray = await fileUploadAndResize(base64Image)
+      console.log('file returning')
+      console.log(urlArray)
       setMainImage(prev => [...prev, urlArray])
       console.log('data came here')
     } catch (e) {
@@ -96,23 +106,19 @@ export function BasicElements() {
   // end
 
 
-
   const submitHandler = async (e) => {
     e.preventDefault()
+    setReload(!reload)
     const [image1, image2, image3, image4] = mainImage
     const productdetails = { image1, image2, image3, image4, value }
     console.log('here is the all data', productdetails)
     instance.post('/addproducts', productdetails).then(() => {
+      console.log('haavooooo')
     }).catch((err) => {
       console.log(err)
     })
   }
 
-  const renderPhotos = (source) => {
-    return source.map((photo) => {
-      return <img className="Alignimg" src={photo} key={photo} alt="" />
-    })
-  }
 
   const textChange = (e) => {
     const newValues = { ...value }
@@ -167,7 +173,7 @@ export function BasicElements() {
                   </div>
                 </div>
               </div>
-              <form onSubmit={submitHandler} autocomplete='off' className="forms-sample pt-4">
+              <form onSubmit={submitHandler} autocomplete='on' className="forms-sample pt-4">
                 <Form.Group>
                   <label htmlFor="exampleInputName1">Product Name</label>
                   <Form.Control type="text" onChange={textChange} className="form-control" id="name" placeholder="Name" />
@@ -221,11 +227,6 @@ export function BasicElements() {
                               <Button onClick={getCroppedImg}>crop</Button>
                             </div>
                           )}
-                          {result && (
-                            <div>
-                              <img src={result} alt="cropped image" />
-                            </div>
-                          )}
                         </div>
                         <Button onClick={onHide}>Close</Button>
                       </Modal.Body>
@@ -237,7 +238,7 @@ export function BasicElements() {
                           <img src={mainImage[0]} alt="" />
                         </div>
                       </div>
-                      <div className="file-upload-wrapper" data-text="Select your file!">
+                      <div className="file-upload-wrapper" data-text={fileName[0]}>
                         <input type="file" onChange={cropImage} name="Img1" className="file-upload-field" id="file-upload-field" />
                       </div>
                     </form>
@@ -249,7 +250,7 @@ export function BasicElements() {
                           <img src={mainImage[1]} alt="" />
                         </div>
                       </div>
-                      <div className="file-upload-wrapper" data-text="Select your file!">
+                      <div className="file-upload-wrapper" data-text={fileName[1]}>
                         <input type="file" onChange={cropImage} name="Img2" className="file-upload-field" id="file-upload-field" />
                       </div>
                     </form>
@@ -261,7 +262,7 @@ export function BasicElements() {
                           <img src={mainImage[2]} alt="" />
                         </div>
                       </div>
-                      <div className="file-upload-wrapper" data-text="Select your file!">
+                      <div className="file-upload-wrapper" data-text={fileName[2]}>
                         <input type="file" onChange={cropImage} name="Img3" className="file-upload-field" id="file-upload-field" />
                       </div>
                     </form>
@@ -273,13 +274,13 @@ export function BasicElements() {
                           <img src={mainImage[3]} alt="" />
                         </div>
                       </div>
-                      <div className="file-upload-wrapper" data-text="Select your file!">
+                      <div className="file-upload-wrapper" data-text={fileName[3]}>
                         <input type="file" onChange={cropImage} name="Img4" className="file-upload-field" id="file-upload-field" />
                       </div>
                     </form>
                   </div>
                 </div>
-                <Form.Group>
+                <Form.Group> 
                   <label htmlFor="exampleInputCity1">Price</label>
                   <Form.Control type="text" onChange={textChange} className="form-control" id="price" placeholder="price" />
                 </Form.Group>

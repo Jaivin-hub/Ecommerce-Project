@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Slider from "react-slick";
-import axios from 'axios'
 import instance from '../axios-orders'
 import './style.css'
 import { useHistory } from "react-router-dom"
@@ -23,7 +22,7 @@ function Buttons() {
     getData()
   }, [fordelete])
 
- 
+
 
   const getData = () => {
     instance.get('/getproducts').then((res) => {
@@ -42,9 +41,9 @@ function Buttons() {
     })
   }
 
-  const EditProduct=(id)=>{
+  const EditProduct = (id) => {
     history.push(`/editproducts/${id}`);
-  } 
+  }
 
   return (
     <div>
@@ -59,26 +58,27 @@ function Buttons() {
           </ol>
         </nav>
       </div>
-      <div className="row">
-        <div className="col-12 grid-margin stretch-card">
-          <div className="card">
-            <div className="card-body">
+      <div className="row" >
+        <div className="col-12 grid-margin stretch-card" >
+          <div className="card" >
+            <div className="card-body" >
               <h4 className="card-title">All Products</h4>
               <p className="card-description">You can edit this products by clicking them.</p>
               <div className="template-demo">
-                <div className="row text-center">
+                <div className="row text-center" style={{ overflowY: 'scroll',height:'70vh'}}>
 
                   {data.map((item, key) => {
                     return (
-                      <div className="col-md-6 col-xl-4 grid-margin stretch-card">
+                      <div className="col-md-3 col-xl-2 grid-margin stretch-card">
                         <div className="card">
                           <div className="card-body">
                             <h4 className="card-title">{item.name}</h4>
+                            <p className="text-muted text-small text-center justify-content-center">{item.description}.</p>
                             <Slider className="portfolio-slider" {...sliderSettings}>
                               {item.images.map((itm, k) => {
                                 return (
-                                  <div className="parent">
-                                    <img style={{ height: "30em" }} className="image1" src={itm.image1} alt="carousel-item" />
+                                  <div className="parent mt-3">
+                                    <img style={{ height: "10em" }} className="image1" src={itm.image1} alt="carousel-item" />
                                   </div>
                                 )
                               })}
@@ -90,9 +90,16 @@ function Buttons() {
                                     <div className="flex-grow">
                                       <div className="d-flex d-md-block d-xl-flex justify-content-between">
                                         <h6 className="preview-subject">{item.category}</h6>
-                                        <p className="text-muted text-small">{item.description}.</p>
                                       </div>
-                                      <p className="text-muted">{item.price}</p>
+                                      {item.quantity == 0 ?
+                                        <small className="text-danger">Out of stock</small>
+                                        :
+                                        item.quantity <= 3 ?
+                                          <small className="text-warning">Only {item.quantity} stock!</small>
+                                          :
+                                          <small>{item.quantity}</small>
+                                      }
+                                      <p className="text-muted pt-1">{item.price}</p>
                                     </div>
                                   </div>
                                 </div>

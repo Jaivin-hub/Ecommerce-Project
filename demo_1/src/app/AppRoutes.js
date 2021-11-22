@@ -61,8 +61,6 @@ class AppRoutes extends Component {
           <Route path="/charts/chart-js" component={ChartJs} />
           <Route path="/error-pages/error-404" component={Error404} />
           <Route path="/error-pages/error-500" component={Error500} />
-
-
           <Redirect to="/user-pages/login-1" />
         </Switch>
       </Suspense>
