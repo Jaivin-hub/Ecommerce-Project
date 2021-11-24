@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { Carousel } from 'react-bootstrap'
 import Products from './products'
 import Ads from './Ads'
@@ -15,21 +15,21 @@ import Header from '../src/Header'
 function Home(props) {
 
     const location = useLocation();
-  
-  
-    useEffect(()=>{
+
+
+    useEffect(() => {
         getProducts()
-    },[])
+    }, [])
 
 
 
-    const getProducts=()=>{
-        instance.get('/getProductsCategory').then((res)=>{
+    const getProducts = () => {
+        instance.get('/getProductsCategory').then((res) => {
             const newData = res.data
         })
     }
 
-    
+
     return (
         <div className="col-md-12">
             <div className="row">
@@ -71,16 +71,29 @@ function Home(props) {
                     </Carousel.Item>
                 </Carousel>
             </div>
-            <div className="row d-flex justify-content-around p-4"> 
-             
-               
-                    <img  src="https://cdn11.bigcommerce.com/s-erpoah/images/stencil/500x500/q/fy21-fcatbanner63__20309.original.jpg" style={{height:"400px",width:"500px"}} alt="" />
-              
-                    <img src="https://cdn11.bigcommerce.com/s-erpoah/images/stencil/500x500/m/fy21-fcatbanner47__77926.original.jpg" style={{height:"400px",width:"500px"}} alt="" />
-              
-                    <img src="https://cdn11.bigcommerce.com/s-erpoah/images/stencil/500x500/n/fy21-fcatbanner42__54676.original.jpg" style={{height:"400px",width:"500px"}} alt="" />
-              
-           
+            <div className="row p-4">
+                <div className="col-md-4 col-4 text-center">
+                    <div className="row">
+                        <img src="https://cdn11.bigcommerce.com/s-erpoah/images/stencil/500x500/q/fy21-fcatbanner63__20309.original.jpg" alt="" />
+                    </div>
+                </div>
+                <div className="col-md-4 col-4 text-center">
+                    <div className="row">
+                        <img src="https://cdn11.bigcommerce.com/s-erpoah/images/stencil/500x500/m/fy21-fcatbanner47__77926.original.jpg" alt="" />
+
+                    </div>
+                </div>
+                <div className="col-md-4 col-4 text-center">
+                    <div className="row">
+                        <img src="https://cdn11.bigcommerce.com/s-erpoah/images/stencil/500x500/n/fy21-fcatbanner42__54676.original.jpg" alt="" />
+                    </div>
+                </div>
+
+
+
+
+
+
             </div>
             <div className="row text-center pt-4">
                 <h3><strong>NEW PRODUCTS</strong></h3>

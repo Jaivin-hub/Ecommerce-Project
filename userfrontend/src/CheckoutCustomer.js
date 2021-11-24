@@ -157,7 +157,6 @@ function CheckoutCustomer() {
     const [statenameErr, setStatenameErr] = useState("")
     const [postcodeErr, setPostcodeErr] = useState("")
     const [phoneErr, setPhoneErr] = useState("")
-
     const [review, setReview] = useState()
     const [addAddress, SetAddAddress] = useState(false)
 

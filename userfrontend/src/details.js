@@ -1,6 +1,7 @@
 import React from 'react';
 import { GrDeliver } from "react-icons/gr";
 
+
 function Details(){
     return(
         <div className="col-md-12 pt-3">
@@ -33,15 +34,15 @@ function Details(){
                         </div>
                     </div>
                     <div className="delevarydetails m-5">
-                    <div className="row text-center pt-5">
+                    <div className="row text-center pt-5 text-justify">
                         <h4><strong>YOUR SOURCE FOR FINE ALCOHOL DELIVERY</strong></h4>
                         <p className="text-light pt-4">YourOwn is a supplier of fine alcohol online, including whisky, spirits, liqueurs and wine. We source from the best distilleries and wineries in the world, bringing you a handpicked beverage selection from collectors rare editions to popular drinks. We are your premier option for alcohol online and wine and liquor delivery in Australia.</p>
                     </div>
-                    <div className="row text-center pt-5">
+                    <div className="row text-center pt-5 text-justify">
                         <h4><strong>PREMIUM WHISKY COLLECTION</strong></h4>
                         <p className="text-light pt-4">We are a great liquor delivery option for rare and collectable drinks, especially whisky, offering an expansive selection of award winning global brands, from Scotland, Japan, North America, Australia and Ireland. Discover hundreds of options in all price ranges.</p>
                     </div>
-                    <div className="row text-center pt-5">
+                    <div className="row text-center pt-5 text-justify">
                         <h4><strong>THE PERFECT MATCH FOR YOUR PALATE</strong></h4>
                         <p className="text-light pt-4">We are a great liquor delivery option for rare and collectable drinks, especially whisky, offering an expansive selection of award winning global brands, from Scotland, Japan, North America, Australia and Ireland. Discover hundreds of options in all price ranges.Whether you stick with your favourite drinks, or an aficionado dedicated to expanding your palate, you’re sure to find the perfect match at YourOwn. Add to your collection piece by piece, or we can provide bespoke solutions when you need to buy in bulk for corporate events and the celebrations in your life.</p>
                     </div>

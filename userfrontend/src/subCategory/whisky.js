@@ -23,7 +23,7 @@ function Whisky(props) {
     const getdata = () => {
         instance.get(`/getwhisky/${categoryName}`).then((res) => {
             const newdata = res.data
-            console.log('oooo',res.data)
+            console.log('oooo', res.data)
             setdata(newdata)
         })
     }
@@ -70,13 +70,16 @@ function Whisky(props) {
                 <div>
                     <div className="row text-center pt-3">
                         <h2><strong>{categoryName}</strong></h2>
-                        <div className="img pt-4">
-                            <img src="https://cdn11.bigcommerce.com/s-erpoah/product_images/uploaded_images/fy21-catbanner8.jpg" alt="" />
+                        <div className="col-md-12 col-12 pt-4">
+                           
+                                <img style={{width:'100%'}} src="https://cdn11.bigcommerce.com/s-erpoah/product_images/uploaded_images/fy21-catbanner8.jpg" alt="" />
+                           
                         </div>
+
                     </div>
                     <div className="row pt-5">
                         <h3><strong>BUY {categoryName} ONLINE IN INDIA</strong></h3>
-                        <div className="message pt-3">
+                        <div className="message pt-3 text-justify">
                             <p>Whisky is known worldwide for its unique aromas and distinctive flavors.
                                 Whether you are looking for popular editions or hard-to-find collectables,
                                 GoodDrop brings you an unparalleled selection of Scotch whisky brands from

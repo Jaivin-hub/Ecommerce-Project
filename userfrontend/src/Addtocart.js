@@ -27,6 +27,7 @@ function Addtocart() {
     const [addModified, setAddmodified] = useState(false)
     const [granttotal, setGranttotal] = useState()
     const [refresh, setRefresh] = useState(false)
+    const [showWarning, setShowWarning] = useState(false)
     let sum = 0
 
     useEffect(() => {
@@ -83,11 +84,11 @@ function Addtocart() {
     }
     const totalquantity = details.length
 
-    console.log(details)
+
 
     return (
         <div className="col-md-12">
-            <div className="container">
+            <div className="container ">
                 <div className="row text-center pt-4">
                     <h2><strong>YOUR CART ({totalquantity} Items)</strong></h2>
                 </div>
@@ -107,11 +108,11 @@ function Addtocart() {
                         </div>
                     </div>
                     <div className="row pt-5">
-                        <div className="col-md-8">
+                        <div className="col-md-8 col-8">
                             <Table >
+
                                 <thead>
                                     <tr>
-
                                         <th>ITEM</th>
                                         <th className="text-center">PRICE</th>
                                         <th className="text-center">QUANTITY</th>
@@ -202,15 +203,7 @@ function Addtocart() {
                                     </div>
                                 </div>
                                 <hr />
-                                {/* <div className="row">
-                                    <div className="col-md-6">
-                                        <h6><strong>SHIPPING:</strong></h6>
-                                    </div>
-                                    <div className="col-md-6 text-end">
-                                        <h6>Add Info</h6>
-                                    </div>
-                                </div>
-                                <hr /> */}
+
                                 <div className="row">
                                     <div className="col-md-6">
                                         <h6><strong>GRAND TOTAL:</strong></h6>
@@ -221,9 +214,20 @@ function Addtocart() {
                                 </div>
                                 <hr />
                                 <div className="row">
-                                    <div className="proceedbtn">
-                                        <button onClick={submitted} className="btn">PROCEED TO CHECKOUT</button>
-                                    </div>
+                                    {showWarning ?
+                                        <small style={{ fontSize: "100%", fontWeight: "bold" }} className="text-danger">Cart is empty!</small>
+                                        : null
+                                    }
+
+                                    {details.length == 0 ?
+                                        <div className="proceedbtn mt-2">
+                                            <button onClick={() => setShowWarning(true)} className="btn">PROCEED TO CHECKOUT</button>
+                                        </div>
+                                        :
+                                        <div className="proceedbtn">
+                                            <button onClick={submitted} className="btn">PROCEED TO CHECKOUT</button>
+                                        </div>}
+
                                 </div>
                             </div>
                         </div>

@@ -19,6 +19,7 @@ import Notification from './Notification'
 import OrderPlaced from './OrderPlaced'
 import BuyNow from './BuyNow'
 import ToWishList from './ToWishList'
+import Firstpage from './Firstpage'
 
 function App() {
 
@@ -26,11 +27,13 @@ function App() {
   return (
     <div>
       <Router>
-        <Header />
-
+        {/* <Header /> */}
         <Switch>
           <Route exact path="/">
             <Home />
+          </Route>
+          <Route path='/security'>
+            <Firstpage />
           </Route>
           <Route path="/login">
             <Login />
