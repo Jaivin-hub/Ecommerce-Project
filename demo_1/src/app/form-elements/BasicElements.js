@@ -40,21 +40,10 @@ export function BasicElements() {
   }
 
 
-
-  // const fetchImage = () => {
-  //   console.log('ggggggggg')
-  //   axios.post('http://localhost:5000/users/fetchUserImage', { 'email': email }).then((res) => {
-  //     setUserImage(res.data.image)
-  //     setSpinner(false)
-  //   })
-  // }
-
-
-  // firstImg crop..
   const [srcImg, setSrcImg] = useState(null);
   const [result, setResult] = useState(null);
   const [image, setImage] = useState(null);
-  const [crop, setCrop] = useState({ aspect: 1 / 1 });
+  const [crop, setCrop] = useState({ aspect: 1/ 1});
   const [showImageHandler, setShowImageHandler] = useState(false)
   const [mainImage, setMainImage] = useState([]);
   const [fileName,setFileName] = useState([])
@@ -91,7 +80,6 @@ export function BasicElements() {
       );
       const base64Image = canvas.toDataURL("image/jpeg", 1);
       setResult(base64Image);
-      
       setShowImageHandler(false)
       console.log('here toooo')
       const urlArray = await fileUploadAndResize(base64Image)
@@ -144,8 +132,6 @@ export function BasicElements() {
     newValues[e.target.id] = e.target.value
     setValues(newValues)
   }
-
-
 
 
 

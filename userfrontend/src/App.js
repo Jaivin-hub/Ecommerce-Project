@@ -8,7 +8,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
-
+import { Redirect } from 'react-router';
 import ShowProduct from './ShowProduct';
 import Addtocart from './Addtocart';
 import CheckoutCustomer from './CheckoutCustomer';
@@ -27,13 +27,13 @@ function App() {
   return (
     <div>
       <Router>
-        {/* <Header /> */}
+        <Header />
         <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path='/security'>
+        <Route exact path='/'>
             <Firstpage />
+          </Route>
+          <Route  path="/home">
+            <Home />
           </Route>
           <Route path="/login">
             <Login />
@@ -74,6 +74,7 @@ function App() {
           <Route path="/whisky/:data">
             <Whisky />
           </Route>
+          <Redirect to="/security" />
         </Switch>
       </Router>
     </div>

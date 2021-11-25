@@ -66,7 +66,7 @@ function Header() {
     }
 
     const swithHandler = () => {
-        history.push("/");
+        history.push("/home");
     }
 
     const swithProfile = () => {
@@ -83,8 +83,10 @@ function Header() {
         console.log(maincategory)
         history.push(`/whisky/${subcategory}`)
     }
-
+    if (window.location.pathname === '/') return null;
+    else
     return (
+        
         <div className="col-md-12 main">
             <div className="row ">
                 <Navbar bg="" expand="lg">

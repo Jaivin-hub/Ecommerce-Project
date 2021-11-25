@@ -108,7 +108,7 @@ function Addtocart() {
                         </div>
                     </div>
                     <div className="row pt-5">
-                        <div className="col-md-8 col-8">
+                        <div className="col-md-8 col-12">
                             <Table >
 
                                 <thead>
@@ -133,10 +133,10 @@ function Addtocart() {
                                                 <td>
 
                                                     <div className="row">
-                                                        <div className="col-md-5">
+                                                        <div className="col-md-8 col-10">
                                                             <img style={{ width: '150%', height: '5em', borderRadius: "4px" }} src={item.image} alt="" />
                                                         </div>
-                                                        <div className="col-md-6 ms-3">
+                                                        <div className="col-md-4 ms-3 col-2">
                                                             <small><small><u>{item.subcategory}</u></small></small>
                                                             <p><strong>{item.name}</strong></p>
                                                         </div>
@@ -146,10 +146,10 @@ function Addtocart() {
                                                 </td>
                                                 <td>
                                                     <div className="row pt-4">
-                                                        <div className="col-md-2">
+                                                        <div className="col-md-2 col-1 text-end">
                                                             <BiRupee />
                                                         </div>
-                                                        <div className="col-md-8">
+                                                        <div className="col-md-8 col-1">
                                                             <p>{item.price}</p>
                                                         </div>
                                                     </div>
@@ -158,14 +158,14 @@ function Addtocart() {
                                                 <td>
                                                     {/* <div className="quantity"> */}
                                                     <div className="row mt-4">
-                                                        <div className="col-md-2">
+                                                        <div className="col-md-2 col-1">
                                                             <button onClick={() => { subtractProduct(item.productId, item.price) }} className="btn"><BiMinus /> </button>
                                                         </div>
-                                                        <div className="col-md-2 ms-2">
+                                                        <div className="col-md-2 ms-2 col-1">
                                                             <button className="btn">{item.productQuantity}</button>
 
                                                         </div>
-                                                        <div className="col-md-2">
+                                                        <div className="col-md-2 col-1">
                                                             <button onClick={() => { AddProduct(item.productId, item.price) }} className="btn"><BsPlus /></button>
                                                         </div>
                                                     </div>
@@ -173,10 +173,10 @@ function Addtocart() {
                                                 </td>
                                                 <td>
                                                     <div className="row pt-4">
-                                                        <div className="col-md-4 text-end">
+                                                        <div className="col-md-4 text-end col-1">
                                                             <BiRupee />
                                                         </div>
-                                                        <div className="col-md-8">
+                                                        <div className="col-md-8 col-1">
                                                             <p>{item.subtotal}</p>
                                                         </div>
                                                     </div>

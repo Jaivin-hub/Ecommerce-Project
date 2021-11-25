@@ -72,9 +72,9 @@ function CheckoutCustomer() {
 
         const { amount, id: order_id, currency } = result.data;
         console.log('hhh')
-        const payment='razorpay'
+        const payment = 'razorpay'
         const total = Math.floor(amount / 100)
-        const totalDetails = {total,userId,payment,addressId}
+        const totalDetails = { total, userId, payment, addressId }
 
         const options = {
             key: "rzp_test_9DCRDXICx0vZ5R", // Enter the Key ID generated from the Dashboard
@@ -94,10 +94,10 @@ function CheckoutCustomer() {
                     razorpayOrderId: response.razorpay_order_id,
                     razorpaySignature: response.razorpay_signature,
                 };
-                console.log('data',data)
+                console.log('data', data)
 
                 const result = await instance.post("/success", totalDetails);
-                if(result.data.msg==true){
+                if (result.data.msg == true) {
                     history.push("/orderplaced");
                 }
             },
@@ -369,17 +369,17 @@ function CheckoutCustomer() {
         <div className="col-md-12">
             <div className="container">
                 <div className="row pt-5 ps-5">
-                    <div className="col-md-6">
+                    <div className="col-md-6 ">
                         <div className="row">
                             {token ?
                                 <div className="row">
-                                    <div className="col-md-8">
+                                    <div className="col-md-8 col-8">
                                         <div className="row">
                                             <h3><strong>CUSTOMER</strong></h3>
                                             <small><strong>{UserName}</strong></small>
                                         </div>
                                     </div>
-                                    <div className="col-md-4 text-end">
+                                    <div className="col-md-4 text-end col-4">
                                         <div className="signoutbtn pt-1">
                                             <button onClick={logOutHandler} className="btn">LOG OUT</button>
                                         </div>
@@ -388,7 +388,7 @@ function CheckoutCustomer() {
                                 :
                                 <div>
                                     <div className="row">
-                                        <div className="col-md-8">
+                                        <div className="col-md-8 col-8">
                                             <h3><strong>CUSTOMER</strong></h3>
                                             <small>Don’t have an account? Create an account to continue.</small>
                                         </div>
@@ -412,57 +412,31 @@ function CheckoutCustomer() {
                                 </div>
                             }
                         </div>
-                        {/* {!token ?
-                            <div>
-                                <div className="row">
-                                    <div className="col-md-8">
-                                        <h3><strong>CUSTOMER</strong></h3>
-                                        <small>Don’t have an account? Create an account to continue.</small>
-                                    </div>
-                                </div>
-                                <div className="stepone">
-                                    <div className="loginbox pt-3">
-                                        <label htmlFor="">Email</label><br />
-                                        <input className="logininp" type="text" />
-                                    </div>
-                                    <div className="loginbox pt-3">
-                                        <label htmlFor="">Password</label><br />
-                                        <input className="logininp" type="password" /><br />
-                                    </div>
-                                    <div className="pt-2">
-                                        <small>Forgot password?</small>
-                                    </div>
-                                    <div className="mt-3">
-                                        <button onClick={firstStep} className="btn">SIGN IN</button>
-                                    </div>
-                                </div>
-                            </div>
-                            : null} */}
                         <hr />
                         <div className="row">
                             <div className="row">
-                                <div className="col-md-4">
+                                <div className="col-md-4 col-6">
                                     <div className="billing">
                                         <h3><strong>BILLING</strong></h3>
                                     </div>
                                 </div>
-                                <div className="col-md-8">
+                                <div className="col-md-8 ">
                                     <div className="row">
                                         {allAddress ?
-                                            <div className="col-md-6 text-end">
+                                            <div className="col-md-6 pt-1 col-6">
                                                 <button onClick={() => setAllAddress(!allAddress)} className="btn">
                                                     Cancel
                                                 </button>
                                             </div>
                                             :
-                                            <div className="col-md-6 text-end">
+                                            <div className="col-md-6  pt-1 col-6">
                                                 <button onClick={() => setAllAddress(!allAddress)} className="btn">
                                                     Select Address
                                                 </button>
                                             </div>
                                         }
 
-                                        <div className="col-md-6 text-end">
+                                        <div className="col-md-6 text-end pt-1 col-6">
                                             <button onClick={() => { SetAddAddress(true) }} className="btn">Add Address</button>
                                         </div>
                                     </div>
@@ -471,34 +445,24 @@ function CheckoutCustomer() {
 
 
                             {addAddress ?
-                                <div className="row">
+                                <div className="row mt-3">
                                     <form onSubmit={billingSubmitHandler}>
-                                        <div className="addressdetails">
-                                            <label className="pt-3" htmlFor="">Country</label><br />
-                                            <select className="form-control" id="stockdetails">
-                                                <option>India</option>
-                                                <option>Australia</option>
-                                            </select>
-                                        </div>
-                                        <div className="row">
-                                            <div className="row">
-                                                <div className="col-md-6">
-                                                    <div className="addressdetails">
-                                                        <label className="pt-3" htmlFor="">First Name</label><br />
-                                                        <input onInput={(e) => { firstnameHandler(e.target.value) }} value={firstname} className="countryinp" type="text" />
-                                                        <p className="err" style={{ color: 'red' }}>{citynameErr}</p>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-md-6">
-                                                    <div className="addressdetails">
-                                                        <label className="pt-3 ms-4" htmlFor="">Last Name</label><br />
-                                                        <input onInput={(e) => { lastnameHandler(e.target.value) }} value={lastname} className="countryinp ms-4" type="text" />
-                                                        <p className="err" style={{ color: 'red' }}>{statenameErr}</p>
-                                                    </div>
+                                        <div className="row col-12">
+                                            <div className="col-md-6">
+                                                <div className="addressdetails">
+                                                    <label className="pt-3" htmlFor="">First Name</label><br />
+                                                    <input onInput={(e) => { firstnameHandler(e.target.value) }} value={firstname} className="countryinp" type="text" />
+                                                    <p className="err" style={{ color: 'red' }}>{citynameErr}</p>
                                                 </div>
                                             </div>
 
+                                            <div className="col-md-6">
+                                                <div className="addressdetails">
+                                                    <label className="pt-3 " htmlFor="">Last Name</label><br />
+                                                    <input onInput={(e) => { lastnameHandler(e.target.value) }} value={lastname} className="countryinp " type="text" />
+                                                    <p className="err" style={{ color: 'red' }}>{statenameErr}</p>
+                                                </div>
+                                            </div>
                                             <div className="addressdetails">
                                                 <label className="pt-3" htmlFor="">Company Name (Optional)</label><br />
                                                 <input onInput={(e) => { companynameHandler(e.target.value) }} value={companyname} className="countryinp" type="text" />
@@ -514,42 +478,37 @@ function CheckoutCustomer() {
                                                 <input onInput={(e) => { addressline2Handler(e.target.value) }} value={addressline2} className="countryinp" type="text" />
                                                 <p className="err" style={{ color: 'red' }}>{addressline2Err}</p>
                                             </div>
-                                            <div className="row">
-                                                <div className="col-md-6">
-                                                    <div className="addressdetails">
-                                                        <label className="pt-3" htmlFor="">City</label><br />
-                                                        <input onInput={(e) => { citynameHandler(e.target.value) }} value={cityname} className="countryinp" type="text" />
-                                                        <p className="err" style={{ color: 'red' }}>{citynameErr}</p>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-md-6">
-                                                    <div className="addressdetails">
-                                                        <label className="pt-3 ms-4" htmlFor="">State/Province (Optional)</label><br />
-                                                        <input onInput={(e) => { statenameHandler(e.target.value) }} value={statename} className="countryinp ms-4" type="text" />
-                                                        <p className="err" style={{ color: 'red' }}>{statenameErr}</p>
-                                                    </div>
+                                            <div className="col-md-6">
+                                                <div className="addressdetails">
+                                                    <label className="pt-3" htmlFor="">City</label><br />
+                                                    <input onInput={(e) => { citynameHandler(e.target.value) }} value={cityname} className="countryinp" type="text" />
+                                                    <p className="err" style={{ color: 'red' }}>{citynameErr}</p>
                                                 </div>
                                             </div>
 
-                                            <div className="row">
-                                                <div className="col-md-6">
-                                                    <div className="addressdetails">
-                                                        <label className="pt-3" htmlFor="">Postal Code</label><br />
-                                                        <input onInput={(e) => { postcodeHandler(e.target.value) }} value={postcode} className="countryinp" type="text" />
-                                                        <p className="err" style={{ color: 'red' }}>{postcodeErr}</p>
-                                                    </div>
+                                            <div className="col-md-6">
+                                                <div className="addressdetails">
+                                                    <label className="pt-3" htmlFor="">State/Province (Optional)</label><br />
+                                                    <input onInput={(e) => { statenameHandler(e.target.value) }} value={statename} className="countryinp" type="text" />
+                                                    <p className="err" style={{ color: 'red' }}>{statenameErr}</p>
                                                 </div>
-                                                <div className="col-md-6">
-                                                    <div className="addressdetails">
-                                                        <label className="pt-3 ms-4" htmlFor="">Phone Number</label><br />
-                                                        <input onInput={(e) => { phoneHandler(e.target.value) }} value={phone} className="countryinp ms-4" type="text" />
-                                                        <p className="err" style={{ color: 'red' }}>{phoneErr}</p>
-                                                    </div>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <div className="addressdetails">
+                                                    <label className="pt-3" htmlFor="">Postal Code</label><br />
+                                                    <input onInput={(e) => { postcodeHandler(e.target.value) }} value={postcode} className="countryinp" type="text" />
+                                                    <p className="err" style={{ color: 'red' }}>{postcodeErr}</p>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <div className="addressdetails">
+                                                    <label className="pt-3" htmlFor="">Phone Number</label><br />
+                                                    <input onInput={(e) => { phoneHandler(e.target.value) }} value={phone} className="countryinp " type="text" />
+                                                    <p className="err" style={{ color: 'red' }}>{phoneErr}</p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="row pt-3">
+                                        <div className="row pt-3 ms-1">
                                             <div className="continue">
                                                 <button type='submit' className="btn">CONTINUE</button>
                                             </div>
@@ -563,21 +522,21 @@ function CheckoutCustomer() {
                                         return (
                                             <div className="addressMangement">
                                                 <div className="row">
-                                                    <div className="col-md-2 text-center mt-2">
+                                                    <div className="col-md-2 text-center mt-2 col-2">
                                                         <input className="ml-1" name="select" onClick={() => SelectedAddressHandler(item.id)} type="checkbox" />
                                                     </div>
-                                                    <div className="col-md-10">
+                                                    <div className="col-md-10 col-8">
                                                         <div className="row">
-                                                            <div className="col-md-4">
+                                                            <div className="col-md-4 col-4">
                                                                 <h4>{item.cityname}</h4>
                                                                 <small> {item.postcode}</small>
                                                             </div>
-                                                            <div className="col-md-6">
+                                                            <div className="col-md-6 col-6">
                                                                 <small> {item.addressline1}</small>
                                                                 <small> {item.addressline2}</small><br />
                                                                 <small> {item.phone}</small>
                                                             </div>
-                                                            <div className="col-md-2">
+                                                            <div className="col-md-2 col-2">
                                                                 <button onClick={() => AddressDeleteHandler(item.id)} className="btn"><MdDelete /></button>
                                                             </div>
                                                         </div>
@@ -611,32 +570,32 @@ function CheckoutCustomer() {
                                             </div>
                                         </div>
                                         <div className="row ">
-                                            <div className="col-md-3 text-center ">
+                                            <div className="col-md-3 text-center col-4">
                                                 <div className="row">
-                                                    <div className="col-md-3">
+                                                    <div className="col-md-3 col-3">
                                                         <input onChange={() => { paybtn() }} className="mt3" name="radio" type="radio" />
                                                     </div>
-                                                    <div className="col-md-3">
+                                                    <div className="col-md-3 col-3">
                                                         <label htmlFor="">Paypal</label>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="col-md-6 text-center">
+                                            <div className="col-md-6 text-center col-4">
                                                 <div className="row">
-                                                    <div className="col-md-3">
+                                                    <div className="col-md-3 col-1">
                                                         <input onChange={() => { buttonHandler() }} className="mt3" name="radio" type="radio" />
                                                     </div>
-                                                    <div className="col-md-6">
+                                                    <div className="col-md-6 col-6">
                                                         <label htmlFor="">Cash on Delivery</label>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="col-md-3 text-center">
+                                            <div className="col-md-3 text-center col-4">
                                                 <div className="row">
-                                                    <div className="col-md-3">
+                                                    <div className="col-md-3 col-3">
                                                         <input onChange={() => { razBtn() }} className="mt3" name="radio" type="radio" />
                                                     </div>
-                                                    <div className="col-md-6">
+                                                    <div className="col-md-6 col-6">
                                                         <label htmlFor="">Razorpay</label>
                                                     </div>
                                                 </div>
@@ -708,9 +667,9 @@ function CheckoutCustomer() {
                             : null}
                     </div>
 
-                    <div className="col-md-6">
-                        <div className="row">
-                            <div className="orderdetails">
+                    <div className="col-md-6 text-center">
+                        <div className="row ">
+                            <div  className="orderdetails mt-3 ">
                                 <div className="row pt-2">
                                     <div className="ordersummer col-md-6">
                                         <h5><strong>Order Summary</strong></h5>
@@ -733,14 +692,14 @@ function CheckoutCustomer() {
                                                     <h6 className=""><strong>{item.productQuantity}</strong> Bottles</h6>
                                                 </div>
                                                 <div className="row">
-                                                    <div className="col-md-3">
+                                                    <div className="col-md-3 col-3">
                                                         <img style={{ width: '100%', height: '5em', borderRadius: '5px' }} className="addedimg" src={item.image} alt="" />
                                                     </div>
-                                                    <div className="col-md-6">
+                                                    <div className="col-md-6 col-4   ">
                                                         <p>{item.name}</p>
                                                         <p>{item.description}</p>
                                                     </div>
-                                                    <div className="col-md-3">
+                                                    <div className="col-md-3 col-5">
                                                         <p><BiRupee />{item.subtotal}</p>
                                                     </div>
                                                 </div>
@@ -752,25 +711,19 @@ function CheckoutCustomer() {
                                 <hr />
                                 <div className="row">
                                     <div className="row ">
-                                        {/* <div className="col-md-6">
-                                            <h6><strong>TAX</strong></h6>
-                                        </div>
-                                        <div className="col-md-6 text-end">
-                                            <p><BiRupee />14.54</p>
-                                        </div> */}
                                     </div>
                                     <div className="row pt-3">
-                                        <div className="col-md-6">
+                                        <div className="col-md-6 col-6">
                                             <h4><strong>TOTAL (INR)</strong></h4>
                                         </div>
-                                        <div className="col-md-6 text-end">
+                                        <div className="col-md-6 col-6 text-end">
                                             <h5><BiRupee />{granttotal}</h5>
                                         </div>
                                     </div>
                                     <div className="container">
 
-                                        <div className="row  pt-3 ">
-                                            <div className="col-md-3 pt-4">
+                                        <div className="row   ">
+                                            <div className="col-md-3 col-2">
                                                 <small><u>Coupon code</u></small>
                                                 {coupenPreview == 'Coupon applied' ?
                                                     <div className="row">
@@ -782,9 +735,9 @@ function CheckoutCustomer() {
                                                     </div>
                                                 }
                                             </div>
-                                            <div className="col-md-9">
+                                            <div className="col-md-9 col-10">
                                                 <form onSubmit={sendCouponHandler}>
-                                                    <div className=" pt-1">
+                                                    <div className="">
                                                         <div className="">
                                                             <input id="couponcode" onChange={couponHandler} className="couponinp" type="text" />
                                                         </div>

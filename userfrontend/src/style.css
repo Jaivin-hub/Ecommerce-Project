@@ -17,6 +17,7 @@
     box-sizing: content-box;
     position: relative;
     top: -1.5rem;
+    width:200%;
     
 }
 .input_errorMessage__2BX8K- {
@@ -62,6 +63,22 @@ input[type=number]::-webkit-outer-spin-button {
     bottom: 12.8px;
     bottom: 0.8rem;
     
+}
+
+.input_wrapper__1lXNxt-:after {
+    content: '';
+    width: 224px;
+    width: 14rem;
+    height: 12.8px;
+    height: 0.8rem;
+    background-color: rgb(233, 227, 199);
+    opacity: 0.6;
+    position: absolute;
+    left: 20px;
+    left: 1.25rem;
+    bottom: 12.8px;
+    bottom: 0.8rem;
+    width:80%;
 }
 
 .input_inputBox__1bIPw- {
