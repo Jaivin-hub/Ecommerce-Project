@@ -8,12 +8,16 @@ function ChartJs() {
     getData()
     getDaily()
     getWeeklySailes()
-    
+    checkOffers()
   }, [])
 
   const [COD, setCOD] = useState()
   const [paypal, setPaypal] = useState()
   const [razorpay, setRazorpay] = useState()
+
+  const checkOffers=()=>{
+    
+  }
 
  
 

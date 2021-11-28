@@ -309,7 +309,6 @@ function CheckoutCustomer() {
             console.log('Order placed')
             if (res) {
                 history.push("/orderplaced");
-
             }
         })
     }
@@ -435,7 +434,6 @@ function CheckoutCustomer() {
                                                 </button>
                                             </div>
                                         }
-
                                         <div className="col-md-6 text-end pt-1 col-6">
                                             <button onClick={() => { SetAddAddress(true) }} className="btn">Add Address</button>
                                         </div>
@@ -611,7 +609,6 @@ function CheckoutCustomer() {
                                     <h6><strong>Terms and Conditions</strong></h6>
                                 </div>
                                 <div className="row pt-4">
-
                                     <textarea name="termsText" id="" cols="30" rows="10">I am over the Age of 18 Years. A person over the age of 18 must be present at the nominated delivery address to sign for the goods.
                                         Due to the nature of our goods, no Authority to Leave requests can be made. We will not accept any claims for disputed deliveries
                                         based on Proof Of Delivery signature at a residential or commercial address. Please ensure your delivery details are accurate as additional
@@ -624,24 +621,16 @@ function CheckoutCustomer() {
                                         <label htmlFor="">Yes, I agree with the above terms and conditions</label>
                                     </div>
                                 </div>
-
-
-
-
                                 <div className="row pt-3">
-
-
                                     {firstConfirmation && secondConfirmation && thirdConfirmation ?
                                         null
                                         :
                                         <p className="text-danger">{ErrorMsg}</p>
                                     }
                                     {firstConfirmation && secondConfirmation && thirdConfirmation ?
-
                                         <div className="btn">
                                             {checkout ?
                                                 <PayPal value={props} />
-
                                                 : razorpay ? <button style={{ backgroundColor: 'rgb(2,0,36)', background: 'linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%)', width: "50%", height: '3em', borderRadius: '5px', color: '#fff' }}
                                                     className="App-link" data-payment_button_id="pl_IHRD263JqZbzZQ" onClick={displayRazorpay}>
                                                     Buy Now <br /><small className="text-muted">secured by razorpay</small>
@@ -653,23 +642,19 @@ function CheckoutCustomer() {
                                         </div>
                                         :
                                         <div className="btn">
-
                                             <button
                                                 onClick={showError}
                                                 className="btn">PLACE YOUR ORDER
                                             </button>
-
                                         </div>
                                     }
-
                                 </div>
                             </div>
                             : null}
                     </div>
-
                     <div className="col-md-6 text-center">
                         <div className="row ">
-                            <div  className="orderdetails mt-3 ">
+                            <div className="orderdetails mt-3 ">
                                 <div className="row pt-2">
                                     <div className="ordersummer col-md-6">
                                         <h5><strong>Order Summary</strong></h5>
@@ -680,14 +665,9 @@ function CheckoutCustomer() {
                                 </div>
                                 <hr />
                                 <div style={{ height: "15em", overflow: "scroll", overflowX: "hidden" }}>
-
-
-
                                     {details.map((item, k) => {
                                         return (
                                             <div>
-
-
                                                 <div className="row">
                                                     <h6 className=""><strong>{item.productQuantity}</strong> Bottles</h6>
                                                 </div>
@@ -745,7 +725,6 @@ function CheckoutCustomer() {
                                                             <button type="submit" className="btn">APPLY</button>
                                                         </div>
                                                     </div>
-
                                                 </form>
                                             </div>
                                         </div>
