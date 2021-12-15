@@ -31,7 +31,8 @@ function Home(props) {
 
 
     return (
-        <div className="col-md-12">
+        <div >
+
             <div className="row">
                 <Carousel fade>
                     <Carousel.Item>
@@ -88,12 +89,6 @@ function Home(props) {
                         <img src="https://cdn11.bigcommerce.com/s-erpoah/images/stencil/500x500/n/fy21-fcatbanner42__54676.original.jpg" alt="" />
                     </div>
                 </div>
-
-
-
-
-
-
             </div>
             <div className="row text-center pt-4">
                 <h3><strong>NEW PRODUCTS</strong></h3>

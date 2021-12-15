@@ -28,7 +28,6 @@ function Addtocart() {
     const [granttotal, setGranttotal] = useState()
     const [refresh, setRefresh] = useState(false)
     const [showWarning, setShowWarning] = useState(false)
-    let sum = 0
 
     useEffect(() => {
         getcart()
@@ -133,10 +132,10 @@ function Addtocart() {
                                                 <td>
 
                                                     <div className="row">
-                                                        <div className="col-md-8 col-10">
+                                                        <div className="col-md-6 col-10">
                                                             <img style={{ width: '150%', height: '5em', borderRadius: "4px" }} src={item.image} alt="" />
                                                         </div>
-                                                        <div className="col-md-4 ms-3 col-2">
+                                                        <div className="col-md-3 ms-3  col-2">
                                                             <small><small><u>{item.subcategory}</u></small></small>
                                                             <p><strong>{item.name}</strong></p>
                                                         </div>

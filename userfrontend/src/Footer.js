@@ -17,12 +17,12 @@ function Header() {
     }
     return (
         <div>
-            <div className="footer col-md-12 mt-5">
+            <div className="footer  mt-5">
                 <div className="container">
                     <div className="row pt-5">
                         <div className="col-md-6">
                             <div className="row">
-                                <div className="col-md-4">
+                                <div className="col-md-4 col-4">
                                     <h6><strong>NAVIGATE</strong></h6>
                                     <div>
                                         <small>Blog</small><br />
@@ -38,7 +38,7 @@ function Header() {
                                         <small>Sitemap</small>
                                     </div>
                                 </div>
-                                <div className="col-md-4">
+                                <div className="col-md-4 col-4 text-center">
                                     <h6><strong>CATEGORIES</strong></h6>
                                     <div>
                                         {data.map((item, key) => {
@@ -50,7 +50,7 @@ function Header() {
                                         })}
                                     </div>
                                 </div>
-                                <div className="col-md-4">
+                                <div className="col-md-4 col-4">
                                     <h6><strong>POPULAR BRANDS</strong></h6>
                                     <div>
                                         <small>wild oats</small><br />
@@ -73,7 +73,7 @@ function Header() {
                                 <div className="col-md-6">
 
                                 </div>
-                                <div className="col-md-6">
+                                <div className="col-md-6 pt-3">
                                     <div className="">
                                         <h6><strong>SUBSCRIBE TO OUR NEWSLETTER</strong></h6>
                                     </div>
@@ -98,7 +98,16 @@ function Header() {
                 </div>
                 <div className="row pt-5">
                     <small>
-                        YourOwn supports the Responsible Service of Alcohol. New South Wales: Liquor Act 2007 - It is against the law to sell or supply alcohol to, or to obtain alcohol on behalf of, a person under the age of 18 years. Victoria: Warning - Under the Liquor Control Reform Act 1998 it is an offence to supply alcohol to a person under the age of 18 years (penalty exceeds $17,000), for a person under the age of 18 years to purchase or receive liquor (penalty exceeds $700). Western Australia: WARNING. Under the Liquor Control Act 1988, it is an offence: to sell or supply liquor to a person under the age of 18 years on licensed or regulated premises; or for a person under the age of 18 years to purchase, or attempt to purchase, liquor on licensed or regulated premises. South Australia: Under Liquor Licensing Act 1997, Liquor must NOT be supplied to persons under 18. Queensland: Under the Liquor Act 1992, it is an offence to supply liquor to a person under the age of 18 years. Tasmania: Under the Liquor Licensing Act 1990 it is an offence: for liquor to be delivered to a person under the age of 18 years. Penalty: Fine not exceeding 20 penalty units. For a person under the age of 18 years to purchase liquor. Penalty, Fine not exceeding 10 penalty units. For more information visit our Legal page. *1 Day Dispatch Monday-Friday.
+                        YourOwn supports the Responsible Service of Alcohol. New South Wales: Liquor Act 2007 - It is against the law to sell or supply alcohol to,
+                         or to obtain alcohol on behalf of, a person under the age of 18 years. Victoria: Warning - Under the Liquor Control Reform Act 1965 it is
+                          an offence to supply alcohol to a person under the age of 18 years (penalty exceeds $17,000), for a person under the age of 18 years to 
+                          purchase or receive liquor (penalty exceeds $700). Western Australia: WARNING. Under the Liquor Control Act 1988, it is an offence: to sell
+                           or supply liquor to a person under the age of 18 years on licensed or regulated premises; or for a person under the age of 18 years to purchase,
+                            or attempt to purchase, liquor on licensed or regulated premises. South Australia: Under Liquor Licensing Act 1997, Liquor must NOT be supplied
+                             to persons under 18. Queensland: Under the Liquor Act 1992, it is an offence to supply liquor to a person under the age of 18 years. Tasmania:
+                              Under the Liquor Licensing Act 1990 it is an offence: for liquor to be delivered to a person under the age of 18 years. Penalty: Fine not exceeding
+                               20 penalty units. For a person under the age of 18 years to purchase liquor. Penalty, Fine not exceeding 10 penalty units. For more information visit
+                                our Legal page. *1 Day Dispatch Monday-Friday.
                     </small>
                 </div>
             </div>

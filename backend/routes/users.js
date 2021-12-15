@@ -12,8 +12,11 @@ var accountSID = process.env.REACT_APP_accountSID
 var authToken = process.env.REACT_APP_authToken
 var RAZORPAY_SECRET = process.env.RAZORPAY_SECRET
 var RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID
+const CLOUDINARY_NAME = process.env.CLOUDINARY_NAME
+
 var Client = require('twilio')(accountSID, authToken)
 const Razorpay = require("razorpay");
+
 
 // var accountSID = 'ACa5634a266ec8f11b8bdc468fca20c5fb'
 // var serviceSID = 'VA1285b0f4040f6828cc8ed6bf8c28124d'
@@ -246,7 +249,6 @@ router.post('/checkadmin', (req, res) => {
   console.log(req.body)
   const Admin = 'jaivin'
   const AdminPass = '1234'
-
   const userName = req.body.userName
   const password = req.body.password
   if (Admin == userName && AdminPass == password) {
@@ -624,6 +626,7 @@ router.post('/setStatus', (req, res) => {
 })
 
 router.get('/getAllAddress/:id', (req, res) => {
+  console.log('orupaaaddd...')
   const id = req.params.id
   console.log(99)
   console.log(id)

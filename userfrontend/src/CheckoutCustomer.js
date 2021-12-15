@@ -119,7 +119,6 @@ function CheckoutCustomer() {
     useEffect(() => {
         getCart()
         getAddress()
-
         const script = document.createElement("script");
         script.src = "https://checkout.razorpay.com/v1/checkout.js";
         document.body.appendChild(script);
@@ -130,6 +129,8 @@ function CheckoutCustomer() {
 
 
     const firstStep = () => {
+
+        //work//
         setDiv(false)
     }
 
@@ -161,7 +162,6 @@ function CheckoutCustomer() {
     const [addAddress, SetAddAddress] = useState(false)
 
     const getCart = () => {
-        console.log('function activated');
         instance.get(`/getcart/${userId}`).then((res) => {
             const newdetails = res.data
             const values = newdetails.response
@@ -172,8 +172,9 @@ function CheckoutCustomer() {
     }
 
     const getAddress = () => {
+        console.log('data-----')
         instance.get(`/getAllAddress/${userId}`).then((res) => {
-            console.log('res' + res)
+            console.log('res data' + res)
             setUserAddress(res.data)
         })
     }
@@ -194,20 +195,10 @@ function CheckoutCustomer() {
     // }
 
 
-    const firstnameHandler = (value) => {
-        setFirstname(value)
-    }
 
-    const lastnameHandler = (value) => {
-        setLastname(value)
-    }
 
     const companynameHandler = (value) => {
         setCompanyname(value)
-    }
-
-    const addressline1Handler = (value) => {
-        setAddressline1(value)
     }
 
     const addressline2Handler = (value) => {
@@ -222,29 +213,22 @@ function CheckoutCustomer() {
         setStatename(value)
     }
 
-    const postcodeHandler = (value) => {
-        setPostcode(value)
-    }
-
-    const phoneHandler = (value) => {
-        setPhone(value)
-    }
-
     const billingSubmitHandler = (e) => {
         e.preventDefault()
         console.log('continue');
         let Data = {
-            firstname: firstname,
-            lastname: lastname,
+            firstname: firstName,
+            lastname: lastName,
             companyname: companyname,
-            addressline1: addressline1,
+            addressline1: addressOne,
             addressline2: addressline2,
             cityname: cityname,
             statename: statename,
-            postcode: postcode,
-            phone: phone,
+            postcode: postCode,
+            phone: phoneNumber,
             userid: userId
         }
+        console.log('all data address :', Data)
 
         instance.post("/userdetails", Data).then((res) => {
             console.log('success')
@@ -318,6 +302,235 @@ function CheckoutCustomer() {
         localStorage.clear();
     }
 
+    // Email validation 
+
+    const [email, setEmail] = useState('')
+    const [emailError, setEmailError] = useState('')
+    console.log(email)
+
+    const emailInputBlurHandler = (email, setError) => {
+        if (email === '') {
+            setError('This field cannot be empty!')
+            return false
+        } else if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+            setError('This email id is not valid.')
+            return false
+        } else {
+            setError('')
+            return true
+        }
+    }
+    const emailInputChangeHandler = (email, setError) => {
+        if (email.includes(' ')) {
+            setError('Email id should not contain space.')
+            return false
+        }
+        else {
+            setError('')
+            return true
+        }
+    }
+
+    // #################### Validating Name! ###########################
+
+    const [firstName, setFirstName] = useState('')
+    const [firstNameErr, setFirstNameErr] = useState('')
+
+
+    const nameInputBlurHandler = (firstName, setFirstNameErr) => {
+        if (firstName === '') {
+            setFirstNameErr('This field cannot be empty!')
+            return false
+        } else if (firstName.length < 2) {
+            setFirstNameErr('This field should have atleast 4 charecters.')
+            return false
+        } else if (firstName.slice(-1) === ' ') {
+            setFirstNameErr('should not end with space.')
+            return false
+        } else {
+            setFirstNameErr('')
+            return true
+        }
+    }
+
+
+    const nameInputChangeHandler = (firstName, setFirstNameErr) => {
+        if (firstName.length === 0) {
+            setFirstNameErr('This field cannot be empty!')
+            return false
+        } else if (firstName.charAt(0) === ' ') {
+            setFirstNameErr('should not start with space.')
+            return false
+        } else if (firstName.includes('  ')) {
+            setFirstNameErr('should not contain consecutive spaces.')
+            return false
+        } else if (/\d/.test(firstName)) {
+            setFirstNameErr('should not contain numbers.')
+            return false
+        } else if (!firstName.match(/^[a-zA-Z ]+$/)) {
+            setFirstNameErr('Invalid charecter!')
+            return false
+        } else if (firstName === '') {
+            setFirstNameErr('This field cannot be empty!')
+            return false
+        } else if (firstName.length < 2) {
+            setFirstNameErr('This field should have atleast 4 charecters.')
+            return false
+        } else if (firstName.slice(-1) === ' ') {
+            setFirstNameErr('should not end with space.')
+            return false
+        } else {
+            setFirstNameErr('')
+            return true
+        }
+    }
+
+    // #################### Validating Name! ###########################
+
+
+    // #################### Validating LastName! ###########################
+
+    const [lastName, setLastName] = useState('')
+    const [lastNameErr, setLastNameErr] = useState('')
+
+
+    const lastnameInputBlurHandler = (lastName, setLastNameErr) => {
+        if (lastName === '') {
+            setLastNameErr('This field cannot be empty!')
+            return false
+        } else if (lastName.slice(-1) === ' ') {
+            setLastNameErr('should not end with space.')
+            return false
+        } else {
+            setLastNameErr('')
+            return true
+        }
+    }
+
+
+    const lastnameInputChangeHandler = (lastName, setLastNameErr) => {
+        if (lastName.length === 0) {
+            setLastNameErr('This field cannot be empty!')
+            return false
+        } else if (lastName.charAt(0) === ' ') {
+            setLastNameErr('should not start with space.')
+            return false
+        } else if (lastName.includes('  ')) {
+            setLastNameErr('should not contain consecutive spaces.')
+            return false
+        } else if (/\d/.test(lastName)) {
+            setLastNameErr('should not contain numbers.')
+            return false
+        } else if (!lastName.match(/^[a-zA-Z ]+$/)) {
+            setLastNameErr('Invalid charecter!')
+            return false
+        } else if (lastName === '') {
+            setLastNameErr('This field cannot be empty!')
+            return false
+        } else if (lastName.slice(-1) === ' ') {
+            setLastNameErr('should not end with space.')
+            return false
+        } else {
+            setLastNameErr('')
+            return true
+        }
+    }
+
+    // #################### Validating LastName! ###########################
+
+    // #################### Validating Address or similar stuff! ###########################
+
+    const [addressOne, setAddressOne] = useState('')
+    const [addressOneErr, setAddressOneErr] = useState('')
+
+    const addressInputBlurHandler = (value, setError) => {
+        if (value === '') {
+            setError('This field cannot be empty!')
+        } else if (value.length < 4) {
+            setError('This field should have atleast 4 charecters.')
+        } else if (value.slice(-1) === ' ') {
+            setError('This field should not end with space.')
+        } else {
+            setError('')
+        }
+    }
+
+
+    const addressInputChangeHandler = (value, setError) => {
+        if (value.length === 0) {
+            setError('')
+        } else if (value.charAt(0) === ' ') {
+            setError('should not start with space.')
+        } else if (value.length < 4) {
+            setError('This field should have atleast 4 charecters.')
+        } else if (value.includes('  ')) {
+            setError('should not contain consecutive spaces.')
+        } else if (value.slice(-1) === ' ') {
+            setError('This field should not end with space.')
+        } else {
+            setError('')
+        }
+    }
+
+    //######################### Validating Postal Code! ###########################
+
+    const [postCode, setPostCode] = useState('')
+    const [postCodeErr, setPostCodeErr] = useState('')
+
+
+    const postalCodeInputBlurHandler = (postCode, setError) => {
+        if (postCode === '') {
+            setError('This field cannot be empty!')
+        } else if (postCode && postCode.length !== 6) {
+            setError('Postal Code should have 6 digits')
+        } else {
+            setError('')
+        }
+    }
+
+    const postalCodeInputChangeHandler = (postCode, setError) => {
+        if (postCode === '') {
+            setError('This field cannot be empty!')
+        } else if (!postCode.match(/^[0-9]*$/g) && postCode !== '') {
+            setError('Enter numbers only!')
+        } else if (postCode && postCode.length > 6) {
+            setError('postalCode should not have more than 6 digits')
+        } else {
+            setError('')
+        }
+    }
+
+    //######################### Validating phone number! ###########################
+
+    const [phoneNumber, setPhoneNumber] = useState('')
+    const [phoneNumberErr, setPhoneNumberErr] = useState('')
+
+    const phoneInputBlurHandler = (phone, setError) => {
+        if (phone === '') {
+            setError('This field cannot be empty!')
+        } else if (phone.length < 10) {
+            setError('Phone number does not have 10 digits')
+        } else if (phone.length > 10) {
+            setError('Phone number has more than 10 digits')
+        } else {
+            setError('')
+        }
+    }
+
+    const phoneInputChangeHandler = (phone, setError) => {
+
+        if (!phone.match(/^[0-9][-\s\./0-9]*$/g)) {
+            setError("Enter numbers only!");
+        } else if (phone.length > 10) {
+            setError('Phone number has more than 10 digits')
+        }
+        else {
+            setError('')
+        }
+    }
+
+
+
     const [firstConfirmation, setFirstConfirmation] = useState(false)
     const [secondConfirmation, setSecondConfirmation] = useState(false)
     const [thirdConfirmation, setThirdConfirmation] = useState(false)
@@ -357,12 +570,11 @@ function CheckoutCustomer() {
     }
 
 
-    console.log('ithaaanuu')
     console.log(details)
     const props = { granttotal, addressId }
 
 
-    const UserName = username.toUpperCase()
+    const UserName = username
 
     return (
         <div className="col-md-12">
@@ -395,7 +607,21 @@ function CheckoutCustomer() {
                                     <div className="stepone">
                                         <div className="loginbox pt-3">
                                             <label htmlFor="">Email</label><br />
-                                            <input className="logininp" type="text" />
+                                            <input
+                                                className="logininp"
+                                                type="email"
+                                                value={email}
+                                                onChange={(e) => {
+                                                    setEmail(e.target.value)
+                                                    emailInputChangeHandler(e.target.value, setEmailError)
+                                                }}
+                                                onBlur={(e) => {
+                                                    emailInputBlurHandler(e.target.value, setEmailError)
+                                                }}
+                                            />
+                                            <span className='text-danger fs-6'>
+                                                {emailError}
+                                            </span>
                                         </div>
                                         <div className="loginbox pt-3">
                                             <label htmlFor="">Password</label><br />
@@ -449,16 +675,42 @@ function CheckoutCustomer() {
                                             <div className="col-md-6">
                                                 <div className="addressdetails">
                                                     <label className="pt-3" htmlFor="">First Name</label><br />
-                                                    <input onInput={(e) => { firstnameHandler(e.target.value) }} value={firstname} className="countryinp" type="text" />
-                                                    <p className="err" style={{ color: 'red' }}>{citynameErr}</p>
+                                                    <input
+                                                        type="text"
+                                                        className="countryinp"
+                                                        value={firstName}
+                                                        onChange={(e) => {
+                                                            setFirstName(e.target.value)
+                                                            nameInputChangeHandler(e.target.value, setFirstNameErr)
+                                                        }}
+                                                        onBlur={(e) => {
+                                                            nameInputBlurHandler(e.target.value, setFirstNameErr)
+                                                        }}
+                                                    />
+                                                    <span className='text-danger fs-6'>
+                                                        {firstNameErr}
+                                                    </span>
                                                 </div>
                                             </div>
 
                                             <div className="col-md-6">
                                                 <div className="addressdetails">
                                                     <label className="pt-3 " htmlFor="">Last Name</label><br />
-                                                    <input onInput={(e) => { lastnameHandler(e.target.value) }} value={lastname} className="countryinp " type="text" />
-                                                    <p className="err" style={{ color: 'red' }}>{statenameErr}</p>
+                                                    <input
+                                                        value={lastName}
+                                                        className="countryinp"
+                                                        type="text"
+                                                        onChange={(e) => {
+                                                            setLastName(e.target.value)
+                                                            lastnameInputChangeHandler(e.target.value, setLastNameErr)
+                                                        }}
+                                                        onBlur={(e) => {
+                                                            lastnameInputBlurHandler(e.target.value, setLastNameErr)
+                                                        }}
+                                                    />
+                                                    <span className='text-danger fs-6'>
+                                                        {lastNameErr}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="addressdetails">
@@ -468,8 +720,20 @@ function CheckoutCustomer() {
                                             </div>
                                             <div className="addressdetails">
                                                 <label className="pt-3" htmlFor="">Address Line 1</label><br />
-                                                <input style={{ width: '100%' }} onInput={(e) => { addressline1Handler(e.target.value) }} value={addressline1} className="countryinp" type="text" />
-                                                <p className="err" style={{ color: 'red' }}>{addressline1Err}</p>
+                                                <input style={{ width: '100%' }}
+                                                    onChange={(e) => {
+                                                        setAddressOne(e.target.value);
+                                                        addressInputChangeHandler(e.target.value, setAddressOneErr)
+                                                    }}
+                                                    onBlur={(e) => {
+                                                        addressInputBlurHandler(e.target.value, setAddressOneErr)
+                                                    }}
+                                                    value={addressOne}
+                                                    className="countryinp"
+                                                    type="text" />
+                                                <span className='text-danger fs-6'>
+                                                    {addressOneErr}
+                                                </span>
                                             </div>
                                             <div className="addressdetails">
                                                 <label className="pt-3" htmlFor="">Address Line 2 (Optional)</label><br />
@@ -494,15 +758,42 @@ function CheckoutCustomer() {
                                             <div className="col-md-6">
                                                 <div className="addressdetails">
                                                     <label className="pt-3" htmlFor="">Postal Code</label><br />
-                                                    <input onInput={(e) => { postcodeHandler(e.target.value) }} value={postcode} className="countryinp" type="text" />
-                                                    <p className="err" style={{ color: 'red' }}>{postcodeErr}</p>
+                                                    <input
+                                                        value={postCode}
+                                                        onChange={(e) => {
+                                                            setPostCode(e.target.value)
+                                                            postalCodeInputChangeHandler(e.target.value, setPostCodeErr)
+                                                        }}
+
+                                                        onBlur={(e) => {
+                                                            postalCodeInputBlurHandler(e.target.value, setPostCodeErr)
+                                                        }}
+                                                        className="countryinp"
+                                                        type="number" />
+                                                    <span className='text-danger fs-6'>
+                                                        {postCodeErr}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="addressdetails">
                                                     <label className="pt-3" htmlFor="">Phone Number</label><br />
-                                                    <input onInput={(e) => { phoneHandler(e.target.value) }} value={phone} className="countryinp " type="text" />
-                                                    <p className="err" style={{ color: 'red' }}>{phoneErr}</p>
+                                                    <input
+                                                        value={phoneNumber}
+                                                        className="countryinp"
+                                                        type="text"
+                                                        onChange={(e) => {
+                                                            setPhoneNumber(e.target.value)
+                                                            phoneInputChangeHandler(e.target.value, setPhoneNumberErr)
+                                                        }}
+
+                                                        onBlur={(e) => {
+                                                            phoneInputBlurHandler(e.target.value, setPhoneNumberErr)
+                                                        }}
+                                                    />
+                                                    <span className='text-danger fs-6'>
+                                                        {phoneNumberErr}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -671,7 +962,7 @@ function CheckoutCustomer() {
                                                 <div className="row">
                                                     <h6 className=""><strong>{item.productQuantity}</strong> Bottles</h6>
                                                 </div>
-                                                <div className="row">
+                                                <div className="row ">
                                                     <div className="col-md-3 col-3">
                                                         <img style={{ width: '100%', height: '5em', borderRadius: '5px' }} className="addedimg" src={item.image} alt="" />
                                                     </div>
@@ -700,9 +991,8 @@ function CheckoutCustomer() {
                                             <h5><BiRupee />{granttotal}</h5>
                                         </div>
                                     </div>
-                                    <div className="container">
-
-                                        <div className="row   ">
+                                    <div className="">
+                                        <div className="row">
                                             <div className="col-md-3 col-2">
                                                 <small><u>Coupon code</u></small>
                                                 {coupenPreview == 'Coupon applied' ?
@@ -719,6 +1009,7 @@ function CheckoutCustomer() {
                                                 <form onSubmit={sendCouponHandler}>
                                                     <div className="">
                                                         <div className="">
+                                                            <br />
                                                             <input id="couponcode" onChange={couponHandler} className="couponinp" type="text" />
                                                         </div>
                                                         <div className="mt-2">

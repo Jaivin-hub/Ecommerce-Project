@@ -1,15 +1,19 @@
 const cloudinary = require('cloudinary')
 const assert = require('assert').strict
 const dotenv = require('dotenv');
+const CLOUDINARY_NAME = process.env.CLOUDINARY_NAME
+const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY
+const CLOUDINARY_SECRET = process.env.CLOUDINARY_SECRET
 dotenv.config()
 
 
 // config
 cloudinary.config({
-  cloud_name: 'yourown',
-  api_key: '111526726122269',
-  api_secret: 'DfeZyproNZs5_c429VB-oKdPLBk',
+  cloud_name: CLOUDINARY_NAME,
+  api_key: CLOUDINARY_API_KEY,
+  api_secret: CLOUDINARY_SECRET,
 })
+
 
 exports.upload = async (req, res) => {
   console.log('upload function')

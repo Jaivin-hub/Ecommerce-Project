@@ -1,4 +1,5 @@
 import Header from './Header';
+import { useEffect, useState } from 'react'
 import Login from './Login';
 import Signup from './Signup';
 import Home from './Home';
@@ -20,25 +21,45 @@ import OrderPlaced from './OrderPlaced'
 import BuyNow from './BuyNow'
 import ToWishList from './ToWishList'
 import Firstpage from './Firstpage'
+import { useLocation } from 'react-router-dom'
+
 
 function App() {
 
 
+  // useEffect(() => {
+  //   setPath(window.location.pathname)
+
+
+  // }, [])
+
+
+  const location = useLocation();
+  console.log('pRH' + location.pathname);
+
+
+
+  // console.log('path:' + path)
+  // const routePath = window.location.pathname
+
   return (
     <div>
       <Router>
-        <Header />
+        
         <Switch>
-        <Route exact path='/'>
+          <Route exact path='/'>
             <Firstpage />
           </Route>
-          <Route  path="/home">
+          <Route path="/home">
+            <Header />
             <Home />
           </Route>
           <Route path="/login">
+            <Header />
             <Login />
           </Route>
           <Route path="/buyNow">
+            <Header />
             <BuyNow />
           </Route>
           <Route path="/buyNow/:id">
@@ -51,27 +72,35 @@ function App() {
             <Notification />
           </Route>
           <Route path="/signup">
+            <Header />
             <Signup />
           </Route>
           <Route path="/userprofile">
+            <Header />
             <Profile />
           </Route>
           <Route path="/productdetail/:testvalue">
+            <Header />
             <ShowProduct />
           </Route>
           <Route path="/history">
+            <Header />
             <History />
           </Route>
           <Route path="/cart">
+            <Header />
             <Addtocart />
           </Route>
           <Route path="/checkoutcustomer">
+            <Header />
             <CheckoutCustomer />
           </Route>
           <Route path="/orderplaced">
+            <Header />
             <OrderPlaced />
           </Route>
           <Route path="/whisky/:data">
+            <Header />
             <Whisky />
           </Route>
           <Redirect to="/security" />

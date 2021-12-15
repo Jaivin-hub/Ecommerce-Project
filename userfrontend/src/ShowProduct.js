@@ -8,15 +8,17 @@ import { useParams, useHistory } from 'react-router-dom'
 import { GiShoppingBag } from "react-icons/gi";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {
-    GlassMagnifier
-} from "react-image-magnifiers";
+import { GlassMagnifier } from "react-image-magnifiers";
 
 
 function ShowProduct() {
 
     let history = useHistory()
     let Userid = localStorage.getItem('id')
+    let token = localStorage.getItem('token')
+    const [addToCartFeature, setAddToCartFeature] = useState('')
+    console.log('token:', token)
+
 
     const id = useParams()
 
@@ -34,6 +36,10 @@ function ShowProduct() {
     const [viewedProducts, setViewedProducts] = useState([])
 
     const getData = () => {
+        if (token == null) {
+            setAddToCartFeature('withouttoken')
+        }
+        console.log('oooppp', addToCartFeature)
 
         const productid = id.testvalue
         console.log(productid)
@@ -86,6 +92,12 @@ function ShowProduct() {
         history.push(`/productdetail/${id}`);
     }
 
+    const errorMsg = () => {
+        console.log('error msg')
+        toast.warning('Please signIn')
+
+    }
+
     return (
         <div className="col-md-12">
             <div className="container ">
@@ -93,43 +105,39 @@ function ShowProduct() {
                     return (
                         <div className="row ">
                             <div className="col-md-6 ">
-                                <div className="row ">
+                                <div className="row">
 
 
-                                    <div style={{ height: '30em' }} className="col-md-3 pt-5 mt-4">
-                                        <div className="firstImage mt-2 ">
+                                    <div style={{ height: '' }} className="col-md-3 col-3 ">
+                                        <div className=" mt-1 pt-2  ">
                                             <img onClick={() => { imageSelected(item.image1) }} style={{ width: "100%", height: "80%", borderRadius: "5px", cursor: "pointer" }} src={item.image1} alt="oool" />
                                         </div>
-                                        <div className="firstImage mt-1">
+                                        <div className=" mt-1">
                                             <img onClick={() => { imageSelected(item.image2) }} style={{ width: "100%", height: "80%", borderRadius: "5px", cursor: "pointer" }} src={item.image2} alt="" />
                                         </div>
-                                        <div className="firstImage mt-1">
+                                        <div className=" mt-1">
                                             <img onClick={() => { imageSelected(item.image3) }} style={{ width: "100%", height: "80%", borderRadius: "5px", cursor: "pointer" }} src={item.image3} alt="" />
                                         </div>
-                                        <div className="firstImage mt-1">
+                                        <div className=" mt-1">
                                             <img onClick={() => { imageSelected(item.image4) }} style={{ width: "100%", height: "80%", borderRadius: "5px", cursor: "pointer" }} src={item.image4} alt="" />
                                         </div>
                                     </div>
-                                    <div className="col-md-9 mt-5">
-                                        <div className="imgmain pt-5">
+                                    <div className="col-md-9 col-9">
+                                        <div className="ps-3 pt-5">
                                             <GlassMagnifier
-                                                style={{ width: '100%', height: "25em", borderRadius: '5px' }}
+                                                style={{ width: '100%', height: "auto", borderRadius: '5px' }}
                                                 imageSrc={showImages}
-                                                imageAlt=""
+                                                imageAlt="ddd"
                                                 magnifierBorderSize={1}
                                                 magnifierSize={'50%'}
                                                 square={true}
                                             />
-                                            {/* <img style={{ width: '100%', height: "25em", borderRadius: '5px' }} src={showImages} alt="" /> */}
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
-
-                            <div className="col-md-6 pt-5">
-                                <div className="detail ps-5 ms-5 mt-4">
+                            <div className="col-md-6 col-12 pt-5">
+                                <div className="detail  ">
                                     <small><u>{data.category}</u></small>
                                     <div className="mainname pt-3">
                                         <h3>{data.name}</h3><br />
@@ -154,7 +162,10 @@ function ShowProduct() {
                                         }
 
                                         {data.quantity <= 3 && data.quantity > 1 ?
-                                            <h6 className="pt-1"><strong>Only {data.quantity} Left!</strong></h6>
+                                            <>
+                                                <small>Quantity:</small>
+                                                <h6 className="pt-1"><strong>Only {data.quantity} Left!</strong></h6>
+                                            </>
                                             :
 
                                             null
@@ -176,7 +187,6 @@ function ShowProduct() {
                                         <button className="mt-1">Bottle Only</button><br />
                                     </div>
                                     <div className="quantity pt-3">
-                                        <small>Quantity:</small>
                                         <div className="count">
 
                                         </div>
@@ -186,7 +196,10 @@ function ShowProduct() {
                                             <button className="addtocartbtn">ADD TO CART</button>
 
                                             :
-                                            <button onClick={() => { addtosubmit(data._id) }} className="addtocartbtn">ADD TO CART</button>
+                                            addToCartFeature == 'withouttoken' ?
+                                                <button onClick={errorMsg} className="addtocartbtn">ADD TO CART</button>
+                                                :
+                                                <button onClick={() => { addtosubmit(data._id) }} className="addtocartbtn">ADD TO CART</button>
 
                                         }
                                         <ToastContainer />
@@ -241,11 +254,11 @@ function ShowProduct() {
 
                     {relatedData.map((item, key) => {
                         return (
-                            <div className="col-md-4">
+                            <div className="col-md-4 col-6">
                                 <hr />
                                 {item.images.map((image, i) => {
                                     return (
-                                        <div onClick={() => { itemSelected(item._id) }} className="card profile-card-6"><img style={{ height: "25em" }} src={image.image1} className="img img-responsive" />
+                                        <div onClick={() => { itemSelected(item._id) }} className="card profile-card-6"><img style={{ height: "" }} src={image.image1} className="img img-responsive" />
                                             <div className="profile-name">{item.name}
                                             </div>
                                             <div className="profile-position">{item.subcategory}</div>
@@ -253,7 +266,6 @@ function ShowProduct() {
                                                 <div className="profile-overview">
                                                     <div className="row text-center">
                                                         <div className="col-xs-4">
-                                                            <h3>1</h3>
                                                             <p>{item.name}</p>
                                                         </div>
                                                         <div className="col-xs-4">
@@ -298,11 +310,11 @@ function ShowProduct() {
 
                     {viewedProducts.map((item, key) => {
                         return (
-                            <div className="col-md-4">
+                            <div className="col-md-4 col-6">
                                 <hr />
                                 {item.images.map((image, i) => {
                                     return (
-                                        <div onClick={() => { itemSelected(item._id) }} className="card profile-card-6"><img style={{ height: "25em" }} src={image.image1} className="img img-responsive" />
+                                        <div onClick={() => { itemSelected(item._id) }} className="card profile-card-6"><img style={{ height: "" }} src={image.image1} className="img img-responsive" />
                                             <div className="profile-name">{item.name}
                                             </div>
                                             <div className="profile-position">{item.subcategory}</div>
@@ -310,7 +322,6 @@ function ShowProduct() {
                                                 <div className="profile-overview">
                                                     <div className="row text-center">
                                                         <div className="col-xs-4">
-                                                            <h3>1</h3>
                                                             <p>{item.name}</p>
                                                         </div>
                                                         <div className="col-xs-4">

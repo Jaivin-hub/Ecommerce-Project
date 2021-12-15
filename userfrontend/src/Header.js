@@ -15,10 +15,9 @@ import { Dropdown } from 'react-bootstrap';
 import { BrowserRouter as Router, Switch, Route, Link, useHistory } from "react-router-dom";
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import { Trans } from 'react-i18next';
-function Header() {
+function Header(props) {
 
     let history = useHistory();
-
     const [category, setCategory] = useState([])
     const [logout, setLogout] = useState(false)
     const [coupons, setCoupons] = useState([])
@@ -57,7 +56,7 @@ function Header() {
 
     const LougoutHander = () => {
         localStorage.clear();
-        history.push("/");
+        history.push("/home");
         setLogout(!logout)
     }
 
@@ -83,11 +82,17 @@ function Header() {
         console.log(maincategory)
         history.push(`/whisky/${subcategory}`)
     }
-    if (window.location.pathname === '/') return null;
-    else
+    console.log(window.location.pathname+'from header');
+    if(window.location.pathname=='/home'){
+        console.log('kkkkkk');
+    }
+    // if (window.location.pathname === '/') return null;
+    // else 
+    
+    console.log('else case...')
     return (
         
-        <div className="col-md-12 main">
+        <div className=" main">
             <div className="row ">
                 <Navbar bg="" expand="lg">
 
@@ -107,19 +112,14 @@ function Header() {
 
                                     </div>
                                     <div className="col-md-6">
-                                        <div className="row ">
-                                            <div className="col-md-3 col-3">
+                                        <div className="d-flex justify-content-between">
                                                 {userName ?
                                                     <button width="100%" onClick={swithProfile} style={{ backgroundColor: '#4e6446' }} className="btn btn-">{userName} </button>
                                                     :
                                                     <button width="100%" onClick={swithProfile} style={{ backgroundColor: '#4e6446' }} className="btn btn-"><AccountCircleIcon /></button>
                                                 }
-                                            </div>
-                                            <div className="col-md-3 col-3 text-center">
                                                 <button onClick={auth} width="100%" style={{ backgroundColor: '#4e6446' }} className="btn btn-"><ShoppingBagIcon /></button>
 
-                                            </div>
-                                            <div className="col-md-3 col-3 text-center">
 
                                                 <Dropdown>
                                                     <Dropdown.Toggle bsPrefix="p-0" >
@@ -148,13 +148,10 @@ function Header() {
                                                     </Dropdown.Menu>
                                                 </Dropdown>
 
-                                            </div>
-                                            <div className="col-md-3 col-3 text-end">
                                                 {userName ?
                                                     <button onClick={LougoutHander} width="100%" className="btn btn-">Logout</button>
                                                     : null}
 
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

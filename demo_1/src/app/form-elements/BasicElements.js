@@ -50,7 +50,7 @@ export function BasicElements() {
   console.log('444', mainImage)
   
   const cropImage = (e) => {
-    console.log(e.target.files[0].name)
+    // console.log(e.target.files[0].name)
     var temp = e.target.files[0].name
     setFileName(prev => [...prev,temp])
     setSrcImg(URL.createObjectURL(e.target.files[0]));

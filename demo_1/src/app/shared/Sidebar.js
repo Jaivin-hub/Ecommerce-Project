@@ -89,7 +89,7 @@ class Sidebar extends Component {
               <span className="menu-title"><Trans>Product <br /> Management</Trans></span>
             </Link>
           </li>
-          <li className={this.isPathActive('/basic-ui/buttons') ? 'nav-item menu-items active' : 'nav-item menu-items'}>
+          <li className={this.isPathActive('/buttons') ? 'nav-item menu-items active' : 'nav-item menu-items'}>
             <Link className="nav-link" to="/sailes">
               <span className="menu-icon"><i className="mdi mdi-laptop"></i></span>
               <span className="menu-title"><Trans>Sailes <br /> Report</Trans></span>
@@ -111,13 +111,13 @@ class Sidebar extends Component {
               </div>
               
             </Collapse> 
-            <Collapse in={this.state.categoryMenuOpen}>
+            {/* <Collapse in={this.state.categoryMenuOpen}>
               <div>
                 <ul className="nav flex-column sub-menu">
                   <li className="nav-item"> <Link className={this.isPathActive('/form-elements/basic-elements') ? 'nav-link active' : 'nav-link'} to="/categoryDetails"><Trans>Category details</Trans></Link></li>
                 </ul>
               </div>
-            </Collapse>
+            </Collapse> */}
             <Collapse in={this.state.categoryMenuOpen}>
               <div>
                 <ul className="nav flex-column sub-menu">
@@ -127,28 +127,28 @@ class Sidebar extends Component {
             </Collapse>
           </li>
 
-          <li className={this.isPathActive('/basic-ui/buttons') ? 'nav-item menu-items active' : 'nav-item menu-items'}>
+          <li className={this.isPathActive('/buttons') ? 'nav-item menu-items active' : 'nav-item menu-items'}>
             <Link className="nav-link" to="/orders">
               <span className="menu-icon"><i className="mdi mdi-laptop"></i></span>
               <span className="menu-title"><Trans>OrderManagement</Trans></span>
             </Link>
           </li>
           <li className={this.isPathActive('/form-elements') ? 'nav-item menu-items active' : 'nav-item menu-items'}>
-            <div className={this.state.categoryMenuOpen ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('categoryMenuOpen')} data-toggle="collapse">
+            <div className={this.state.categoryMenuopen ? 'nav-link menu-expanded' : 'nav-link'} onClick={() => this.toggleMenuState('categoryMenuopen')} data-toggle="collapse">
               <span className="menu-icon">
                 <i className="mdi mdi-playlist-play"></i>
               </span>
               <span className="menu-title"><Trans>OfferManagement</Trans></span>
               <i className="menu-arrow"></i>
             </div>
-            <Collapse in={this.state.categoryMenuOpen}>
+            <Collapse in={this.state.categoryMenuopen}>
               <div>
                 <ul className="nav flex-column sub-menu">
                   <li className="nav-item"> <Link className={this.isPathActive('/form-elements/basic-elements') ? 'nav-link active' : 'nav-link'} to="/offermanagement"><Trans>Coupon</Trans></Link></li>
                 </ul>
               </div>
             </Collapse>
-            <Collapse in={this.state.categoryMenuOpen}>
+            <Collapse in={this.state.categoryMenuopen}>
               <div>
                 <ul className="nav flex-column sub-menu">
                   <li className="nav-item"> <Link className={this.isPathActive('/form-elements/basic-elements') ? 'nav-link active' : 'nav-link'} to="/categoryOffers"><Trans>Category</Trans></Link></li>
@@ -156,7 +156,7 @@ class Sidebar extends Component {
               </div>
             </Collapse>
           </li>
-          <li className={this.isPathActive('/basic-ui/buttons') ? 'nav-item menu-items active' : 'nav-item menu-items'}>
+          <li className={this.isPathActive('/buttons') ? 'nav-item menu-items active' : 'nav-item menu-items'}>
             <Link className="nav-link" to="/tables/basic-table">
               <span className="menu-icon"><i className="mdi mdi-table-large"></i></span>
               <span className="menu-title"><Trans>UsersManagement</Trans></span>

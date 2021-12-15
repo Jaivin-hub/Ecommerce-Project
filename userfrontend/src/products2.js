@@ -59,11 +59,11 @@ function Products2() {
 
                     {data.map((item, key) => {
                         return (
-                            <div className="col-md-3">
+                            <div className="col-md-3 col-6">
                                 <hr />
                                 {item.images.map((image, index) => {
                                     return (
-                                        <div onClick={() => { itemSelected(item._id) }} className="card profile-card-6"><img style={{height:"25em"}} src={image.image1} className="img img-responsive" />
+                                        <div onClick={() => { itemSelected(item._id) }} className="card profile-card-6"><img style={{ height: "" }} src={image.image1} className="img img-responsive" />
                                             <div style={{ width: '95%' }} className="profile-name ">
                                                 <div className="row">
                                                     <div className="col-md-6 ">
@@ -83,7 +83,6 @@ function Products2() {
                                                             <p>{item.name}</p>
                                                         </div>
                                                         <div className="col-xs-4">
-                                                            {/* <h3>50</h3> */}
                                                             <p>{item.description}</p>
                                                         </div>
                                                         <div className="col-xs-4">
@@ -99,15 +98,9 @@ function Products2() {
 
                                 <div className="row">
                                     <div className="col-md-12">
-                                       
-                                            <div className="col-md-12 ps-5">
-                                                <button style={{ width: '70%',marginLeft: '11%'}} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Add to Cart<GiShoppingBag /></button>
-                                                <ToastContainer />
-                                            
-                                            {/* <div className="col-md-6">
-                                                <button style={{ width: '80%' }} className="btn btn-outline-secondary btn-fw">Buy now<GiShoppingBag /></button>
-
-                                            </div> */}
+                                        <div className="col-md-12 ps-5">
+                                            <button style={{ width: '70%', marginLeft: '11%' }} onClick={() => { productSelected(item._id) }} className="btn btn-outline-secondary btn-fw">Add to Cart<GiShoppingBag /></button>
+                                            <ToastContainer />
                                         </div>
                                     </div>
 

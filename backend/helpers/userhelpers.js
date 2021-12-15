@@ -6,6 +6,7 @@ const generateToken = require('../Utils/generateToken')
 module.exports = {
 
     addUser: (user) => {
+        console.log('helpersss....');
         return new Promise(async (resolve, reject) => {
             let res = await db.get().collection('usermanagement').insertOne(user)
             let id = "" + res.insertedId

@@ -5,6 +5,7 @@
 }
 
 .input_input__1Zlh-- {
+    position: absolute;
     font-size: 9.5rem;
     font-weight: 900;
     font-family: 'meister', sans-serif;
@@ -81,11 +82,11 @@ input[type=number]::-webkit-outer-spin-button {
     width:80%;
 }
 
-.input_inputBox__1bIPw- {
+/* .input_inputBox__1bIPw- {
     overflow: hidden;
     height: 8.5rem;
     
-}
+} */
 
 .input_label__2EQrH- {
     transform: rotate(
@@ -117,25 +118,24 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .textInput{
   position: absolute;
-  top: 18%;
+  top: 22%;
   width:20%;
-  left: 25%;
+  left: 15%;
 }
 .dateofbirth{
   position: absolute;
   top: 18%;
-  left: 25%;
+  left: 15%;
 }
 
 .text{
   position: absolute;
-  top: 8%;
-  left: 25%;
+  top: 10%;
+  left: 15%;
 }
 
 .firstImage{
     width: 100%;
-   
     height: 25%;
     border: 3px linear black;
     border-radius:5px;
@@ -166,8 +166,8 @@ input[type=number]::-webkit-outer-spin-button {
 
 .signupDetails{
     border: 1px solid black;
-    width: 45%;
-    height: 40vh;
+    width: 402px;
+    height: 380px;
     margin-top: 2vh;
 }
 

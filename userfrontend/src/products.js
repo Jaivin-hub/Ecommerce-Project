@@ -26,8 +26,10 @@ function Products() {
     let history = useHistory();
 
     const getData = () => {
+        console.log('function activated')
         instance.get(`/getdetails`).then((res) => {
             const newData = res.data
+            console.log('data came from database' , res.data)
             setData(newData)
         })
     }
@@ -77,11 +79,11 @@ function Products() {
                 <div className="row">
                     {data.map((item, key) => {
                         return (
-                            <div className="col-md-3">
+                            <div className="col-md-3 col-6">
                                 <hr />
                                 {item.images.map((image, index) => {
                                     return (
-                                        <div onClick={() => { itemSelected(item._id) }} className="card profile-card-6"><img style={{ height: '25em' }} src={image.image1} className="img img-responsive" />
+                                        <div onClick={() => { itemSelected(item._id) }} className="card profile-card-6"><img style={{ height: '' }} src={image.image1} className="img img-responsive" />
                                             <div style={{ width: '95%' }} className="profile-name ">
                                                 <div className="row">
                                                     <div className="col-md-6 ">
