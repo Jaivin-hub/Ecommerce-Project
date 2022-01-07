@@ -672,10 +672,14 @@ module.exports = {
 
     checkNumber: (number) => {
         return new Promise((resolve, reject) => {
+            console.log('checking')
+            console.log(number)
             db.get().collection('usermanagement').findOne({ phone: number }).then((res) => {
                 if (res) {
+                    console.log('if case')
                     resolve(res)
                 } else {
+                    console.log('else case')
                     resolve('')
                 }
             })

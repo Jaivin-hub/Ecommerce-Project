@@ -13,17 +13,11 @@ var authToken = process.env.REACT_APP_authToken
 var RAZORPAY_SECRET = process.env.RAZORPAY_SECRET
 var RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID
 const CLOUDINARY_NAME = process.env.CLOUDINARY_NAME
-
+console.log('accountSID',accountSID,'authToken',authToken)
 var Client = require('twilio')(accountSID, authToken)
 const Razorpay = require("razorpay");
 
-
-// var accountSID = 'ACa5634a266ec8f11b8bdc468fca20c5fb'
-// var serviceSID = 'VA1285b0f4040f6828cc8ed6bf8c28124d'
-// var authToken = 'a329ab28ae61acb846baf9bbd7c3b7ca'
-// const RAZORPAY_SECRET = '4xZM9M4X6Hj8y6S5chm6ANlw'
-// const RAZORPAY_KEY_ID = 'rzp_test_9DCRDXICx0vZ5R'
-
+console.log('accountSID',accountSID,'authToken',authToken,'serviceSID',serviceSID)
 
 router.post('/', function (req, res, next) {
   const username = req.body.firstname
@@ -513,6 +507,7 @@ router.post('/getotp', (req, res) => {
   let number = req.body.otp
   console.log('first router')
   console.log(number)
+  
   userhelpers.checkNumber(number).then((response) => {
     console.log('number find')
     console.log(response)
@@ -528,6 +523,8 @@ router.post('/getotp', (req, res) => {
 
 
       console.log('response find')
+      console.log('serviceSID',serviceSID)
+      console.log('number',number)
       Client.verify
         .services(serviceSID)
         .verifications.create({

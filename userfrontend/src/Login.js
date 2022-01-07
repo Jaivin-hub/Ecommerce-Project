@@ -94,6 +94,7 @@ function Login() {
                 console.log('success')
                 console.log(res)
                 if (res.data == 'user not found') {
+                    console.log('userNotFound')
                     setmainErr('User not found!')
                 } else {
                     setmainErr('')
@@ -140,6 +141,7 @@ function Login() {
     }
 
     const setInputs = () => {
+        setmainErr('')
         setShow(true)
     }
 
@@ -157,7 +159,7 @@ function Login() {
 
     const otpData = parseInt(otpvalue)
 
-    console.log(otpvalue)
+    console.log(otpData)
 
     const otpSubmitHandler = (e) => {
         e.preventDefault()
@@ -248,6 +250,7 @@ function Login() {
                             <div className="col-md-6 col-12">
                                 <div className="row">
                                     <p className="err" style={{ color: 'red' }}>{display}</p>
+                                    <p className="err" style={{ color: 'red' }}>{mainErr}</p>
                                 </div>
                                 {!show ?
 
