@@ -6,7 +6,6 @@ const generateToken = require('../Utils/generateToken')
 module.exports = {
 
     addUser: (user) => {
-        console.log('helpersss....');
         return new Promise(async (resolve, reject) => {
             let res = await db.get().collection('usermanagement').insertOne(user)
             let id = "" + res.insertedId
@@ -58,8 +57,6 @@ module.exports = {
                     },
                 },
             ]).toArray()
-            console.log(new Date(new Date() - numberOfDays * 60 * 60 * 24 * 1000))
-            console.log(data);
             resolve(data)
         })
     },
@@ -99,7 +96,6 @@ module.exports = {
     fetchProducts: () => {
         return new Promise((resolve, reject) => {
             db.get().collection('productmanagement').find().limit(9).sort({ date: -1 }).toArray().then((res) => {
-                console.log(res)
                 resolve(res)
             })
         })
@@ -372,11 +368,8 @@ module.exports = {
 
     getSubcategory: (data) => {
         return new Promise((resolve, reject) => {
-            console.log('subcategory addded function')
-            console.log(data.Category)
             const newData = data.subcategory.toUpperCase()
             db.get().collection('categoryManagement').updateOne({ Categoryname: data.Category }, { $push: { Subcategory: { $each: [newData] } } }).then((res) => {
-           console.log('category aaddedd')
             }).catch((err) => {
                 console.log(err)
             })
@@ -384,12 +377,10 @@ module.exports = {
     },
 
     checkUser: (data) => {
-        console.log(data)
         return new Promise((resolve, reject) => {
             db.get().collection('usermanagement').findOne({ email: data.email }).then((res) => {
                 if (res) {
                     if (res.password == data.password && res.ActiveStatus == '') {
-                        console.log('User')
                         responseWithToken = { ...res, token: generateToken(res._id) }
                         resolve(responseWithToken)
                     } else {
@@ -487,9 +478,7 @@ module.exports = {
             db.get().collection('productmanagement').updateOne({ _id: ObjectID(products[i].productId) }, { $inc: { quantity: -temp[i] } })
         }
 
-        // console.log(arr)
         // console.log(productQuantityData[0])
-        console.log('finish')
         // let data = await db.get().collection('cart').aggregate([
         //     { $match: { userid: userId } },
         //     { $project: { [nameOfP]: 1 } }
@@ -552,7 +541,6 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection('orderManagement').find({ userid: userId }).toArray().then((res) => {
                 const orderStatus = res[0].orderStatus
-                console.log(res)
                 // for(i=0;i<res.length;i++){
                 //     const userId = res[i].userid
                 //     console.log(res[i].addressid
@@ -587,8 +575,6 @@ module.exports = {
             db.get().collection('orderManagement').find({ userid: id }).toArray().then((res) => {
                 resolve(res.addressid)
                 for (i = 0; i < res.length; i++) {
-                    console.log(res[i].addressid)
-                    console.log(res[i].addressid)
                 }
 
                 // db.get().collection('billingAddressManagement').find({ userid: id, addressid: res.addressid }).toArray().then((result) => {
@@ -672,14 +658,10 @@ module.exports = {
 
     checkNumber: (number) => {
         return new Promise((resolve, reject) => {
-            console.log('checking')
-            console.log(number)
             db.get().collection('usermanagement').findOne({ phone: number }).then((res) => {
                 if (res) {
-                    console.log('if case')
                     resolve(res)
                 } else {
-                    console.log('else case')
                     resolve('')
                 }
             })

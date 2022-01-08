@@ -13,11 +13,9 @@ var authToken = process.env.REACT_APP_authToken
 var RAZORPAY_SECRET = process.env.RAZORPAY_SECRET
 var RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID
 const CLOUDINARY_NAME = process.env.CLOUDINARY_NAME
-console.log('accountSID',accountSID,'authToken',authToken)
 var Client = require('twilio')(accountSID, authToken)
 const Razorpay = require("razorpay");
 
-console.log('accountSID',accountSID,'authToken',authToken,'serviceSID',serviceSID)
 
 router.post('/', function (req, res, next) {
   const username = req.body.firstname
@@ -29,23 +27,18 @@ router.post('/', function (req, res, next) {
 
 
 router.post("/orders", async (req, res) => {
-  console.log(req.body)
 
-  console.log('hereeeeeeeeeeee')
-  console.log('process.env', RAZORPAY_KEY_ID)
   try {
     const instance = new Razorpay({
       key_id: RAZORPAY_KEY_ID,
 
       key_secret: RAZORPAY_SECRET,
     });
-    console.log('instance', instance);
     const options = {
       amount: req.body.total + '00', // amount in smallest currency unit
       currency: "INR",
       receipt: Date.now(),
     };
-    console.log('options', options);
     const order = await instance.orders.create(options);
 
     if (!order) return res.status(500).send("Some error occured");
@@ -58,46 +51,36 @@ router.post("/orders", async (req, res) => {
 
 router.get('/getUser', (req, res, next) => {
   userhelpers.fetchUser().then((response) => {
-    console.log('fetched success')
     res.json(response)
   })
 })
 
 router.post('/success', (req, res) => {
-  console.log('success router///')
   userhelpers.getallfromcart(req.body).then((response) => {
-    console.log('payment success')
     res.json({ msg: response })
   })
-  console.log(req.body)
 })
 
 router.get('/fetchreport/:type', (req, res) => {
   userhelpers.fetchReport(req.params.type).then((response) => {
-    console.log('data ')
     res.json(response)
   })
 })
 
 router.post('/blockUser', (req, res) => {
-  console.log('router')
   console.log(req.body.id)
   userhelpers.blockUser(req.body.id).then((response) => {
-    console.log('retuning from helpers...')
   })
 })
 
 router.get('/getDataofDaily', (req, res) => {
   userhelpers.getDataOfDaily().then((response) => {
-    // console.log('returning')
     res.json(response)
   })
 })
 
 router.get('/getWeeklySailes', (req, res) => {
-  console.log('ivide ethyyy')
   userhelpers.getWeeklySales().then((response) => {
-    console.log('returning kjsdkjksj')
     res.json(response)
   })
 })
@@ -109,17 +92,13 @@ router.get('/getDataToDashbord', (req, res) => {
 })
 
 router.post('/cancelproduct', (req, res) => {
-  console.log('ithuvare')
   userhelpers.cancelProduct(req.body).then((response) => {
-    console.log('helpers all set')
     res.json({ msg: true })
   })
 })
 
 router.post('/towishlist', (req, res) => {
   userhelpers.toWishList(req.body).then((response) => {
-    console.log('helpers returning')
-    console.log(response)
     if (response == false) {
       res.json({ msg: false })
     } else {
@@ -130,11 +109,8 @@ router.post('/towishlist', (req, res) => {
 
 router.get('/getWishlist/:id', (req, res) => {
   const id = req.params.id
-  console.log('id printed')
-  console.log(id)
   userhelpers.fetchWishList(id).then((response) => {
     const grantTotal = response.products.reduce((total, doc) => (total + doc.subtotal), 0)
-    console.log('yaa its that', grantTotal)
     const data = { response, grantTotal }
     res.json(data)
 
@@ -154,37 +130,25 @@ router.get('/getproducts', (req, res) => {
 
 router.post('/deleteproduct', (req, res) => {
   const id = req.query.id
-  console.log('it is ')
-  console.log(id)
   userhelpers.deleteProduct(id).then((response) => {
-    console.log('success')
   })
 })
 
 router.post('/editproducts', (req, res) => {
   const { id } = req.body
-  console.log('this is router')
-  console.log(id)
   userhelpers.findProducts(id).then((response) => {
-    console.log('it is returning')
-    console.log(response)
     res.json(response)
   })
 })
 
 router.get('/findProduct/:id', (req, res) => {
-  console.log('yyayyayayayayay')
   const productId = req.params.id
-  console.log(productId)
   userhelpers.findProductforEdit(productId).then((response) => {
-    console.log('returning from helperes')
     res.json(response)
   })
 })
 
 router.post('/updateproducts', (req, res) => {
-  console.log('ooohhhhh')
-  console.log(req.body)
   userhelpers.updateProduct(req.body)
 })
 
@@ -195,7 +159,6 @@ router.get('/getdetails', (req, res) => {
 })
 
 router.get('/getProductsCategory', (req, res) => {
-  console.log('good part')
   userhelpers.findForCatagory().then((response) => {
     res.json(response)
   })
@@ -203,9 +166,7 @@ router.get('/getProductsCategory', (req, res) => {
 
 router.get('/getrelated/:productId', (req, res) => {
   const productId = req.params.productId
-  console.log('ivideyum ethyyy')
   userhelpers.findRelated(productId).then((response) => {
-    console.log('related helpers responding')
     res.json(response)
   })
 })
@@ -224,23 +185,18 @@ router.get('/getwhisky/:name', (req, res) => {
 })
 
 router.get('/getcouponoffers', (req, res) => {
-  console.log('hereeeeee================================================================')
   userhelpers.getalloffers().then((response) => {
     res.json(response)
   })
 })
 
 router.get('/getAllCategories', (req, res) => {
-  console.log('routeril ethyyy.....')
   userhelpers.getallcategories().then((response) => {
-    console.log('HELPERS RETURNING')
     res.json(response)
   })
 })
 
 router.post('/checkadmin', (req, res) => {
-  console.log('ividaaayiii')
-  console.log(req.body)
   const Admin = 'jaivin'
   const AdminPass = '1234'
   const userName = req.body.userName
@@ -263,18 +219,15 @@ router.get('/findCategories', (req, res) => {
 router.post('/getexactproduct/:id', (req, res) => {
   const id = req.params.id
   userhelpers.getexactproduct(id).then((response) => {
-    console.log(response)
     res.json(response)
   })
 })
 
 router.get('/gettheproduct/:id', (req, res) => {
   const id = req.params.id
-  console.log(id)
 
   userhelpers.getexactproduct(id).then((response) => {
     const { name, quantity, category, maincategory, description, price } = response
-    console.log('response prie ' + response.price)
     // const subtotal = response.price
     // const product = { name, quantity, category, maincategory, description, price,subtotal }
 
@@ -283,10 +236,7 @@ router.get('/gettheproduct/:id', (req, res) => {
 })
 
 router.post('/setdata', (req, res) => {
-  console.log('routers')
-  console.log(req.body.id)
   userhelpers.setdata(req.body.id).then((response) => {
-    console.log('response from helpers')
   })
 })
 
@@ -296,7 +246,6 @@ router.post('/senttheproduct', (req, res) => {
   const userid = req.body.Userid
   const productQuantity = 1
   userhelpers.getexactproduct(productId).then((response) => {
-    console.log('res----ponse')
     const image = response.images[0].image1
     const { name, quantity, size, subcategory, maincategory, regularprice, price, description } = response
     const subtotal = response.price
@@ -315,18 +264,14 @@ router.get('/getcart/:id', (req, res) => {
 })
 
 router.post('/deleteitem', (req, res) => {
-  console.log(req.body)
-  console.log('this is ' + req.params.id)
   userhelpers.deleteItem(req.body)
 })
 
 router.post('/addcatagory', (req, res) => {
-  console.log('yaayyaa')
   userhelpers.category(req.body)
 })
 
 router.get('/getcatagory', (req, res) => {
-  console.log('here')
   userhelpers.getCategory().then((response) => {
     res.json(response)
   })
@@ -334,30 +279,23 @@ router.get('/getcatagory', (req, res) => {
 
 
 router.post('/addsubcatagory', (req, res) => {
-  console.log('subcategory')
-  console.log(req.body)
   userhelpers.getSubcategory(req.body).then((response) => {
-    console.log('kkkkkkk')
   })
 })
 
 router.get('/getsubcategorydetails/:data', (req, res) => {
   userhelpers.getSubcategoryDetails(req.params.data).then((response) => {
-    console.log('response from helpers..')
-    console.log(response)
     res.json(response)
   })
 })
 
 router.get('/getcategorybackend', (req, res) => {
-  console.log('ividaaaayiiii...')
   userhelpers.getCategory().then((response) => {
     res.json(response)
   })
 })
 
 router.post('/checkusers', (req, res) => {
-  console.log('router..')
   const data = req.body
   userhelpers.checkUser(data).then((response) => {
     res.json(response);
@@ -392,8 +330,6 @@ router.post('/dltprd', (req, res) => {
 })
 
 router.post('/userdetails', (req, res) => {
-  console.log('came')
-  console.log(req.body)
   userhelpers.userBillingAddress(req.body)
 })
 
@@ -412,7 +348,6 @@ router.get('/getorders', (req, res) => {
 
 router.post('/getaddress', (req, res) => {
   userhelpers.getaddress(req.body).then((response) => {
-    console.log('data fetched')
     res.json(response)
   })
 })
@@ -425,7 +360,6 @@ router.get('/getall/:id', (req, res) => {
 
 router.post('/getallproduct', (req, res) => {
   userhelpers.gettheproduct(req.body).then((response) => {
-    console.log(response)
     res.json(response)
   })
 })
@@ -455,10 +389,7 @@ router.get('/getcoupon', (req, res) => {
 })
 
 router.get('/dltcoupon/:id', (req, res) => {
-  console.log('router')
-  console.log(req.params.id)
   userhelpers.dltcoupon(req.params.id).then((response) => {
-    console.log('deleted')
   })
 })
 
@@ -471,17 +402,12 @@ router.get('/getalloffers', (req, res) => {
 router.post('/coupenentered', (req, res) => {
   let totalAmount = req.body.totalAmount
   userhelpers.coupenentered(req.body).then((response) => {
-    console.log('response...from helpers')
-    console.log(response)
     if (response == 'Coupen already used') {
-      console.log('a;ja;kjd')
       res.json(response)
     } else if (response == 'Invalid coupon') {
-      console.log(78373737)
       res.json(response)
     } else {
       const result = totalAmount - response
-      console.log(result)
       res.json(result)
     }
     // if (response) {
@@ -505,41 +431,21 @@ router.get('/picImage/:id', (req, res) => {
 
 router.post('/getotp', (req, res) => {
   let number = req.body.otp
-  console.log('first router')
-  console.log(number)
-  
+
   userhelpers.checkNumber(number).then((response) => {
-    console.log('number find')
-    console.log(response)
 
     if (response) {
-
-
-      // client.verify.services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-      // .verifications
-      // .create({to: '+15017122661', channel: 'sms'})
-      // .then(verification => console.log(verification.status));
-
-
-
-      console.log('response find')
-      console.log('serviceSID',serviceSID)
-      console.log('number',number)
       Client.verify
         .services(serviceSID)
         .verifications.create({
           to: `+91${number}`,
           channel: 'sms'
         }).then((verification) => {
-          console.log('send otp')
-          console.log(verification.status)
-          console.log('then activated')
           res.json({ msg: "Otp sended to number" })
         }).catch((err) => {
-          console.log(err);
+          console.log('twilio error:', err);
         })
     } else {
-      console.log('else case')
       res.json({ msg: "User not found" })
     }
 
@@ -547,9 +453,6 @@ router.post('/getotp', (req, res) => {
 })
 
 router.post('/otpadded', (req, res) => {
-  console.log('camee with otp')
-  console.log(req.body.otpvalue.otp)
-  console.log(req.body.dataOtp.otpdata)
   const number = req.body.otpvalue.otp
   const Otp = req.body.dataOtp.otpdata
   Client.verify
@@ -572,14 +475,10 @@ router.post('/otpadded', (req, res) => {
 router.post('/addphoto', async (req, res) => {
 
   const fileStr = req.body.data
-  console.log(req.data)
-  console.log('fdj')
   const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
     upload_preset: 'ml_default'
   }).then((response) => {
-    console.log(uploadedResponse)
     res.json({ msg: 'yayayayay' })
-    console.log("thisnjj")
   }).catch((err) => {
     console.error({ err: 'somethng went wrong' })
   })
@@ -592,14 +491,8 @@ router.post('/addProfile', (req, res) => {
 
 router.route('/uploads').post(upload)
 //.delete(remove)
-console.log('ividdddd')
 router.post('/addUserImage', (req, res) => {
-  console.log('Inside router')
-  console.log(req.body)
-  console.log(req.body.email)
   userhelpers.addUserImage(req.body).then((response) => {
-    console.log('returning from helpers')
-    console.log(response)
     res.json(true)
 
   })
@@ -607,7 +500,6 @@ router.post('/addUserImage', (req, res) => {
 
 router.post('/editProductdetails', (req, res) => {
   userhelpers.editProductDetails(req.body).then((response) => {
-    console.log('helpers returning')
   })
 })
 
@@ -623,31 +515,23 @@ router.post('/setStatus', (req, res) => {
 })
 
 router.get('/getAllAddress/:id', (req, res) => {
-  console.log('orupaaaddd...')
   const id = req.params.id
-  console.log(99)
-  console.log(id)
   userhelpers.getAllAddress(id).then((response) => {
-    console.log('helpers returns')
     res.json(response)
   })
 })
 
 router.post('/addoffer', (req, res) => {
   userhelpers.addOffer(req.body).then((res) => {
-    console.log('response camed')
   })
 })
 
 router.post('/deleteAddress', (req, res) => {
-  console.log(req.body)
   userhelpers.deleteAddress(req.body)
 })
 
 router.post('/checkpassword', (req, res) => {
   userhelpers.checkPassword(req.body).then((response) => {
-    console.log('returning helpers')
-    console.log(response)
     res.json({ res: response })
   })
 })
@@ -659,30 +543,23 @@ router.get('/getcategoryoffers', (req, res) => {
 })
 
 router.post('/changePassword', (req, res) => {
-  console.log('ithrayum kk')
   userhelpers.changePassword(req.body).then((response) => {
-    console.log('returning from helpers')
     res.json({ res: response })
   })
 })
 
 router.post('/dltoffer', (req, res) => {
-  console.log('oooyaaa')
   userhelpers.dltOffers(req.body)
 })
 
 router.post('/filterprice', (req, res) => {
-  console.log('routers..')
   userhelpers.felterPrice(req.body).then((response) => {
-    console.log('data returned from helpers..')
     res.json(response)
   })
 })
 
 router.post('/EditUserDetails', (req, res) => {
-  console.log('came here')
   userhelpers.EditUserDetails(req.body).then((response) => {
-    console.log('data returned from helpers')
     res.json(response)
   })
 })
@@ -695,9 +572,7 @@ router.get('/getUserDetailsfromProfile/:id', (req, res) => {
 
 
 router.get('/getSalesReport', (req, res) => {
-  console.log('oooooooiiii')
   userhelpers.GetSalesReport().then((response) => {
-    console.log('returning from helpers')
     res.json(response)
   })
 })

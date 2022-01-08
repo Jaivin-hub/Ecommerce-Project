@@ -19,6 +19,7 @@ function Home(props) {
 
     useEffect(() => {
         getProducts()
+        console.log('running...')
     }, [])
 
 

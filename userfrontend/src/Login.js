@@ -8,7 +8,6 @@ import { useForm } from 'react-hook-form'
 
 function Login() {
 
-    console.log('here the env ', process.env.REACT_APP_CLIENT_ID)
     const ClientId = process.env.REACT_APP_CLIENT_ID
     const [showloginButton, setShowloginButton] = useState(true);
     const [showlogoutButton, setShowlogoutButton] = useState(false);
@@ -21,9 +20,7 @@ function Login() {
     // Google Authentication
 
     const onLoginSuccess = (res) => {
-        console.log('Login Success:', res.profileObj);
         const { givenName, email, familyName, imageUrl } = res.profileObj
-        console.log('kkkaaa:', givenName, email, familyName, imageUrl)
         let data = {
             firstname: givenName,
             lastname: familyName,
@@ -33,11 +30,8 @@ function Login() {
             image: imageUrl,
             ActiveStatus: ''
         }
-        console.log('data:', data)
         instance.post("/", data).then((res) => {
-            console.log('sucess with token')
             if (res.data.token) {
-                console.log(res.data)
                 localStorage.setItem('token', res.data.token)
                 localStorage.setItem('username', res.data.firstname)
                 localStorage.setItem('lastname', res.data.lastname)
@@ -82,7 +76,6 @@ function Login() {
     // Input fields ends
 
     const submitHandler = (e) => {
-        console.log('infunction')
         e.preventDefault()
 
         if (inputemailHandler(email) && inputpasswordHandler(password)) {
@@ -91,10 +84,7 @@ function Login() {
                 password: password,
             }
             instance.post("/checkusers", data).then((res) => {
-                console.log('success')
-                console.log(res)
                 if (res.data == 'user not found') {
-                    console.log('userNotFound')
                     setmainErr('User not found!')
                 } else {
                     setmainErr('')
